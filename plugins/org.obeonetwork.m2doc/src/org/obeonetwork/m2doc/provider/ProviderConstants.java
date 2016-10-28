@@ -37,5 +37,9 @@ public interface ProviderConstants {
      * The key used in the map passed to {@link IProvider} to define the activated layers the image should have.
      */
     String DIAGRAM_ACTIVATED_LAYERS_KEY = "layers";
+    /**
+     * The key used in the map passed to {@link IProvider} to define a flag indicate if diagram should be refresh before M2Doc generation.
+     */
+    String DIAGRAM_FLAG_REFRESH_KEY = "refershFlag";
 
 }

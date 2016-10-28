@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#getTemplateFileName <em>Template File Name</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#getResultFileName <em>Result File Name</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#isTimeStamped <em>Time Stamped</em>}</li>
+ *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#isRefreshDiagram <em>Refresh Diagram</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#getDefinitions <em>Definitions</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#getPackagesNSURI <em>Packages NSURI</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.Generation#getServicesTokens <em>Services Tokens</em>}</li>
@@ -135,6 +136,33 @@ public interface Generation extends EObject {
 	void setTimeStamped(boolean value);
 
 	/**
+     * Returns the value of the '<em><b>Refresh Diagram</b></em>' attribute.
+     * The default value is <code>"false"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Refresh Diagram</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Refresh Diagram</em>' attribute.
+     * @see #setRefreshDiagram(boolean)
+     * @see org.obeonetwork.m2doc.genconf.GenconfPackage#getGeneration_RefreshDiagram()
+     * @model default="false"
+     * @generated
+     */
+    boolean isRefreshDiagram();
+
+    /**
+     * Sets the value of the '{@link org.obeonetwork.m2doc.genconf.Generation#isRefreshDiagram <em>Refresh Diagram</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Refresh Diagram</em>' attribute.
+     * @see #isRefreshDiagram()
+     * @generated
+     */
+    void setRefreshDiagram(boolean value);
+
+    /**
      * Returns the value of the '<em><b>Definitions</b></em>' containment reference list.
      * The list contents are of type {@link org.obeonetwork.m2doc.genconf.Definition}.
      * <!-- begin-user-doc -->

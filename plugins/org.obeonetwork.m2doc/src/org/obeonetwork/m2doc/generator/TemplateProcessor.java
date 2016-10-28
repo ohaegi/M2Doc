@@ -42,6 +42,7 @@ import org.eclipse.acceleo.query.runtime.impl.QueryEvaluationEngine;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
+import org.obeonetwork.m2doc.genconf.Generation;
 import org.obeonetwork.m2doc.provider.AbstractDiagramProvider;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.provider.OptionType;
@@ -780,6 +781,12 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
         parameters.put(ProviderConstants.IMAGE_HEIGHT_KEY, object.getHeight());
         parameters.put(ProviderConstants.IMAGE_WIDTH_KEY, object.getWidth());
         parameters.put(ProviderConstants.DIAGRAM_ACTIVATED_LAYERS_KEY, object.getActivatedLayers());
+        if (targetConfObject instanceof Generation) {
+            parameters.put(ProviderConstants.DIAGRAM_FLAG_REFRESH_KEY,
+                    ((Generation) targetConfObject).isRefreshDiagram());
+        } else {
+            parameters.put(ProviderConstants.DIAGRAM_FLAG_REFRESH_KEY, false);
+        }
         setGenericParameters(object, provider.getOptionTypes(), parameters);
         return parameters;
     }
