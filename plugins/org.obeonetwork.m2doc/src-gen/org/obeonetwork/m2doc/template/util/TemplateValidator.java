@@ -14,26 +14,45 @@
 package org.obeonetwork.m2doc.template.util;
 
 import java.util.Map;
+
 import org.apache.poi.xwpf.usermodel.IBody;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine.AstResult;
-
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.template.*;
+import org.obeonetwork.m2doc.template.AbstractConstruct;
+import org.obeonetwork.m2doc.template.AbstractImage;
+import org.obeonetwork.m2doc.template.AbstractProviderClient;
+import org.obeonetwork.m2doc.template.Bookmark;
+import org.obeonetwork.m2doc.template.Cell;
+import org.obeonetwork.m2doc.template.Compound;
+import org.obeonetwork.m2doc.template.Conditionnal;
+import org.obeonetwork.m2doc.template.Default;
+import org.obeonetwork.m2doc.template.DocumentTemplate;
+import org.obeonetwork.m2doc.template.Image;
+import org.obeonetwork.m2doc.template.Link;
+import org.obeonetwork.m2doc.template.POSITION;
+import org.obeonetwork.m2doc.template.Query;
+import org.obeonetwork.m2doc.template.QueryBehavior;
+import org.obeonetwork.m2doc.template.Repetition;
+import org.obeonetwork.m2doc.template.Representation;
+import org.obeonetwork.m2doc.template.Row;
+import org.obeonetwork.m2doc.template.StaticFragment;
+import org.obeonetwork.m2doc.template.Table;
+import org.obeonetwork.m2doc.template.TableMerge;
+import org.obeonetwork.m2doc.template.Template;
+import org.obeonetwork.m2doc.template.TemplatePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,76 +62,77 @@ import org.obeonetwork.m2doc.template.*;
  * @generated
  */
 public class TemplateValidator extends EObjectValidator {
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public static final String copyright = " Copyright (c) 2016 Obeo. \r\n All rights reserved. This program and the accompanying materials\r\n are made available under the terms of the Eclipse Public License v1.0\r\n which accompanies this distribution, and is available at\r\n http://www.eclipse.org/legal/epl-v10.html\r\n  \r\n  Contributors:\r\n      Obeo - initial API and implementation";
+    public static final String copyright = " Copyright (c) 2016 Obeo. \r\n All rights reserved. This program and the accompanying materials\r\n are made available under the terms of the Eclipse Public License v1.0\r\n which accompanies this distribution, and is available at\r\n http://www.eclipse.org/legal/epl-v10.html\r\n  \r\n  Contributors:\r\n      Obeo - initial API and implementation";
 
-	/**
+    /**
      * The cached model package
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public static final TemplateValidator INSTANCE = new TemplateValidator();
+    public static final TemplateValidator INSTANCE = new TemplateValidator();
 
-	/**
+    /**
      * A constant for the {@link org.eclipse.emf.common.util.Diagnostic#getSource() source} of diagnostic {@link org.eclipse.emf.common.util.Diagnostic#getCode() codes} from this package.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @see org.eclipse.emf.common.util.Diagnostic#getSource()
      * @see org.eclipse.emf.common.util.Diagnostic#getCode()
      * @generated
      */
-	public static final String DIAGNOSTIC_SOURCE = "org.obeonetwork.m2doc.template";
+    public static final String DIAGNOSTIC_SOURCE = "org.obeonetwork.m2doc.template";
 
-	/**
+    /**
      * A constant with a fixed name that can be used as the base value for additional hand written constants.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 0;
+    private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 0;
 
-	/**
+    /**
      * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	protected static final int DIAGNOSTIC_CODE_COUNT = GENERATED_DIAGNOSTIC_CODE_COUNT;
+    protected static final int DIAGNOSTIC_CODE_COUNT = GENERATED_DIAGNOSTIC_CODE_COUNT;
 
-	/**
+    /**
      * Creates an instance of the switch.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public TemplateValidator() {
+    public TemplateValidator() {
         super();
     }
 
-	/**
+    /**
      * Returns the package of this validator switch.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	protected EPackage getEPackage() {
+    @Override
+    protected EPackage getEPackage() {
       return TemplatePackage.eINSTANCE;
     }
 
-	/**
+    /**
      * Calls <code>validateXXX</code> for the corresponding classifier of the model.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    @Override
+    protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         switch (classifierID) {
             case TemplatePackage.ABSTRACT_CONSTRUCT:
                 return validateAbstractConstruct((AbstractConstruct)value, diagnostics, context);
@@ -120,6 +140,8 @@ public class TemplateValidator extends EObjectValidator {
                 return validateConditionnal((Conditionnal)value, diagnostics, context);
             case TemplatePackage.REPETITION:
                 return validateRepetition((Repetition)value, diagnostics, context);
+            case TemplatePackage.USER_DOC:
+                return validateUserDoc((UserDoc)value, diagnostics, context);
             case TemplatePackage.QUERY:
                 return validateQuery((Query)value, diagnostics, context);
             case TemplatePackage.TABLE_MERGE:
@@ -181,21 +203,23 @@ public class TemplateValidator extends EObjectValidator {
         }
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateAbstractConstruct(AbstractConstruct abstractConstruct, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateAbstractConstruct(AbstractConstruct abstractConstruct, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(abstractConstruct, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateConditionnal(Conditionnal conditionnal, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateConditionnal(Conditionnal conditionnal, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         if (!validate_NoCircularContainment(conditionnal, diagnostics, context)) return false;
         boolean result = validate_EveryMultiplicityConforms(conditionnal, diagnostics, context);
         if (result || diagnostics != null) result &= validate_EveryDataValueConforms(conditionnal, diagnostics, context);
@@ -209,13 +233,14 @@ public class TemplateValidator extends EObjectValidator {
         return result;
     }
 
-	/**
+    /**
      * Validates the AlternativeExcludeElse constraint of '<em>Conditionnal</em>'.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateConditionnal_AlternativeExcludeElse(Conditionnal conditionnal, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateConditionnal_AlternativeExcludeElse(Conditionnal conditionnal, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         // TODO implement the constraint
         // -> specify the condition that violates the constraint
         // -> verify the diagnostic details, including severity, code, and message
@@ -237,75 +262,86 @@ public class TemplateValidator extends EObjectValidator {
         return true;
     }
 
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateRepetition(Repetition repetition, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(repetition, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateQuery(Query query, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(query, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateTableMerge(TableMerge tableMerge, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(tableMerge, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateTable(Table table, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(table, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateRow(Row row, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(row, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateCell(Cell cell, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(cell, diagnostics, context);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateDocumentTemplate(DocumentTemplate documentTemplate, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validate_EveryDefaultConstraint(documentTemplate, diagnostics, context);
-    }
-
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean validateOptionValueMap(Map.Entry<?, ?> optionValueMap, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateRepetition(Repetition repetition, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(repetition, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateUserDoc(UserDoc userDoc, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(userDoc, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateQuery(Query query, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(query, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateTableMerge(TableMerge tableMerge, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(tableMerge, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateTable(Table table, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(table, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateRow(Row row, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(row, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateCell(Cell cell, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(cell, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateDocumentTemplate(DocumentTemplate documentTemplate, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(documentTemplate, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateOptionValueMap(Map.Entry<?, ?> optionValueMap, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return validate_EveryDefaultConstraint((EObject)optionValueMap, diagnostics, context);
     }
 
@@ -314,7 +350,8 @@ public class TemplateValidator extends EObjectValidator {
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean validateAbstractImage(AbstractImage abstractImage, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateAbstractImage(AbstractImage abstractImage, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(abstractImage, diagnostics, context);
     }
 
@@ -323,7 +360,8 @@ public class TemplateValidator extends EObjectValidator {
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean validateAbstractProviderClient(AbstractProviderClient abstractProviderClient, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateAbstractProviderClient(AbstractProviderClient abstractProviderClient,
+            DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(abstractProviderClient, diagnostics, context);
     }
 
@@ -347,77 +385,80 @@ public class TemplateValidator extends EObjectValidator {
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateImage(Image image, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateImage(Image image, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(image, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateDefault(Default default_, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateDefault(Default default_, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(default_, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateCompound(Compound compound, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateCompound(Compound compound, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(compound, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateTemplate(Template template, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateTemplate(Template template, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(template, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateRepresentation(Representation representation, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateRepresentation(Representation representation, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(representation, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateStaticFragment(StaticFragment staticFragment, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateStaticFragment(StaticFragment staticFragment, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(staticFragment, diagnostics, context);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateQueryBehavior(QueryBehavior queryBehavior, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateQueryBehavior(QueryBehavior queryBehavior, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
         return true;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validatePOSITION(POSITION position, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validatePOSITION(POSITION position, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return true;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -428,59 +469,61 @@ public class TemplateValidator extends EObjectValidator {
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateWTable(XWPFTable wTable, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return true;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateRun(XWPFRun run, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return true;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public boolean validateAstResult(AstResult astResult, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return true;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean validateTemplateValidationMessage(TemplateValidationMessage templateValidationMessage, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateWTable(XWPFTable wTable, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return true;
     }
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateWTableRow(XWPFTableRow wTableRow, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateRun(XWPFRun run, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return true;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public boolean validateWTableCell(XWPFTableCell wTableCell, DiagnosticChain diagnostics, Map<Object, Object> context) {
+    public boolean validateAstResult(AstResult astResult, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return true;
     }
 
-	/**
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateTemplateValidationMessage(TemplateValidationMessage templateValidationMessage,
+            DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return true;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateWTableRow(XWPFTableRow wTableRow, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return true;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateWTableCell(XWPFTableCell wTableCell, DiagnosticChain diagnostics,
+            Map<Object, Object> context) {
+        return true;
+    }
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -501,15 +544,15 @@ public class TemplateValidator extends EObjectValidator {
     /**
      * Returns the resource locator that will be used to fetch messages for this validator's diagnostics.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public ResourceLocator getResourceLocator() {
+    @Override
+    public ResourceLocator getResourceLocator() {
         // TODO
         // Specialize this to return a resource locator for messages specific to this validator.
         // Ensure that you remove @generated or mark it @generated NOT
         return super.getResourceLocator();
     }
 
-} //TemplateValidator
+} // TemplateValidator

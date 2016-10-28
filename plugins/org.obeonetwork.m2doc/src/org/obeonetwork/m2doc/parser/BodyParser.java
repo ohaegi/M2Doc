@@ -75,6 +75,7 @@ import org.obeonetwork.m2doc.template.StaticFragment;
 import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.TemplatePackage;
+import org.obeonetwork.m2doc.template.UserDoc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTFldChar;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
@@ -143,14 +144,14 @@ public class BodyParser {
      */
     private static final String[] IMAGE_OPTION_SET =
 
-    {IMAGE_FILE_NAME_KEY, IMAGE_HEIGHT_KEY, IMAGE_LEGEND_KEY, IMAGE_LEGEND_POSITION, IMAGE_WIDTH_KEY };
+            {IMAGE_FILE_NAME_KEY, IMAGE_HEIGHT_KEY, IMAGE_LEGEND_KEY, IMAGE_LEGEND_POSITION, IMAGE_WIDTH_KEY };
     /**
      * Array of representation's options name constants.
      */
     private static final String[] DIAGRAM_OPTION_SET =
 
-    {DIAGRAM_PROVIDER_KEY, IMAGE_HEIGHT_KEY, IMAGE_LEGEND_KEY, IMAGE_LEGEND_POSITION, IMAGE_WIDTH_KEY,
-        DIAGRAM_LAYERS_KEY, };
+            {DIAGRAM_PROVIDER_KEY, IMAGE_HEIGHT_KEY, IMAGE_LEGEND_KEY, IMAGE_LEGEND_POSITION, IMAGE_WIDTH_KEY,
+                DIAGRAM_LAYERS_KEY, };
 
     /**
      * Rank of the option's value group in the matcher.
@@ -286,6 +287,10 @@ public class BodyParser {
                     result = TokenType.ELSE;
                 } else if (code.startsWith(TokenType.ENDIF.getValue())) {
                     result = TokenType.ENDIF;
+                } else if (code.startsWith(TokenType.USERDOC.getValue())) {
+                    result = TokenType.USERDOC;
+                } else if (code.startsWith(TokenType.ENDUSERDOC.getValue())) {
+                    result = TokenType.ENDUSERDOC;
                 } else if (code.startsWith(TokenType.ELT.getValue())) {
                     result = TokenType.ELT;
                 } else if (code.startsWith(TokenType.LET.getValue())) {
@@ -352,12 +357,16 @@ public class BodyParser {
                 case IF:
                     compound.getSubConstructs().add(parseConditionnal());
                     break;
+                case USERDOC:
+                    compound.getSubConstructs().add(parseUserDoc());
+                    break;
                 case ELSEIF:
                 case ELSE:
                 case ENDFOR:
                 case ENDIF:
                 case ENDLET:
                 case ENDBOOKMARK:
+                case ENDUSERDOC:
                     // report the error and ignore the problem so that parsing
                     // continues in other parts of the document.
                     XWPFRun run = runIterator.lookAhead(1).getRun();
@@ -1096,6 +1105,37 @@ public class BodyParser {
         }
 
         return link;
+    }
+
+    /**
+     * Parses a conditional.
+     * conditionnal are made of the following set of tags : {gd:if "query"} ...
+     * [{gd:elseif "query"} ....]* ({gd:else})? ... {gd:endif}
+     * 
+     * @return the created object
+     * @throws DocumentParserException
+     *             if something wrong happens during parsing.
+     */
+    private UserDoc parseUserDoc() throws DocumentParserException {
+        // first read the tag that opens the link
+        final UserDoc userDoc = (UserDoc) EcoreUtil.create(TemplatePackage.Literals.USER_DOC);
+        String tagText = readTag(userDoc, userDoc.getRuns()).trim();
+        // remove the prefix
+        tagText = tagText.substring(TokenType.USERDOC.getValue().length()).trim();
+        AstResult result = queryParser.build(tagText);
+        if (result.getErrors().size() == 0) {
+            userDoc.setId(result);
+        } else {
+            final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
+            userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), tagText, lastRun));
+        }
+        // read up the tags until the "gd:endbookmark" tag is encountered.
+        parseCompound(userDoc, TokenType.ENDUSERDOC);
+        if (getNextTokenType() != TokenType.EOF) {
+            readTag(userDoc, userDoc.getClosingRuns());
+        }
+
+        return userDoc;
     }
 
     /**

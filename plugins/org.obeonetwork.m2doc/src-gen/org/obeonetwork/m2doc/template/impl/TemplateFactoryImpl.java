@@ -14,6 +14,7 @@
 package org.obeonetwork.m2doc.template.impl;
 
 import java.util.Map;
+
 import org.apache.poi.xwpf.usermodel.IBody;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -25,13 +26,30 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.template.*;
+import org.obeonetwork.m2doc.template.Bookmark;
+import org.obeonetwork.m2doc.template.Cell;
+import org.obeonetwork.m2doc.template.Conditionnal;
+import org.obeonetwork.m2doc.template.Default;
+import org.obeonetwork.m2doc.template.DocumentTemplate;
+import org.obeonetwork.m2doc.template.Image;
+import org.obeonetwork.m2doc.template.Link;
+import org.obeonetwork.m2doc.template.POSITION;
+import org.obeonetwork.m2doc.template.Query;
+import org.obeonetwork.m2doc.template.QueryBehavior;
+import org.obeonetwork.m2doc.template.Repetition;
+import org.obeonetwork.m2doc.template.Representation;
+import org.obeonetwork.m2doc.template.Row;
+import org.obeonetwork.m2doc.template.StaticFragment;
+import org.obeonetwork.m2doc.template.Table;
+import org.obeonetwork.m2doc.template.TableMerge;
+import org.obeonetwork.m2doc.template.Template;
+import org.obeonetwork.m2doc.template.TemplateFactory;
+import org.obeonetwork.m2doc.template.TemplatePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,20 +58,20 @@ import org.obeonetwork.m2doc.template.*;
  * @generated
  */
 public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory {
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public static final String copyright = " Copyright (c) 2016 Obeo. \r\n All rights reserved. This program and the accompanying materials\r\n are made available under the terms of the Eclipse Public License v1.0\r\n which accompanies this distribution, and is available at\r\n http://www.eclipse.org/legal/epl-v10.html\r\n  \r\n  Contributors:\r\n      Obeo - initial API and implementation";
+    public static final String copyright = " Copyright (c) 2016 Obeo. \r\n All rights reserved. This program and the accompanying materials\r\n are made available under the terms of the Eclipse Public License v1.0\r\n which accompanies this distribution, and is available at\r\n http://www.eclipse.org/legal/epl-v10.html\r\n  \r\n  Contributors:\r\n      Obeo - initial API and implementation";
 
-	/**
+    /**
      * Creates the default factory implementation.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public static TemplateFactory init() {
+    public static TemplateFactory init() {
         try {
             TemplateFactory theTemplateFactory = (TemplateFactory)EPackage.Registry.INSTANCE.getEFactory(TemplatePackage.eNS_URI);
             if (theTemplateFactory != null) {
@@ -66,26 +84,27 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
         return new TemplateFactoryImpl();
     }
 
-	/**
+    /**
      * Creates an instance of the factory.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public TemplateFactoryImpl() {
+    public TemplateFactoryImpl() {
         super();
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public EObject create(EClass eClass) {
+    @Override
+    public EObject create(EClass eClass) {
         switch (eClass.getClassifierID()) {
             case TemplatePackage.CONDITIONNAL: return createConditionnal();
             case TemplatePackage.REPETITION: return createRepetition();
+            case TemplatePackage.USER_DOC: return createUserDoc();
             case TemplatePackage.QUERY: return createQuery();
             case TemplatePackage.TABLE_MERGE: return createTableMerge();
             case TemplatePackage.IMAGE: return createImage();
@@ -105,13 +124,13 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
         }
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public Object createFromString(EDataType eDataType, String initialValue) {
+    @Override
+    public Object createFromString(EDataType eDataType, String initialValue) {
         switch (eDataType.getClassifierID()) {
             case TemplatePackage.QUERY_BEHAVIOR:
                 return createQueryBehaviorFromString(eDataType, initialValue);
@@ -140,13 +159,13 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
         }
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public String convertToString(EDataType eDataType, Object instanceValue) {
+    @Override
+    public String convertToString(EDataType eDataType, Object instanceValue) {
         switch (eDataType.getClassifierID()) {
             case TemplatePackage.QUERY_BEHAVIOR:
                 return convertQueryBehaviorToString(eDataType, instanceValue);
@@ -175,87 +194,105 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
         }
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Conditionnal createConditionnal() {
+    @Override
+    public Conditionnal createConditionnal() {
         ConditionnalImpl conditionnal = new ConditionnalImpl();
         return conditionnal;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Repetition createRepetition() {
+    @Override
+    public Repetition createRepetition() {
         RepetitionImpl repetition = new RepetitionImpl();
         return repetition;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Query createQuery() {
+    public UserDoc createUserDoc() {
+        UserDocImpl userDoc = new UserDocImpl();
+        return userDoc;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Query createQuery() {
         QueryImpl query = new QueryImpl();
         return query;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public TableMerge createTableMerge() {
+    @Override
+    public TableMerge createTableMerge() {
         TableMergeImpl tableMerge = new TableMergeImpl();
         return tableMerge;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Table createTable() {
+    @Override
+    public Table createTable() {
         TableImpl table = new TableImpl();
         return table;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Row createRow() {
+    @Override
+    public Row createRow() {
         RowImpl row = new RowImpl();
         return row;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Cell createCell() {
+    @Override
+    public Cell createCell() {
         CellImpl cell = new CellImpl();
         return cell;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public DocumentTemplate createDocumentTemplate() {
+    @Override
+    public DocumentTemplate createDocumentTemplate() {
         DocumentTemplateImpl documentTemplate = new DocumentTemplateImpl();
         return documentTemplate;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -270,6 +307,7 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public Bookmark createBookmark() {
         BookmarkImpl bookmark = new BookmarkImpl();
         return bookmark;
@@ -280,6 +318,7 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public Link createLink() {
         LinkImpl link = new LinkImpl();
         return link;
@@ -287,95 +326,100 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Image createImage() {
+    @Override
+    public Image createImage() {
         ImageImpl image = new ImageImpl();
         return image;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Default createDefault() {
+    @Override
+    public Default createDefault() {
         DefaultImpl default_ = new DefaultImpl();
         return default_;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Template createTemplate() {
+    @Override
+    public Template createTemplate() {
         TemplateImpl template = new TemplateImpl();
         return template;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Representation createRepresentation() {
+    @Override
+    public Representation createRepresentation() {
         RepresentationImpl representation = new RepresentationImpl();
         return representation;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public StaticFragment createStaticFragment() {
+    @Override
+    public StaticFragment createStaticFragment() {
         StaticFragmentImpl staticFragment = new StaticFragmentImpl();
         return staticFragment;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public QueryBehavior createQueryBehaviorFromString(EDataType eDataType, String initialValue) {
+    public QueryBehavior createQueryBehaviorFromString(EDataType eDataType, String initialValue) {
         QueryBehavior result = QueryBehavior.get(initialValue);
         if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
         return result;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public String convertQueryBehaviorToString(EDataType eDataType, Object instanceValue) {
+    public String convertQueryBehaviorToString(EDataType eDataType, Object instanceValue) {
         return instanceValue == null ? null : instanceValue.toString();
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public POSITION createPOSITIONFromString(EDataType eDataType, String initialValue) {
+    public POSITION createPOSITIONFromString(EDataType eDataType, String initialValue) {
         POSITION result = POSITION.get(initialValue);
         if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
         return result;
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public String convertPOSITIONToString(EDataType eDataType, Object instanceValue) {
+    public String convertPOSITIONToString(EDataType eDataType, Object instanceValue) {
         return instanceValue == null ? null : instanceValue.toString();
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -395,64 +439,65 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public XWPFTable createWTableFromString(EDataType eDataType, String initialValue) {
+    public XWPFTable createWTableFromString(EDataType eDataType, String initialValue) {
         return (XWPFTable)super.createFromString(eDataType, initialValue);
     }
 
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public String convertWTableToString(EDataType eDataType, Object instanceValue) {
-        return super.convertToString(eDataType, instanceValue);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public XWPFRun createRunFromString(EDataType eDataType, String initialValue) {
-        return (XWPFRun)super.createFromString(eDataType, initialValue);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public String convertRunToString(EDataType eDataType, Object instanceValue) {
-        return super.convertToString(eDataType, instanceValue);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public AstResult createAstResultFromString(EDataType eDataType, String initialValue) {
-        return (AstResult)super.createFromString(eDataType, initialValue);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public String convertAstResultToString(EDataType eDataType, Object instanceValue) {
-        return super.convertToString(eDataType, instanceValue);
-    }
-
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    public TemplateValidationMessage createTemplateValidationMessageFromString(EDataType eDataType, String initialValue) {
+    public String convertWTableToString(EDataType eDataType, Object instanceValue) {
+        return super.convertToString(eDataType, instanceValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public XWPFRun createRunFromString(EDataType eDataType, String initialValue) {
+        return (XWPFRun)super.createFromString(eDataType, initialValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String convertRunToString(EDataType eDataType, Object instanceValue) {
+        return super.convertToString(eDataType, instanceValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public AstResult createAstResultFromString(EDataType eDataType, String initialValue) {
+        return (AstResult)super.createFromString(eDataType, initialValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String convertAstResultToString(EDataType eDataType, Object instanceValue) {
+        return super.convertToString(eDataType, instanceValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public TemplateValidationMessage createTemplateValidationMessageFromString(EDataType eDataType,
+            String initialValue) {
         return (TemplateValidationMessage)super.createFromString(eDataType, initialValue);
     }
 
@@ -467,41 +512,41 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public XWPFTableRow createWTableRowFromString(EDataType eDataType, String initialValue) {
+    public XWPFTableRow createWTableRowFromString(EDataType eDataType, String initialValue) {
         return (XWPFTableRow)super.createFromString(eDataType, initialValue);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public String convertWTableRowToString(EDataType eDataType, Object instanceValue) {
+    public String convertWTableRowToString(EDataType eDataType, Object instanceValue) {
         return super.convertToString(eDataType, instanceValue);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public XWPFTableCell createWTableCellFromString(EDataType eDataType, String initialValue) {
+    public XWPFTableCell createWTableCellFromString(EDataType eDataType, String initialValue) {
         return (XWPFTableCell)super.createFromString(eDataType, initialValue);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public String convertWTableCellToString(EDataType eDataType, Object instanceValue) {
+    public String convertWTableCellToString(EDataType eDataType, Object instanceValue) {
         return super.convertToString(eDataType, instanceValue);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -539,22 +584,23 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
 
     /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public TemplatePackage getTemplatePackage() {
+    @Override
+    public TemplatePackage getTemplatePackage() {
         return (TemplatePackage)getEPackage();
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @deprecated
      * @generated
      */
-	@Deprecated
-	public static TemplatePackage getPackage() {
+    @Deprecated
+    public static TemplatePackage getPackage() {
         return TemplatePackage.eINSTANCE;
     }
 
-} //TemplateFactoryImpl
+} // TemplateFactoryImpl
