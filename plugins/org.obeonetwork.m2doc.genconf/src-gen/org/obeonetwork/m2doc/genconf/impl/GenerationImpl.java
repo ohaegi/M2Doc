@@ -35,6 +35,7 @@ import org.obeonetwork.m2doc.genconf.Generation;
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#getTemplateFileName <em>Template File Name</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#getResultFileName <em>Result File Name</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#isTimeStamped <em>Time Stamped</em>}</li>
+ *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#isRefreshDiagram <em>Refresh Diagram</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#getDefinitions <em>Definitions</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#getPackagesNSURI <em>Packages NSURI</em>}</li>
  *   <li>{@link org.obeonetwork.m2doc.genconf.impl.GenerationImpl#getServicesTokens <em>Services Tokens</em>}</li>
@@ -124,6 +125,26 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
 	protected boolean timeStamped = TIME_STAMPED_EDEFAULT;
 
 	/**
+     * The default value of the '{@link #isRefreshDiagram() <em>Refresh Diagram</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isRefreshDiagram()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean REFRESH_DIAGRAM_EDEFAULT = false;
+
+    /**
+     * The cached value of the '{@link #isRefreshDiagram() <em>Refresh Diagram</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isRefreshDiagram()
+     * @generated
+     * @ordered
+     */
+    protected boolean refreshDiagram = REFRESH_DIAGRAM_EDEFAULT;
+
+    /**
      * The cached value of the '{@link #getDefinitions() <em>Definitions</em>}' containment reference list.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -258,6 +279,27 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isRefreshDiagram() {
+        return refreshDiagram;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setRefreshDiagram(boolean newRefreshDiagram) {
+        boolean oldRefreshDiagram = refreshDiagram;
+        refreshDiagram = newRefreshDiagram;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, GenconfPackage.GENERATION__REFRESH_DIAGRAM, oldRefreshDiagram, refreshDiagram));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -322,6 +364,8 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
                 return getResultFileName();
             case GenconfPackage.GENERATION__TIME_STAMPED:
                 return isTimeStamped();
+            case GenconfPackage.GENERATION__REFRESH_DIAGRAM:
+                return isRefreshDiagram();
             case GenconfPackage.GENERATION__DEFINITIONS:
                 return getDefinitions();
             case GenconfPackage.GENERATION__PACKAGES_NSURI:
@@ -352,6 +396,9 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
                 return;
             case GenconfPackage.GENERATION__TIME_STAMPED:
                 setTimeStamped((Boolean)newValue);
+                return;
+            case GenconfPackage.GENERATION__REFRESH_DIAGRAM:
+                setRefreshDiagram((Boolean)newValue);
                 return;
             case GenconfPackage.GENERATION__DEFINITIONS:
                 getDefinitions().clear();
@@ -389,6 +436,9 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
             case GenconfPackage.GENERATION__TIME_STAMPED:
                 setTimeStamped(TIME_STAMPED_EDEFAULT);
                 return;
+            case GenconfPackage.GENERATION__REFRESH_DIAGRAM:
+                setRefreshDiagram(REFRESH_DIAGRAM_EDEFAULT);
+                return;
             case GenconfPackage.GENERATION__DEFINITIONS:
                 getDefinitions().clear();
                 return;
@@ -418,6 +468,8 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
                 return RESULT_FILE_NAME_EDEFAULT == null ? resultFileName != null : !RESULT_FILE_NAME_EDEFAULT.equals(resultFileName);
             case GenconfPackage.GENERATION__TIME_STAMPED:
                 return timeStamped != TIME_STAMPED_EDEFAULT;
+            case GenconfPackage.GENERATION__REFRESH_DIAGRAM:
+                return refreshDiagram != REFRESH_DIAGRAM_EDEFAULT;
             case GenconfPackage.GENERATION__DEFINITIONS:
                 return definitions != null && !definitions.isEmpty();
             case GenconfPackage.GENERATION__PACKAGES_NSURI:
@@ -446,6 +498,8 @@ public class GenerationImpl extends MinimalEObjectImpl.Container implements Gene
         result.append(resultFileName);
         result.append(", timeStamped: ");
         result.append(timeStamped);
+        result.append(", refreshDiagram: ");
+        result.append(refreshDiagram);
         result.append(", packagesNSURI: ");
         result.append(packagesNSURI);
         result.append(", servicesTokens: ");

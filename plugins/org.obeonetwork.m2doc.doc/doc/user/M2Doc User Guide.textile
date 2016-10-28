@@ -108,6 +108,19 @@ Some examples:
 
 **Warning**: do not forget the single quotes ' around the string in an AQL Expression: @title:"'Table name'"@. The description ID does not need such quotes because it is of type String.
 
+h4. Update strategy for Sirius Representation
+
+In both case Sirius diagram and Sirius table providers, the M2Doc generation can occur with a closed Sirius representation view. So the semantic and graphical models could be unsynchronized. A parameter in genConf model define the strategy to follow during M2Doc generation.
+
+!images/image019.png!
+
+The boolean parameter "Refresh Diagram" can be used to define following update strategy : 
+- if it is set to false, the M2Doc generation take the state of graphical model without update it
+- if it is set to true, the M2Doc generation take the updated with semantic model and arranged model like if we open diagram or table in Sirius representation view.
+By default, the parameter is set to false.
+
+Becarefull, enabling update representation could be expensive in term of time machine. 
+
 h3. Document generation and style
 
 The style of the fragments of generated documents is determined by the style of the templates parts. 

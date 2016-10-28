@@ -104,6 +104,10 @@ public class SiriusDiagramByDiagramDescriptionNameProvider extends AbstractSiriu
         Object targetRootObject = parameters.get(TARGET_ROOT_OBJECT_KEY);
         List<String> diagramActivatedLayers = (List<String>) parameters
                 .get(ProviderConstants.DIAGRAM_ACTIVATED_LAYERS_KEY);
+        Object refreshTag = parameters.get(ProviderConstants.REPRESENTATION_FLAG_REFRESH_KEY);
+        if (refreshTag != null && refreshTag instanceof Boolean) {
+            refreshDiagramFlag = (Boolean) refreshTag;
+        }
         if (!(diagramDescriptionName instanceof String)) {
             throw new ProviderException(
                     "Image cannot be computed because no diagram description name has been provided to the provider \""

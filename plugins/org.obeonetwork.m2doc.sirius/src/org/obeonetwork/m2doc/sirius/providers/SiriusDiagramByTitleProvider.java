@@ -104,6 +104,10 @@ public class SiriusDiagramByTitleProvider extends AbstractSiriusDiagramImagesPro
             throw new ProviderException("Cannot find session associated to the conf model root element.");
         }
         Object representationTitle = parameters.get(REPRESENTATION_TITLE_KEY);
+        Object refreshTag = parameters.get(ProviderConstants.REPRESENTATION_FLAG_REFRESH_KEY);
+        if (refreshTag != null && refreshTag instanceof Boolean) {
+            refreshDiagramFlag = (Boolean) refreshTag;
+        }
         if (!(representationTitle instanceof String)) {
             throw new ProviderException(
                     "Image cannot be computed because no representation title has been provided to the provider \""

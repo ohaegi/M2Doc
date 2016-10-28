@@ -29,6 +29,7 @@ import org.eclipse.sirius.viewpoint.description.RepresentationDescription;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.provider.OptionType;
+import org.obeonetwork.m2doc.provider.ProviderConstants;
 import org.obeonetwork.m2doc.provider.ProviderException;
 
 /**
@@ -58,10 +59,12 @@ public class SiriusTableByDescriptionIdProvider extends AbstractSiriusTableProvi
      *            the diagram description from which we want to retrieve representations.
      * @param session
      *            the Sirius session from which we want to find the representation with the given name.
+     * @param refreshTableFlag
+     *            flag indicate if table should be refresh.
      * @return all representations whose target is the specified EObject
      */
     private List<DTable> getAssociatedTablesByDiagramDescriptionAndName(EObject targetRootObject,
-            String diagramDescriptionName, Session session) {
+            String diagramDescriptionName, Session session, Boolean refreshTableFlag) {
         List<DTable> result = new ArrayList<DTable>();
         if (diagramDescriptionName != null) {
             Collection<DRepresentation> representations = DialectManager.INSTANCE.getRepresentations(targetRootObject,
@@ -77,6 +80,7 @@ public class SiriusTableByDescriptionIdProvider extends AbstractSiriusTableProvi
                     DView dView = (DView) representation.eContainer();
                     Viewpoint vp = dView.getViewpoint();
                     if (selectedViewpoints.contains(vp)) {
+                        refreshTable(representation, session, refreshTableFlag);
                         result.add((DTable) representation);
                     }
                 }
@@ -90,6 +94,11 @@ public class SiriusTableByDescriptionIdProvider extends AbstractSiriusTableProvi
     public List<MTable> getTables(Map<String, Object> parameters) throws ProviderException {
         Object tableId = parameters.get(DESCRIPTION_ID_KEY);
         Object target = parameters.get(TARGET_ROOT_OBJECT_KEY);
+        Object refreshTag = parameters.get(ProviderConstants.REPRESENTATION_FLAG_REFRESH_KEY);
+        Boolean refreshTableFlag = false;
+        if (refreshTag != null && refreshTag instanceof Boolean) {
+            refreshTableFlag = (Boolean) refreshTag;
+        }
         if (!(tableId instanceof String)) {
             throw new ProviderException(
                     "Table cannot be computed because no table name has been declared in a 'tableId' parameter ("
@@ -106,7 +115,8 @@ public class SiriusTableByDescriptionIdProvider extends AbstractSiriusTableProvi
             throw new ProviderException("Cannot find the session associated to the model root element.");
         }
         checkDiagramDescriptionExist(session, (String) tableId);
-        List<DTable> tables = getAssociatedTablesByDiagramDescriptionAndName(eTarget, (String) tableId, session);
+        List<DTable> tables = getAssociatedTablesByDiagramDescriptionAndName(eTarget, (String) tableId, session,
+                refreshTableFlag);
         if (!tables.isEmpty()) {
             return extractTables(tables);
         }

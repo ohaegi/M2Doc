@@ -43,6 +43,11 @@ public class SiriusTableByTitleProvider extends AbstractSiriusTableProvider {
     @Override
     public List<MTable> getTables(Map<String, Object> parameters) throws ProviderException {
         EObject rootObject = (EObject) parameters.get(ProviderConstants.CONF_ROOT_OBJECT_KEY);
+        Object refreshTag = parameters.get(ProviderConstants.REPRESENTATION_FLAG_REFRESH_KEY);
+        Boolean refreshTableFlag = false;
+        if (refreshTag != null && refreshTag instanceof Boolean) {
+            refreshTableFlag = (Boolean) refreshTag;
+        }
         Session session = SessionManager.INSTANCE.getSession(rootObject);
         if (session == null) {
             throw new ProviderException("Cannot find session associated to the conf model root element.");
@@ -53,7 +58,7 @@ public class SiriusTableByTitleProvider extends AbstractSiriusTableProvider {
                     "Table cannot be computed because no title has been declared in a 'title' parameter ("
                         + this.getClass().getName() + ")");
         }
-        List<DTable> tables = getTablesByTitle((String) tableTitle, session);
+        List<DTable> tables = getTablesByTitle((String) tableTitle, session, refreshTableFlag);
         return extractTables(tables);
     }
 
@@ -64,9 +69,11 @@ public class SiriusTableByTitleProvider extends AbstractSiriusTableProvider {
      *            the title of the tables we want to find.
      * @param session
      *            the Sirius session in which to look for the tables.
+     * @param refreshTableFlag
+     *            flag indicate if table should be refresh.
      * @return a list of maching tables, never <code>null</code> but possibly empty.
      */
-    private List<DTable> getTablesByTitle(String title, Session session) {
+    private List<DTable> getTablesByTitle(String title, Session session, Boolean refreshTableFlag) {
         List<DTable> result = new ArrayList<DTable>();
         if (title != null) {
             Collection<DRepresentation> representations = DialectManager.INSTANCE.getAllRepresentations(session);
@@ -82,6 +89,7 @@ public class SiriusTableByTitleProvider extends AbstractSiriusTableProvider {
                     DView dView = (DView) representation.eContainer();
                     Viewpoint vp = dView.getViewpoint();
                     if (selectedViewpoints.contains(vp)) {
+                        refreshTable(representation, session, refreshTableFlag);
                         result.add((DTable) representation);
                     }
                 }

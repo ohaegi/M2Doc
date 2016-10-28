@@ -211,3 +211,21 @@ An example of post configuration model is done in __org.obeometwork.m2doc.sirius
 
 	!images/image012.png!
 
+h2. Compare docx documents in WORD
+
+To test M2Doc, we need compare docx documents. WORD have a tool to do that.
+
+To use it, you need to open in WORD the documents to compare and run the  compare tool in WORD : "Review / Compare / Compare... " or in French version "Révision / Comparer / Comparer..."
+
+	!images/image013.png!
+
+You can choose documents to compare :
+
+	!images/image014.png!
+
+Files tagged "Compatible mode" are files edited by WORD.
+
+You can show quickly difference between documents
+
+	!images/image015.png!
+
