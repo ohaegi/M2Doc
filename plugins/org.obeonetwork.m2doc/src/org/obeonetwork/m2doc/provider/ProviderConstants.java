@@ -41,8 +41,12 @@ public interface ProviderConstants {
      * The key used in the map passed to {@link IProvider} to define a flag indicate if diagram should be refresh before M2Doc generation.
      */
     String DIAGRAM_FLAG_REFRESH_KEY = "refershFlag";
+<<<<<<< HEAD
     /**
      * The key of the 'hide title' parameter for the m:wtable tag.
      */
     String HIDE_TITLE_KEY = "hideTitle";
+=======
+
+>>>>>>> 8e5e0ecfa29bd5ffd21eb1a39e0ba617b9406e45
 }
