@@ -55,6 +55,7 @@ import org.obeonetwork.m2doc.template.TableMerge;
 import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.TemplateFactory;
 import org.obeonetwork.m2doc.template.TemplatePackage;
+import org.obeonetwork.m2doc.template.UserDoc;
 import org.obeonetwork.m2doc.template.util.TemplateValidator;
 
 /**
@@ -93,6 +94,13 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
 	private EClass repetitionEClass = null;
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass userDocEClass = null;
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -474,6 +482,24 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getUserDoc() {
+        return userDocEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getUserDoc_Id() {
+        return (EAttribute)userDocEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -1065,6 +1091,9 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
         createEAttribute(repetitionEClass, REPETITION__ITERATION_VAR);
         createEAttribute(repetitionEClass, REPETITION__QUERY);
 
+        userDocEClass = createEClass(USER_DOC);
+        createEAttribute(userDocEClass, USER_DOC__ID);
+
         queryEClass = createEClass(QUERY);
         createEAttribute(queryEClass, QUERY__BEHAVIOR);
         createEAttribute(queryEClass, QUERY__QUERY);
@@ -1179,6 +1208,7 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
         // Add supertypes to classes
         conditionnalEClass.getESuperTypes().add(this.getCompound());
         repetitionEClass.getESuperTypes().add(this.getCompound());
+        userDocEClass.getESuperTypes().add(this.getCompound());
         queryEClass.getESuperTypes().add(this.getAbstractConstruct());
         tableMergeEClass.getESuperTypes().add(this.getCompound());
         imageEClass.getESuperTypes().add(this.getAbstractImage());
@@ -1209,6 +1239,9 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
         initEClass(repetitionEClass, Repetition.class, "Repetition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getRepetition_IterationVar(), ecorePackage.getEString(), "iterationVar", null, 0, 1, Repetition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getRepetition_Query(), this.getAstResult(), "query", null, 0, 1, Repetition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(userDocEClass, UserDoc.class, "UserDoc", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getUserDoc_Id(), this.getAstResult(), "id", null, 0, 1, UserDoc.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(queryEClass, Query.class, "Query", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getQuery_Behavior(), this.getQueryBehavior(), "behavior", "TEXT", 0, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1335,6 +1368,12 @@ public class TemplatePackageImpl extends EPackageImpl implements TemplatePackage
            new String[] {
              "documentation", "pour chaque valeur v dans le r\u00e9sultat de l\'\u00e9valuation de query, \r\n- un nouveau contexte est cr\u00e9e en ajoutant la d\u00e9finition \'var =v\' au contexte courant\r\n- le r\u00e9sultat du traitement du corps runs est ins\u00e9r\u00e9 dans le document \r\nles balises {gd:for} et {gd:endfor} sont supprim\u00e9es.\r\nSi la balise {gd:for} est imm\u00e9diatement suivie d\'un retour chariot alors l\'ensemble du paragraphe la contenant est supprim\u00e9e du r\u00e9sultat sinon, le paragraphe duquel on a supprim\u00e9 la balise est ins\u00e9r\u00e9 dans le r\u00e9sultat. Le m\u00eame traitement est appliqu\u00e9 \u00e0 la balise {gd:endfor}",
              "syntax", "{gd:for var | query} body {gd:endfor}"
+           });	
+        addAnnotation
+          (userDocEClass, 
+           source, 
+           new String[] {
+             "documentation", "UserDoc  tag\n\nTag in template to keep user part modification in previous generated \nresult file."
            });	
         addAnnotation
           (queryEClass, 

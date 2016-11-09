@@ -53,6 +53,7 @@ import org.obeonetwork.m2doc.template.Row;
 import org.obeonetwork.m2doc.template.StaticFragment;
 import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.Template;
+import org.obeonetwork.m2doc.template.UserDoc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -228,6 +229,8 @@ public class DocumentParserTest {
         assertEquals(1, conditionnal.getElse().getSubConstructs().size());
         assertTrue(conditionnal.getElse().getSubConstructs().get(0) instanceof StaticFragment);
     }
+
+    // testUserDoc1.docx
 
     @Test
     public void testConditionnalWithElseIfParsing()
@@ -906,4 +909,61 @@ public class DocumentParserTest {
         assertEquals("a reference to bookmark1", ((StringLiteral) linkAfter.getText().getAst()).getValue());
     }
 
+    /**
+     * Test parsing userDoc tag with default simple string.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocSimpleText() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        assertEquals(document, template.getBody());
+        assertEquals(3, template.getSubConstructs().size());
+        assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserDoc);
+        assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
+        UserDoc userDoc = (UserDoc) template.getSubConstructs().get(1);
+        assertNotNull(userDoc.getId());
+        assertTrue(userDoc.getId() instanceof AstResult);
+        assertEquals(1, userDoc.getSubConstructs().size());
+        assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+    }
+
+    /**
+     * Test parsing userDoc tag with default one line string.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocOneLine() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        assertEquals(document, template.getBody());
+        assertEquals(3, template.getSubConstructs().size());
+        assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserDoc);
+        assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
+        UserDoc userDoc = (UserDoc) template.getSubConstructs().get(1);
+        assertNotNull(userDoc.getId());
+        assertTrue(userDoc.getId() instanceof AstResult);
+        assertEquals(1, userDoc.getSubConstructs().size());
+        assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+    }
 }

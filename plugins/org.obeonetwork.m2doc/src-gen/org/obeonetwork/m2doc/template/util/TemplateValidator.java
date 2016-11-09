@@ -120,6 +120,8 @@ public class TemplateValidator extends EObjectValidator {
                 return validateConditionnal((Conditionnal)value, diagnostics, context);
             case TemplatePackage.REPETITION:
                 return validateRepetition((Repetition)value, diagnostics, context);
+            case TemplatePackage.USER_DOC:
+                return validateUserDoc((UserDoc)value, diagnostics, context);
             case TemplatePackage.QUERY:
                 return validateQuery((Query)value, diagnostics, context);
             case TemplatePackage.TABLE_MERGE:
@@ -249,6 +251,15 @@ public class TemplateValidator extends EObjectValidator {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateUserDoc(UserDoc userDoc, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(userDoc, diagnostics, context);
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
