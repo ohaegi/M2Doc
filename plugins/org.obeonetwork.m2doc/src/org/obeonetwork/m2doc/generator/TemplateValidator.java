@@ -79,6 +79,11 @@ public class TemplateValidator extends TemplateSwitch<Void> {
     private IQueryEnvironment environment;
 
     /**
+     * AQL environment used to validate queries.
+     */
+    private IQueryEnvironment environment;
+
+    /**
      * Validates the given {@link DocumentTemplate} against the given {@link IQueryEnvironment} and variables types.
      * 
      * @param documentTemplate

@@ -11,4 +11,3 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sirius.common.acceleo.aql
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.obeonetwork.m2doc.sirius.sample.ecore.design
