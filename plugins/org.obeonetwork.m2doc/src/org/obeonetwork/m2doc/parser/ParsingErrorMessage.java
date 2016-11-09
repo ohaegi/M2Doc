@@ -48,7 +48,11 @@ public enum ParsingErrorMessage {
     /**
      * Error message issued when a diagram tag has invalid option.
      */
-    INVALID_DIAGRAM_OPTION("Invalid diagram option ({0}): {1}.");
+    INVALID_DIAGRAM_OPTION("Invalid diagram option ({0}): {1}."),
+    /**
+     * Error message issued when a userdoc tag contents some thing else than element of STATIC type.
+     */
+    INVALID_USERDOC_CONTENT("Invalid userdoc content, elements in userdoc must be STATIC type not {0} type.");
     /**
      * The error message.
      */

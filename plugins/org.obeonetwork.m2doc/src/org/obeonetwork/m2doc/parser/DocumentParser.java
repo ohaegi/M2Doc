@@ -64,11 +64,13 @@ public class DocumentParser {
         result.setBody(parser.parseTemplate());
         result.setDocument(document);
         for (XWPFFooter footer : document.getFooterList()) {
-            BodyParser footerParser = new BodyParser(footer, new QueryBuilderEngine(queryEnvironment), queryEnvironment);
+            BodyParser footerParser = new BodyParser(footer, new QueryBuilderEngine(queryEnvironment),
+                    queryEnvironment);
             result.getFooters().add(footerParser.parseTemplate());
         }
         for (XWPFHeader header : document.getHeaderList()) {
-            BodyParser headerParser = new BodyParser(header, new QueryBuilderEngine(queryEnvironment), queryEnvironment);
+            BodyParser headerParser = new BodyParser(header, new QueryBuilderEngine(queryEnvironment),
+                    queryEnvironment);
             result.getHeaders().add(headerParser.parseTemplate());
         }
         return result;

@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.eclipse.acceleo.query.ast.Call;
 import org.eclipse.acceleo.query.ast.Conditional;
 import org.eclipse.acceleo.query.ast.StringLiteral;
@@ -32,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.obeonetwork.m2doc.parser.BodyParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
+import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.provider.OptionType;
@@ -66,7 +68,12 @@ import static org.obeonetwork.m2doc.test.M2DocTestUtils.assertTemplateValidation
  * 
  * @author pguilet<pierre.guilet@obeo.fr>
  */
+@SuppressWarnings("restriction")
 public class DocumentParserTest {
+    /**
+     * BOOKMARK1 text.
+     */
+    private static final String BOOKMARK1 = "bookmark1";
     /**
      * Number constant.
      */
@@ -386,9 +393,12 @@ public class DocumentParserTest {
      * The legend option is legend:"\"plan de forme\" du dingy herbulot\"" .
      * The result value option should be <"plan de forme" du dingy herbulot">
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionEscaping() throws IOException, InvalidFormatException, DocumentParserException {
@@ -412,9 +422,12 @@ public class DocumentParserTest {
      * The legend option is legend:"plan de for\me du dingy herbulot" .
      * The result value option should be <"plan de forme du dingy herbulot">
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionEscaping2() throws IOException, InvalidFormatException, DocumentParserException {
@@ -437,9 +450,12 @@ public class DocumentParserTest {
      * The option is <legend:"\\plan de for\\me du di\\\"ngy herbulot\\" legendPos:"below">
      * The result should be <\plan de for\me du di\"ngy herbulot\>
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionEscaping3() throws IOException, InvalidFormatException, DocumentParserException {
@@ -462,9 +478,12 @@ public class DocumentParserTest {
      * The tag is <m:image file:"images/dh1.gif" height:"100" width:"100" legend:"plan de forme" du dingy herbulot" legendPos:"below" >.
      * The result must have an error message indicated that an invalid character is present at index afet the u of "du".
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionInvalid() throws IOException, InvalidFormatException, DocumentParserException {
@@ -485,9 +504,12 @@ public class DocumentParserTest {
      * The tag is <m:image file:"images/dh1.gif" height:"100" width:"100" legen d:"plan de forme du dingy herbulot" legendPos:"below" >.
      * The result must have an error message indicated that an unknow character is present at the key description "leg end".
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionInvalid2() throws IOException, InvalidFormatException, DocumentParserException {
@@ -508,9 +530,12 @@ public class DocumentParserTest {
      * The tag is {m:image file:"images/dh1.gif" height:"100" width:"100" legend:"plan de forme du dingy herbulot" legendPos}.
      * The result must have an error message indicated that an unknown character is present at the key description "leg end".
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionInvalid3() throws IOException, InvalidFormatException, DocumentParserException {
@@ -532,9 +557,12 @@ public class DocumentParserTest {
      * The tag is {m:image file:"images/dh1.gif" height:"100" width:"100" legend : "plan de forme du dingy herbulot" legendPos:"below" } .
      * All options should be handled correctly.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStringOptionAuthorizedEmptySpace()
@@ -586,9 +614,12 @@ public class DocumentParserTest {
      * The tested tag is {m:diagram provider:" org.obeonetwork.m2doc.provider.test.StubDiagramProvider" width:"200" height:"200"
      * resultKind:"oneImage" legend:"plan de forme du dingy herbulot" legendPos:"below"}.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingWithProviderProducingOneImageOk()
@@ -618,9 +649,12 @@ public class DocumentParserTest {
      * The tested tag is {m:diagram diagramProvider:' org.obeonetwork.m2doc.provider.test.StubDiagramProvider ' width:'200' height:'200'
      * title:'RF Schema' legend:'plan de forme du dingy herbulot' legendPos:'below'}.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingWithProviderSurroundedBySpaces()
@@ -649,11 +683,13 @@ public class DocumentParserTest {
      * The tested root object option is <aqlExpression:"if ('test\"'.size()=5)) then db endif">
      * If handled correctly, the if condition will contains the double quote character.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
-     * @throws DocumentParserException²
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testAQLParsingOptionOk() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/diagramValidEscaping.docx");
@@ -688,11 +724,13 @@ public class DocumentParserTest {
      * The tested root object option is <aqlExpression:"if ('test\\''.size()=5)) then db endif" >
      * If handled correctly, the if condition will contains one backslash character followed by the simple quote.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
-     * @throws DocumentParserException²
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testAQLParsingOptionOk2() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/diagramValidEscaping2.docx");
@@ -726,9 +764,12 @@ public class DocumentParserTest {
      * The tested tag is {m:diagram diagramProvider:'wrong' width:'200' height:'200'
      * title:'RF Schema'}.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingWithNoProviderKo()
@@ -782,9 +823,12 @@ public class DocumentParserTest {
      * height:'200'
      * title:'RF Schema'}.
      * 
-     * @throws IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingWithNoDiagramProvider()
@@ -813,8 +857,11 @@ public class DocumentParserTest {
      * Provider options are handled by template processor so no error should be added.
      * 
      * @throws IOException
+     *             IOException
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingWithValidProviderButNoOptions()
@@ -845,8 +892,11 @@ public class DocumentParserTest {
      * aqlExpression:"wrong.->" legend:"plan de forme du dingy herbulot" legendPos:"below"}.
      * 
      * @throws IOException
+     *             IOException
      * @throws InvalidFormatException
-     * @throws DocumentParserException²
+     *             InvalidFormatException
+     * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testRepresentationParsingInvalidAqlExpressionOk()
@@ -875,6 +925,16 @@ public class DocumentParserTest {
                 representation.getRuns().get(THIRTY_FOUR));
     }
 
+    /**
+     * Bookmark And Link tag.
+     * 
+     * @throws IOException
+     *             IOException
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void bookmarkAndLink() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testBookmarkNominal.docx");
@@ -887,14 +947,14 @@ public class DocumentParserTest {
         assertTrue(template.getSubConstructs().get(1) instanceof Link);
         final Link linkBefore = (Link) template.getSubConstructs().get(1);
         assertTrue(linkBefore.getName().getAst() instanceof StringLiteral);
-        assertEquals("bookmark1", ((StringLiteral) linkBefore.getName().getAst()).getValue());
+        assertEquals(BOOKMARK1, ((StringLiteral) linkBefore.getName().getAst()).getValue());
         assertTrue(linkBefore.getText().getAst() instanceof StringLiteral);
         assertEquals("a reference to bookmark1", ((StringLiteral) linkBefore.getText().getAst()).getValue());
 
         assertTrue(template.getSubConstructs().get(3) instanceof Bookmark);
         final Bookmark bookmark = (Bookmark) template.getSubConstructs().get(3);
         assertTrue(bookmark.getName().getAst() instanceof StringLiteral);
-        assertEquals("bookmark1", ((StringLiteral) bookmark.getName().getAst()).getValue());
+        assertEquals(BOOKMARK1, ((StringLiteral) bookmark.getName().getAst()).getValue());
         assertEquals(1, bookmark.getSubConstructs().size());
         assertTrue(bookmark.getSubConstructs().get(0) instanceof StaticFragment);
         final StaticFragment fragment = (StaticFragment) bookmark.getSubConstructs().get(0);
@@ -904,7 +964,7 @@ public class DocumentParserTest {
         assertTrue(template.getSubConstructs().get(5) instanceof Link);
         final Link linkAfter = (Link) template.getSubConstructs().get(5);
         assertTrue(linkAfter.getName().getAst() instanceof StringLiteral);
-        assertEquals("bookmark1", ((StringLiteral) linkAfter.getName().getAst()).getValue());
+        assertEquals(BOOKMARK1, ((StringLiteral) linkAfter.getName().getAst()).getValue());
         assertTrue(linkAfter.getText().getAst() instanceof StringLiteral);
         assertEquals("a reference to bookmark1", ((StringLiteral) linkAfter.getText().getAst()).getValue());
     }
@@ -950,7 +1010,7 @@ public class DocumentParserTest {
      */
     @Test
     public void testUserDocOneLine() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        FileInputStream is = new FileInputStream("templates/testUserDoc2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
@@ -965,5 +1025,45 @@ public class DocumentParserTest {
         assertTrue(userDoc.getId() instanceof AstResult);
         assertEquals(1, userDoc.getSubConstructs().size());
         assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+    }
+
+    /**
+     * Test parsing userDoc tag with condition tag in userDoc content.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocWithConditionInContent()
+            throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc3.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        assertEquals(document, template.getBody());
+        assertEquals(3, template.getSubConstructs().size());
+        assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserDoc);
+        assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
+        UserDoc userDoc = (UserDoc) template.getSubConstructs().get(1);
+        assertNotNull(userDoc.getId());
+        assertTrue(userDoc.getId() instanceof AstResult);
+        assertEquals(3, userDoc.getSubConstructs().size());
+        assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+        assertTrue(userDoc.getSubConstructs().get(1) instanceof Conditionnal);
+        assertTrue(userDoc.getSubConstructs().get(2) instanceof StaticFragment);
+        // Check ValidationMessage
+        assertEquals(1, userDoc.getValidationMessages().size());
+        TemplateValidationMessage validationMessage = userDoc.getValidationMessages().get(0);
+        assertEquals("Invalid userdoc content, elements in userdoc must be STATIC type not IF type.",
+                validationMessage.getMessage());
+        assertEquals(ValidationMessageLevel.ERROR, validationMessage.getLevel());
+        XWPFRun location = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
+        assertEquals(location, validationMessage.getLocation());
     }
 }

@@ -274,7 +274,18 @@ public class BodyParser {
      * @return the next token type.
      */
     private TokenType getNextTokenType() {
-        ParsingToken token = runIterator.lookAhead(1);
+        return getNextTokenType(1);
+    }
+
+    /**
+     * returns the next token type after index.
+     * 
+     * @param index
+     *            index
+     * @return the next token type.
+     */
+    private TokenType getNextTokenType(int index) {
+        ParsingToken token = runIterator.lookAhead(index);
         TokenType result;
         if (token == null) {
             result = TokenType.EOF;
@@ -284,7 +295,7 @@ public class BodyParser {
             XWPFRun run = token.getRun();
             // is run a field begin run
             if (isFieldBegin(run)) {
-                String code = lookAheadTag();
+                String code = lookAheadTag(index);
                 if (code.startsWith(TokenType.FOR.getValue())) {
                     result = TokenType.FOR;
                 } else if (code.startsWith(TokenType.ENDFOR.getValue())) {
@@ -439,12 +450,14 @@ public class BodyParser {
      * precluding the tag nature prediction based on the first run only.
      * </p>
      * 
+     * @param index
+     *            index on current run iterator
      * @return the complete text of the current field.
      */
-    private String lookAheadTag() {
-        int i = 1;
+    private String lookAheadTag(int index) {
+        int i = index;
         // first run must begin a field.
-        XWPFRun run = this.runIterator.lookAhead(1).getRun();
+        XWPFRun run = this.runIterator.lookAhead(index).getRun();
         if (run == null) {
             throw new IllegalStateException("lookAheadTag shouldn't be called on a table.");
         }
@@ -879,9 +892,11 @@ public class BodyParser {
         if (providerQualifiedName != null) {
             result = ProviderRegistry.INSTANCE.getProvider(providerQualifiedName);
             if (result == null) {
-            	representation.getValidationMessages().add(new TemplateValidationMessage(ValidationMessageLevel.ERROR,
-                        String.format("The image tag is referencing an unknown diagram provider : '%s'", providerQualifiedName),
-                        representation.getRuns().get(1)));
+                representation.getValidationMessages()
+                        .add(new TemplateValidationMessage(ValidationMessageLevel.ERROR,
+                                String.format("The image tag is referencing an unknown diagram provider : '%s'",
+                                        providerQualifiedName),
+                                representation.getRuns().get(1)));
                 return null;
             }
         }
@@ -1176,7 +1191,8 @@ public class BodyParser {
     /**
      * Parses a user Document part.
      * user Document part are made of the following set of tags : {m:userdoc "query"} ...
-     *  ... {gd:enduserdoc}
+     * ... {m:enduserdoc}.
+     * userdoc tag must contain only some static element.
      * 
      * @author ohaegi
      * @return the created object
@@ -1196,7 +1212,32 @@ public class BodyParser {
             final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
             userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), tagText, lastRun));
         }
-        // read up the tags until the "gd:endbookmark" tag is encountered.
+        // Test if userdoc tag contain only some static element
+        boolean containStaticOnly = true;
+        TokenType noStaticType = null;
+        int index = 1;
+        while (containStaticOnly) {
+            TokenType type = getNextTokenType(index);
+
+            if (type == TokenType.ENDUSERDOC) {
+                break;
+            } else if (type != TokenType.STATIC) {
+                containStaticOnly = false;
+                noStaticType = type;
+            }
+            index++;
+        }
+        // if not containStaticOnly add validation message error
+        if (!containStaticOnly) {
+            // location is on userDoc run because elements in userDoc no already exists.
+            final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
+            TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
+                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_CONTENT, noStaticType),
+                    lastRun);
+            userDoc.getValidationMessages().add(templateValidationMessage);
+        }
+
+        // read up the tags until the "m:enduserdoc" tag is encountered.
         parseCompound(userDoc, TokenType.ENDUSERDOC);
         if (getNextTokenType() != TokenType.EOF) {
             readTag(userDoc, userDoc.getClosingRuns());
