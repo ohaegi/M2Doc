@@ -46,6 +46,7 @@ import org.obeonetwork.m2doc.template.Template;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.obeonetwork.m2doc.util.FieldUtils.lookAheadTag;
 
 /**
  * Test the {@link TemplateProcessor} class.
@@ -85,6 +86,17 @@ public class TemplateProcessorTest {
         registry.clear();
     }
 
+    /**
+     * Create Destination Document.
+     * 
+     * @param inputDocumentFileName
+     *            inputDocumentFileName
+     * @return XWPFDocument
+     * @throws IOException
+     *             IOException
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     */
     private XWPFDocument createDestinationDocument(String inputDocumentFileName)
             throws IOException, InvalidFormatException {
         FileInputStream is = new FileInputStream(inputDocumentFileName);
@@ -97,6 +109,9 @@ public class TemplateProcessorTest {
         return document;
     }
 
+    /**
+     * Setup.
+     */
     @Before
     public void setup() {
         ResourceSet rs = new ResourceSetImpl();
@@ -115,8 +130,11 @@ public class TemplateProcessorTest {
      * Test the replacement of a variable in a doc.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testVarRefProcessing() throws InvalidFormatException, IOException, DocumentParserException {
@@ -126,7 +144,9 @@ public class TemplateProcessorTest {
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("x", "valueofx");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testVar.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -135,14 +155,28 @@ public class TemplateProcessorTest {
         // scan the destination document
         assertEquals(2, destinationDoc.getParagraphs().size());
         System.out.println(destinationDoc.getParagraphs().get(0).getText());
+        // CHECKSTYLE:OFF
         assertEquals("Template de test pour les balises de référence à une variable : valueofx",
                 destinationDoc.getParagraphs().get(0).getText());
+        // CHECKSTYLE:ON
         assertEquals("Fin du gabarit", destinationDoc.getParagraphs().get(1).getText());
     }
 
+    /**
+     * Test Var Ref Styled Processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testVarRefStyledProcessing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testVarStyle.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
@@ -163,6 +197,16 @@ public class TemplateProcessorTest {
         assertNotNull(run.getCTR().getRPr().getB());
     }
 
+    /**
+     * Test Query Processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testQueryProcessing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testAQL.docx");
@@ -186,6 +230,16 @@ public class TemplateProcessorTest {
         assertEquals("", destinationDoc.getParagraphs().get(2).getText());
     }
 
+    /**
+     * Test Query Styled Processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testVarQueryStyledProcessing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testVarStyle.docx");
@@ -209,6 +263,16 @@ public class TemplateProcessorTest {
         assertNotNull(run.getCTR().getRPr().getB());
     }
 
+    /**
+     * Test m:for tag Processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testGDFORProcessing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testGDFOR.docx");
@@ -229,48 +293,62 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>true</code> expression evaluation and without an
+     * Tests a m:if with <code>true</code> expression evaluation and without an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testGDIF1Processing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("x", "value1");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testConditionnal1.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
                 null);
         processor.doSwitch(template);
+        // CHECKSTYLE:OFF
         assertEquals("Template de test pour les balises conditionnelles\u00a0: ajout de value1",
                 destinationDoc.getParagraphs().get(0).getText());
+        // CHECKSTYLE:ON
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and without
+     * Tests a m:if with <code>false</code> expression evaluation and without
      * an else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF2Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF2Processing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("x", "value");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testConditionnal1.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -281,16 +359,21 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>true</code> expression evaluation and with an
+     * Tests a m:if with <code>true</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testGDIF3Processing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
@@ -307,15 +390,18 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and with an
+     * Tests a m:if with <code>false</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF4Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF4Processing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
@@ -333,16 +419,21 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and with an
+     * Tests a m:if with <code>false</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF5Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF5Processing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
@@ -359,15 +450,18 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and with an
+     * Tests a m:if with <code>false</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF6Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF6Processing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
@@ -385,15 +479,18 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and with an
+     * Tests a m:if with <code>false</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF7Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF7Processing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
@@ -411,15 +508,18 @@ public class TemplateProcessorTest {
     }
 
     /**
-     * Tests a gd:if with <code>false</code> expression evaluation and with an
+     * Tests a m:if with <code>false</code> expression evaluation and with an
      * else.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
-    public void testGDIF8Processing() throws InvalidFormatException, IOException, DocumentParserException {
+    public void testMIF8Processing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal6.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
@@ -436,15 +536,29 @@ public class TemplateProcessorTest {
                 destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests NewLine processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testNewLineProcessing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("v", "part1\npart2\npart3\npart4");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testCarriageReturn.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -454,6 +568,16 @@ public class TemplateProcessorTest {
         assertEquals("part1\npart2\npart3\npart4", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests NewLine processing with No Text Around.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testNewLineProcessingNoTextAround()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -463,7 +587,9 @@ public class TemplateProcessorTest {
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("v", "\n\n\n");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testCarriageReturn.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -473,6 +599,16 @@ public class TemplateProcessorTest {
         assertEquals("\n\n\n", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests NewLine processing with No Text Before.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testNewLineProcessingNoTextBefore()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -482,7 +618,9 @@ public class TemplateProcessorTest {
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("v", "\n\n\ntext");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testCarriageReturn.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -492,6 +630,16 @@ public class TemplateProcessorTest {
         assertEquals("\n\n\ntext", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests NewLine processing with No Text After.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testNewLineProcessingNoTextAfter() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
@@ -500,7 +648,9 @@ public class TemplateProcessorTest {
         BodyParser parser = new BodyParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
+        // CHECKSTYLE:OFF
         definitions.put("v", "text\n\n\n");
+        // CHECKSTYLE:ON
         XWPFDocument destinationDoc = createDestinationDocument("templates/testCarriageReturn.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
         TemplateProcessor processor = new TemplateProcessor(definitions, "", bookmarkManager, env, destinationDoc,
@@ -510,6 +660,16 @@ public class TemplateProcessorTest {
         assertEquals("text\n\n\n", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Carryage Return NewLine processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testCarryageReturnNewLineProcessing()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -529,6 +689,16 @@ public class TemplateProcessorTest {
         assertEquals("part1\npart2\npart3\npart4", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Carryage Return NewLine processing with No Text Around.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testCarryageReturnNewLineProcessingNoTextAround()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -548,6 +718,16 @@ public class TemplateProcessorTest {
         assertEquals("\n\n\n", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Carryage Return NewLine processing with No Text Before.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testCarryageReturnNewLineProcessingNoTextBefore()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -567,6 +747,16 @@ public class TemplateProcessorTest {
         assertEquals("\n\n\ntext", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Carryage Return NewLine processing with No Text After.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testCarryageReturnNewLineProcessingNoTextAfter()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -586,9 +776,21 @@ public class TemplateProcessorTest {
         assertEquals("text\n\n\n", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Tabulation processing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testTabulationProcessing() throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
         FileInputStream is = new FileInputStream("templates/testTabulation.docx");
+        // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyParser parser = new BodyParser(document, env);
@@ -604,6 +806,16 @@ public class TemplateProcessorTest {
         assertEquals("part1\tpart2\tpart3\tpart4", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Tabulation processing with no text Around.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testTabulationProcessingNoTextAround()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -623,6 +835,16 @@ public class TemplateProcessorTest {
         assertEquals("\t\t\t", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Tabulation processing with no text Before.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testTabulationProcessingNoTextBefore()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -642,6 +864,16 @@ public class TemplateProcessorTest {
         assertEquals("\t\t\ttext", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Tabulation processing with no text After.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testTabulationProcessingNoTextAfter()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -661,6 +893,16 @@ public class TemplateProcessorTest {
         assertEquals("text\t\t\t", destinationDoc.getParagraphs().get(0).getText());
     }
 
+    /**
+     * Tests Empty Paragraphs processing with no text Around.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testEmptyParagraphsProcessing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testEmptyParagraphs.docx");
@@ -689,8 +931,11 @@ public class TemplateProcessorTest {
      * resultKind="twoImage" legend:"plan de forme du dingy herbulot" legendPos:"below"} that should produced an image in the run.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagTwoImageInsertionOk()
@@ -703,8 +948,10 @@ public class TemplateProcessorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramValidTwoImage.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
+        // CHECKSTYLE:OFF
         TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, env,
                 destinationDoc, rootObject);
+        // CHECKSTYLE:ON
         processor.doSwitch(template);
         assertEquals("", destinationDoc.getParagraphs().get(0).getText());
         assertEquals(1, destinationDoc.getParagraphs().size());
@@ -717,8 +964,11 @@ public class TemplateProcessorTest {
      * resultKind="oneImage" legend:"plan de forme du dingy herbulot" legendPos:"below"} that should produced an image in the run.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagOneImageInsertionOk()
@@ -745,8 +995,11 @@ public class TemplateProcessorTest {
      * resultKind="zeroImage" legend:"plan de forme du dingy herbulot" legendPos:"below"} that should produced an image in the run.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagZeroImageInsertionOk()
@@ -772,8 +1025,11 @@ public class TemplateProcessorTest {
      * resultKind="exception" legend:"plan de forme du dingy herbulot" legendPos:"below"}
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagException() throws InvalidFormatException, IOException, DocumentParserException {
@@ -800,8 +1056,11 @@ public class TemplateProcessorTest {
      * The given provider does not exists. An error message should be in the run.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagNoProviderCorresponding()
@@ -828,8 +1087,11 @@ public class TemplateProcessorTest {
      * legendPos:'below'} that should produced an error message in the run because the AQL expression in invalid.
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserExceptionn
      */
     @Test
     public void testDiagramTagAqlOptionParsingError()
@@ -859,8 +1121,11 @@ public class TemplateProcessorTest {
      * aqlExpression:"'testImage'" legend:"plan de forme du dingy herbulot" legendPos:"below"}
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDiagramTagAqlValid() throws InvalidFormatException, IOException, DocumentParserException {
@@ -886,8 +1151,11 @@ public class TemplateProcessorTest {
      * obeo)
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testStaticHyperLink() throws InvalidFormatException, IOException, DocumentParserException {
@@ -918,8 +1186,11 @@ public class TemplateProcessorTest {
      * "{m:'http://www.obeo.fr'}"},Lien dynamique vers obeo).
      * 
      * @throws InvalidFormatException
+     *             InvalidFormatException
      * @throws IOException
+     *             IOException
      * @throws DocumentParserException
+     *             DocumentParserException
      */
     @Test
     public void testDynamicHyperLink() throws InvalidFormatException, IOException, DocumentParserException {
@@ -936,12 +1207,9 @@ public class TemplateProcessorTest {
         processor.doSwitch(template);
         // CHECKSTYLE:OFF
         assertEquals(17, destinationDoc.getParagraphs().size());
-        // CHECKSTYLE:ON
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getHyperlinkList().size());
         assertEquals(0, destinationDoc.getHyperlinks().length);
-        // CHECKSTYLE:OFF
         assertEquals(8, destinationDoc.getParagraphs().get(0).getRuns().size());
-        // CHECKSTYLE:ON
         assertTrue(destinationDoc.getParagraphs().get(0).getCTP().toString().replaceAll("[\\s\\t]", "")
                 .replaceAll("(\\r)?\\n", "")
                 .contains(("<w:r>" + "  <w:fldChar w:fldCharType=\"begin\"/>" + "</w:r>" + " <w:r>"
@@ -955,5 +1223,236 @@ public class TemplateProcessorTest {
                     + "</w:r>" + "<w:r>" + "  <w:rPr>" + "   <w:rStyle w:val=\"Lienhypertexte\"/>" + "  </w:rPr>"
                     + "  <w:fldChar w:fldCharType=\"end\"/>" + " </w:r>" + "</xml-fragment>").replaceAll("[\\s\\t]", "")
                             .replaceAll("(\\r)?\\n", "")));
+        // CHECKSTYLE:ON
     }
+
+    /**
+     * Tests userdoc template tag without userdocdest tag support.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocSimple() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
+        final BookmarkManager bookmarkManager = new BookmarkManager();
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, env,
+                destinationDoc, rootObject);
+        processor.doSwitch(template);
+        // POIServices.getInstance().saveFile(destinationDoc, "results/testUserDoc1Resultat.docx");
+        // CHECKSTYLE:OFF
+        assertEquals(8, destinationDoc.getParagraphs().size());
+        assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        assertEquals(1, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
+        assertEquals("m:userdocdest id='value1'",
+                destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
+        assertEquals(1, destinationDoc.getParagraphs().get(5).getCTP().getFldSimpleList().size());
+        assertEquals("m:enduserdocdest",
+                destinationDoc.getParagraphs().get(5).getCTP().getFldSimpleList().get(0).getInstr());
+        // CHECKSTYLE:ON
+    }
+
+    /**
+     * Tests userdoc template tag without userdocdest tag support.
+     * userdoc tag in one line
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocOneLine() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc2.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc2.docx");
+        final BookmarkManager bookmarkManager = new BookmarkManager();
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, env,
+                destinationDoc, rootObject);
+        processor.doSwitch(template);
+        // POIServices.getInstance().saveFile(destinationDoc, "results/testUserDoc2Resultat.docx");
+        // CHECKSTYLE:OFF
+        assertEquals(4, destinationDoc.getParagraphs().size());
+        assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        assertEquals(2, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
+        assertEquals("m:userdocdest id='value1'",
+                destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
+        assertEquals("m:enduserdocdest",
+                destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(1).getInstr());
+        // CHECKSTYLE:ON
+    }
+
+    /**
+     * Tests userdoc template tag without userdocdest tag support with Tag In Content (parsing errors).
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocTagInContent() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc3.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc3.docx");
+        final BookmarkManager bookmarkManager = new BookmarkManager();
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, env,
+                destinationDoc, rootObject);
+        processor.doSwitch(template);
+        // POIServices.getInstance().saveFile(destinationDoc, "results/testUserDoc3Resultat.docx");
+        // CHECKSTYLE:OFF
+        assertEquals(9, destinationDoc.getParagraphs().size());
+        assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
+        assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
+        assertEquals("m:userdoc id=\"'value1'\"", lookAheadTag(paragraph1.getRuns()));
+        int paragraph1RunNbr = paragraph1.getRuns().size();
+        assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
+                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
+
+        XWPFParagraph paragraph3 = destinationDoc.getParagraphs().get(3);
+        assertEquals(1, paragraph3.getRuns().get(0).getCTR().getFldCharList().size());
+        assertEquals("m:if x='1'", lookAheadTag(paragraph3.getRuns()));
+        assertEquals("Invalid userdoc content, the type Conditionnal can not be contrain by userdoc tag.",
+                paragraph3.getRuns().get(4).getText(0));
+        // CHECKSTYLE:ON
+    }
+
+    /**
+     * Tests userdoc template tag without userdocdest tag support with no AQL parameter (parsing errors).
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocTagNoAql() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("templates/testUserDoc4.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        BodyParser parser = new BodyParser(document, env);
+        Template template = parser.parseTemplate();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc4.docx");
+        final BookmarkManager bookmarkManager = new BookmarkManager();
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, env,
+                destinationDoc, rootObject);
+        processor.doSwitch(template);
+        // POIServices.getInstance().saveFile(destinationDoc, "results/testUserDoc4Resultat.docx");
+        // CHECKSTYLE:OFF
+        assertEquals(8, destinationDoc.getParagraphs().size());
+        assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
+        assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
+        assertEquals("m:userdoc x=\"'value1'\"", lookAheadTag(paragraph1.getRuns()));
+        int paragraph1RunNbr = paragraph1.getRuns().size();
+        assertEquals("userdoc tag must have an id parameter.",
+                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
+        assertEquals("Expression \"\" is invalid: null or empty string.",
+                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(1));
+        // CHECKSTYLE:ON
+    }
+
+    // /**
+    // * Extract tag string (word field) from runs list.
+    // * The tag must begin at the first run, return empty sting if not.
+    // *
+    // * @param runs
+    // * list of run where find tag
+    // * @return tag string
+    // */
+    // private String lookAheadTag(List<XWPFRun> runs) {
+    // int i = 0;
+    // // first run must begin a field.
+    // XWPFRun run = runs.get(i);
+    // if (run != null) {
+    // if (isFieldBegin(run)) {
+    // StringBuilder builder = new StringBuilder();
+    // i++;
+    // run = runs.get(i);
+    // // run is null when EOF is reached or a table is encountered.
+    // while (run != null && !isFieldEnd(run)) {
+    // builder.append(readUpInstrText(run));
+    // run = runs.get(++i);
+    // }
+    // return builder.toString().trim();
+    // }
+    // }
+    // return "";
+    // }
+    //
+    // /**
+    // * Returns <code>true</code> when the specified run is a field begin run and <code>false</code> otherwise.
+    // *
+    // * @param run
+    // * the concerned run
+    // * @return <code>true</code> for field begin.
+    // */
+    // private boolean isFieldBegin(XWPFRun run) {
+    // if (run.getCTR().getFldCharList().size() > 0) {
+    // CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
+    // return STFldCharType.BEGIN.equals(fldChar.getFldCharType());
+    // } else {
+    // return false;
+    // }
+    // }
+    //
+    // /**
+    // * Returns <code>true</code> when the specified run is a field end run and <code>false</code> otherwise.
+    // *
+    // * @param run
+    // * the concerned run
+    // * @return <code>true</code> for field end.
+    // */
+    //
+    // private boolean isFieldEnd(XWPFRun run) {
+    // if (run.getCTR().getFldCharList().size() > 0) {
+    // CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
+    // return STFldCharType.END.equals(fldChar.getFldCharType());
+    // } else {
+    // return false;
+    // }
+    // }
+    //
+    // /**
+    // * reads up the instruction of a field's run.
+    // *
+    // * @param run
+    // * the run to read.
+    // * @return the aggregated instruction text of the run
+    // */
+    // private StringBuilder readUpInstrText(XWPFRun run) {
+    // List<CTText> texts = run.getCTR().getInstrTextList();
+    // StringBuilder runBuilder = new StringBuilder();
+    // for (CTText text : texts) {
+    // runBuilder.append(text.getStringValue());
+    // }
+    // return runBuilder;
+    // }
+
 }

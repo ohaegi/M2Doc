@@ -133,6 +133,16 @@ public class DocumentParserTest {
         registry.clear();
     }
 
+    /**
+     * Test Template Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testTemplateParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testTemplate.docx");
@@ -146,6 +156,16 @@ public class DocumentParserTest {
         assertEquals(2, ((StaticFragment) template.getSubConstructs().get(0)).getRuns().size());
     }
 
+    /**
+     * Test var Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testVarParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testVar.docx");
@@ -162,6 +182,16 @@ public class DocumentParserTest {
         assertNotNull(varRef.getQuery());
     }
 
+    /**
+     * Test query Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testQueryParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testAQL.docx");
@@ -178,6 +208,16 @@ public class DocumentParserTest {
         assertNotNull(query.getQuery());
     }
 
+    /**
+     * Test Repetition Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testRepetitionParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testGDFOR.docx");
@@ -198,6 +238,16 @@ public class DocumentParserTest {
         assertTrue(repetition.getSubConstructs().get(0) instanceof StaticFragment);
     }
 
+    /**
+     * Test simple conditional Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testSimpleConditionnalParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
@@ -217,6 +267,16 @@ public class DocumentParserTest {
         assertNull(conditionnal.getAlternative());
     }
 
+    /**
+     * Test simple conditional with else Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testConditionnalWithElseParsing() throws InvalidFormatException, IOException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
@@ -237,8 +297,16 @@ public class DocumentParserTest {
         assertTrue(conditionnal.getElse().getSubConstructs().get(0) instanceof StaticFragment);
     }
 
-    // testUserDoc1.docx
-
+    /**
+     * Test simple conditional with else if Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testConditionnalWithElseIfParsing()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -263,6 +331,16 @@ public class DocumentParserTest {
         assertNull(conditionnal.getAlternative().getElse());
     }
 
+    /**
+     * Test simple conditional with 2 else if Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testConditionnalWith2ElseIfParsing()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -291,6 +369,16 @@ public class DocumentParserTest {
         assertNull(conditionnal.getAlternative().getAlternative().getElse());
     }
 
+    /**
+     * Test simple conditional with 2 else if and an else Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void testConditionnalWith2ElseIfAndElseParsing()
             throws InvalidFormatException, IOException, DocumentParserException {
@@ -322,6 +410,16 @@ public class DocumentParserTest {
                 .get(0) instanceof StaticFragment);
     }
 
+    /**
+     * Test table Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void tableParsingTest() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testTable.docx");
@@ -351,6 +449,16 @@ public class DocumentParserTest {
 
     }
 
+    /**
+     * Test for with table Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void forWithtableParsingTest() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testGDFORWithTable.docx");
@@ -371,6 +479,16 @@ public class DocumentParserTest {
         assertNotNull(((Query) row.getCells().get(1).getTemplate().getSubConstructs().get(0)).getQuery());
     }
 
+    /**
+     * Test image Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void imageParsingTest() throws IOException, InvalidFormatException, DocumentParserException {
         FileInputStream is = new FileInputStream("templates/testImageTag.docx");
@@ -380,10 +498,14 @@ public class DocumentParserTest {
         Template template = parser.parseTemplate();
         assertEquals(1, template.getSubConstructs().size());
         Image im = (Image) template.getSubConstructs().get(0);
+        // CHECKSTYLE:OFF
         assertEquals("images/dh1.gif", im.getFileName());
+        // CHECKSTYLE:ON
         assertEquals(100, im.getHeight());
         assertEquals(100, im.getWidth());
+        // CHECKSTYLE:OFF
         assertEquals("plan de forme du dingy herbulot", im.getLegend());
+        // CHECKSTYLE:ON
         assertEquals(POSITION.BELOW, im.getLegendPOS());
     }
 
@@ -581,6 +703,16 @@ public class DocumentParserTest {
         assertEquals(POSITION.BELOW, im.getLegendPOS());
     }
 
+    /**
+     * Test image with out file directive Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void imageParsingTestWithoutFiledirective()
             throws IOException, InvalidFormatException, DocumentParserException {
@@ -595,6 +727,16 @@ public class DocumentParserTest {
                 "Invalid image directive : no file name provided.", im.getRuns().get(TWENTY));
     }
 
+    /**
+     * Test image with bad option Parsing.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
     @Test
     public void imageParsingTestWithBadOptionName()
             throws IOException, InvalidFormatException, DocumentParserException {
@@ -708,7 +850,9 @@ public class DocumentParserTest {
         assertEquals(POSITION.BELOW, representation.getLegendPOS());
         EMap<String, Object> optionValueMap = representation.getOptionValueMap();
         assertEquals(1, representation.getOptionValueMap().size());
+        // CHECKSTYLE:OFF
         assertNotNull(optionValueMap.get("aqlExpression"));
+        // CHECKSTYLE:ON
         AstResult result = (AstResult) optionValueMap.get("aqlExpression");
         org.eclipse.acceleo.query.ast.Conditional conditional = (Conditional) result.getAst();
 
@@ -996,6 +1140,10 @@ public class DocumentParserTest {
         assertTrue(userDoc.getId() instanceof AstResult);
         assertEquals(1, userDoc.getSubConstructs().size());
         assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+        // AQL parsing test
+        assertTrue(userDoc.getId().getAst() instanceof StringLiteral);
+        assertEquals("value1", ((StringLiteral) (userDoc.getId().getAst())).getValue());
+
     }
 
     /**
@@ -1025,6 +1173,9 @@ public class DocumentParserTest {
         assertTrue(userDoc.getId() instanceof AstResult);
         assertEquals(1, userDoc.getSubConstructs().size());
         assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
+        // AQL parsing test
+        assertTrue(userDoc.getId().getAst() instanceof StringLiteral);
+        assertEquals("value1", ((StringLiteral) (userDoc.getId().getAst())).getValue());
     }
 
     /**
@@ -1060,7 +1211,7 @@ public class DocumentParserTest {
         // Check ValidationMessage
         assertEquals(1, userDoc.getValidationMessages().size());
         TemplateValidationMessage validationMessage = userDoc.getValidationMessages().get(0);
-        assertEquals("Invalid userdoc content, elements in userdoc must be STATIC type not IF type.",
+        assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
                 validationMessage.getMessage());
         assertEquals(ValidationMessageLevel.ERROR, validationMessage.getLevel());
         XWPFRun location = userDoc.getRuns().get(userDoc.getRuns().size() - 1);

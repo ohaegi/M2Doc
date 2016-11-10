@@ -52,7 +52,15 @@ public enum ParsingErrorMessage {
     /**
      * Error message issued when a userdoc tag contents some thing else than element of STATIC type.
      */
-    INVALID_USERDOC_CONTENT("Invalid userdoc content, elements in userdoc must be STATIC type not {0} type.");
+    INVALID_USERDOC_CONTENT("Invalid userdoc content, elements in userdoc must only be STATIC type."),
+    /**
+     * Error message issued when a userdoc tag contents some thing else than element of STATIC type.
+     */
+    INVALID_USERDOC_NOT_STATIC("Invalid userdoc content, the type {0} can not be contrain by userdoc tag."),
+    /**
+     * Error message issued when a userdoc tag have not id parameter.
+     */
+    INVALID_USERDOC_ID_MUST_EXIST("userdoc tag must have an id parameter.");
     /**
      * The error message.
      */

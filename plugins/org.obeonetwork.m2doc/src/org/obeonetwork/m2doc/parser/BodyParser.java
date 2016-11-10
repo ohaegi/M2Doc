@@ -18,7 +18,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import java.io.StringReader;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,14 +79,16 @@ import org.obeonetwork.m2doc.template.TableClient;
 import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.TemplatePackage;
 import org.obeonetwork.m2doc.template.UserDoc;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTFldChar;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.difference;
 
 import static org.obeonetwork.m2doc.provider.ProviderConstants.HIDE_TITLE_KEY;
+import static org.obeonetwork.m2doc.util.FieldUtils.isFieldBegin;
+import static org.obeonetwork.m2doc.util.FieldUtils.isFieldEnd;
+import static org.obeonetwork.m2doc.util.FieldUtils.lookAheadTag;
+import static org.obeonetwork.m2doc.util.FieldUtils.readUpInstrText;
+import static org.obeonetwork.m2doc.util.M2DocUtils.message;
 import static org.obeonetwork.m2doc.util.M2DocUtils.validationError;
 
 /**
@@ -113,6 +114,10 @@ public class BodyParser {
      * text modifier constant.
      */
     private static final String TEXT_MODIFIER = " text";
+    /**
+     * id modifier constant.
+     */
+    private static final String ID_USERDOC_PARAMETER = "id";
     /**
      * Image file name option name.
      */
@@ -149,6 +154,7 @@ public class BodyParser {
      * Image legend position above value's constant.
      */
     private static final String IMAGE_LEGEND_BELOW = "below";
+
     /**
      * Array of image's options name constants.
      */
@@ -223,52 +229,6 @@ public class BodyParser {
     }
 
     /**
-     * Creates an error message.
-     * 
-     * @param message
-     *            the error to create a message from
-     * @param objects
-     *            the list of the message arguments
-     * @return the formated error message
-     */
-    private String message(ParsingErrorMessage message, Object... objects) {
-        return MessageFormat.format(message.getMessage(), objects);
-    }
-
-    /**
-     * Returns <code>true</code> when the specified run is a field begin run and <code>false</code> otherwise.
-     * 
-     * @param run
-     *            the concerned run
-     * @return <code>true</code> for field begin.
-     */
-    private boolean isFieldBegin(XWPFRun run) {
-        if (run.getCTR().getFldCharList().size() > 0) {
-            CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
-            return STFldCharType.BEGIN.equals(fldChar.getFldCharType());
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Returns <code>true</code> when the specified run is a field end run and <code>false</code> otherwise.
-     * 
-     * @param run
-     *            the concerned run
-     * @return <code>true</code> for field end.
-     */
-
-    private boolean isFieldEnd(XWPFRun run) {
-        if (run.getCTR().getFldCharList().size() > 0) {
-            CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
-            return STFldCharType.END.equals(fldChar.getFldCharType());
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * returns the next token type.
      * 
      * @return the next token type.
@@ -295,7 +255,7 @@ public class BodyParser {
             XWPFRun run = token.getRun();
             // is run a field begin run
             if (isFieldBegin(run)) {
-                String code = lookAheadTag(index);
+                String code = lookAheadTag(index, runIterator);
                 if (code.startsWith(TokenType.FOR.getValue())) {
                     result = TokenType.FOR;
                 } else if (code.startsWith(TokenType.ENDFOR.getValue())) {
@@ -439,57 +399,6 @@ public class BodyParser {
             }
             type = getNextTokenType();
         }
-    }
-
-    /**
-     * read up a tag looking ahead the runs so that a prediction can be made
-     * over the nature of a field.
-     * <p>
-     * Using such a method is mandatory because for some reasons fields like
-     * {gd:if ...} can be broken up in an unexpected number of runs thus
-     * precluding the tag nature prediction based on the first run only.
-     * </p>
-     * 
-     * @param index
-     *            index on current run iterator
-     * @return the complete text of the current field.
-     */
-    private String lookAheadTag(int index) {
-        int i = index;
-        // first run must begin a field.
-        XWPFRun run = this.runIterator.lookAhead(index).getRun();
-        if (run == null) {
-            throw new IllegalStateException("lookAheadTag shouldn't be called on a table.");
-        }
-        if (isFieldBegin(run)) {
-            StringBuilder builder = new StringBuilder();
-            i++;
-            run = this.runIterator.lookAhead(i).getRun();
-            // run is null when EOF is reached or a table is encountered.
-            while (run != null && !isFieldEnd(run)) {
-                builder.append(readUpInstrText(run));
-                run = this.runIterator.lookAhead(++i).getRun();
-            }
-            return builder.toString().trim();
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * reads up the instruction of a field's run.
-     * 
-     * @param run
-     *            the run to read.
-     * @return the aggregated instruction text of the run
-     */
-    private StringBuilder readUpInstrText(XWPFRun run) {
-        List<CTText> texts = run.getCTR().getInstrTextList();
-        StringBuilder runBuilder = new StringBuilder();
-        for (CTText text : texts) {
-            runBuilder.append(text.getStringValue());
-        }
-        return runBuilder;
     }
 
     /**
@@ -1189,7 +1098,7 @@ public class BodyParser {
     }
 
     /**
-     * Parses a user Document part.
+     * Parses a user Document template part.
      * user Document part are made of the following set of tags : {m:userdoc "query"} ...
      * ... {m:enduserdoc}.
      * userdoc tag must contain only some static element.
@@ -1205,25 +1114,32 @@ public class BodyParser {
         String tagText = readTag(userDoc, userDoc.getRuns()).trim();
         // remove the prefix
         tagText = tagText.substring(TokenType.USERDOC.getValue().length()).trim();
-        AstResult result = queryParser.build(tagText);
+        String aqlText = "";
+        if (tagText.startsWith(ID_USERDOC_PARAMETER)) {
+            aqlText = tagText.replaceFirst(ID_USERDOC_PARAMETER + "\\s*\\=\\s*\"", "").replaceFirst("\"$", "");
+        } else {
+            final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
+            TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
+                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_ID_MUST_EXIST), lastRun);
+            userDoc.getValidationMessages().add(templateValidationMessage);
+        }
+
+        AstResult result = queryParser.build(aqlText);
         if (result.getErrors().size() == 0) {
             userDoc.setId(result);
         } else {
             final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-            userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), tagText, lastRun));
+            userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), aqlText, lastRun));
         }
         // Test if userdoc tag contain only some static element
         boolean containStaticOnly = true;
-        TokenType noStaticType = null;
         int index = 1;
         while (containStaticOnly) {
             TokenType type = getNextTokenType(index);
-
             if (type == TokenType.ENDUSERDOC) {
                 break;
             } else if (type != TokenType.STATIC) {
                 containStaticOnly = false;
-                noStaticType = type;
             }
             index++;
         }
@@ -1232,8 +1148,7 @@ public class BodyParser {
             // location is on userDoc run because elements in userDoc no already exists.
             final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
             TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
-                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_CONTENT, noStaticType),
-                    lastRun);
+                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_CONTENT), lastRun);
             userDoc.getValidationMessages().add(templateValidationMessage);
         }
 
