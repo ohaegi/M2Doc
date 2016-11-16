@@ -115,10 +115,6 @@ public class BodyParser {
      */
     private static final String TEXT_MODIFIER = " text";
     /**
-     * id modifier constant.
-     */
-    private static final String ID_USERDOC_PARAMETER = "id";
-    /**
      * Image file name option name.
      */
     private static final String IMAGE_FILE_NAME_KEY = "file";
@@ -1114,22 +1110,13 @@ public class BodyParser {
         String tagText = readTag(userDoc, userDoc.getRuns()).trim();
         // remove the prefix
         tagText = tagText.substring(TokenType.USERDOC.getValue().length()).trim();
-        String aqlText = "";
-        if (tagText.startsWith(ID_USERDOC_PARAMETER)) {
-            aqlText = tagText.replaceFirst(ID_USERDOC_PARAMETER + "\\s*\\=\\s*\"", "").replaceFirst("\"$", "");
-        } else {
-            final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-            TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
-                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_ID_MUST_EXIST), lastRun);
-            userDoc.getValidationMessages().add(templateValidationMessage);
-        }
 
-        AstResult result = queryParser.build(aqlText);
+        AstResult result = queryParser.build(tagText);
         if (result.getErrors().size() == 0) {
             userDoc.setId(result);
         } else {
             final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-            userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), aqlText, lastRun));
+            userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), tagText, lastRun));
         }
         // Test if userdoc tag contain only some static element
         boolean containStaticOnly = true;

@@ -452,16 +452,12 @@ public class DocumentParserErrorsTest {
         UserDoc userDoc = (UserDoc) template.getSubConstructs().get(1);
         assertNull(userDoc.getId());
         // Check ValidationMessage
-        assertEquals(2, userDoc.getValidationMessages().size());
+        assertEquals(1, userDoc.getValidationMessages().size());
         TemplateValidationMessage validationMessage1 = userDoc.getValidationMessages().get(0);
-        assertEquals("userdoc tag must have an id parameter.", validationMessage1.getMessage());
-        assertEquals(ValidationMessageLevel.ERROR, validationMessage1.getLevel());
         XWPFRun location = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
+        assertEquals("Expression \"\" is invalid: null or empty string.", validationMessage1.getMessage());
+        assertEquals(ValidationMessageLevel.ERROR, validationMessage1.getLevel());
         assertEquals(location, validationMessage1.getLocation());
-        TemplateValidationMessage validationMessage2 = userDoc.getValidationMessages().get(1);
-        assertEquals("Expression \"\" is invalid: null or empty string.", validationMessage2.getMessage());
-        assertEquals(ValidationMessageLevel.ERROR, validationMessage2.getLevel());
-        assertEquals(location, validationMessage2.getLocation());
     }
 
 }

@@ -1327,7 +1327,7 @@ public class TemplateProcessorTest {
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
         assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
-        assertEquals("m:userdoc id=\"'value1'\"", lookAheadTag(paragraph1.getRuns()));
+        assertEquals("m:userdoc 'value1'", lookAheadTag(paragraph1.getRuns()));
         int paragraph1RunNbr = paragraph1.getRuns().size();
         assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
                 paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
@@ -1369,12 +1369,10 @@ public class TemplateProcessorTest {
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
         assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
-        assertEquals("m:userdoc x=\"'value1'\"", lookAheadTag(paragraph1.getRuns()));
+        assertEquals("m:userdoc", lookAheadTag(paragraph1.getRuns()));
         int paragraph1RunNbr = paragraph1.getRuns().size();
-        assertEquals("userdoc tag must have an id parameter.",
-                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
         assertEquals("Expression \"\" is invalid: null or empty string.",
-                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(1));
+                paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
         // CHECKSTYLE:ON
     }
 
