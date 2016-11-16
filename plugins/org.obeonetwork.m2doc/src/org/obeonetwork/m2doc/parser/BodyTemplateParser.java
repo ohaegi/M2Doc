@@ -21,7 +21,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,9 +36,6 @@ import org.apache.poi.xwpf.usermodel.IBody;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.eclipse.acceleo.query.ast.AstPackage;
 import org.eclipse.acceleo.query.ast.ErrorExpression;
 import org.eclipse.acceleo.query.parser.AstBuilderListener;
@@ -48,7 +44,6 @@ import org.eclipse.acceleo.query.parser.QueryParser;
 import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine;
 import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine.AstResult;
 import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
-import org.eclipse.acceleo.query.runtime.impl.QueryBuilderEngine;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -61,7 +56,6 @@ import org.obeonetwork.m2doc.template.AbstractConstruct;
 import org.obeonetwork.m2doc.template.AbstractImage;
 import org.obeonetwork.m2doc.template.AbstractProviderClient;
 import org.obeonetwork.m2doc.template.Bookmark;
-import org.obeonetwork.m2doc.template.Cell;
 import org.obeonetwork.m2doc.template.Compound;
 import org.obeonetwork.m2doc.template.Conditionnal;
 import org.obeonetwork.m2doc.template.Default;
@@ -72,22 +66,11 @@ import org.obeonetwork.m2doc.template.Query;
 import org.obeonetwork.m2doc.template.QueryBehavior;
 import org.obeonetwork.m2doc.template.Repetition;
 import org.obeonetwork.m2doc.template.Representation;
-import org.obeonetwork.m2doc.template.Row;
-import org.obeonetwork.m2doc.template.StaticFragment;
-import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.TableClient;
-import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.TemplatePackage;
 import org.obeonetwork.m2doc.template.UserDoc;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Sets.difference;
-
 import static org.obeonetwork.m2doc.provider.ProviderConstants.HIDE_TITLE_KEY;
-import static org.obeonetwork.m2doc.util.FieldUtils.isFieldBegin;
-import static org.obeonetwork.m2doc.util.FieldUtils.isFieldEnd;
-import static org.obeonetwork.m2doc.util.FieldUtils.lookAheadTag;
-import static org.obeonetwork.m2doc.util.FieldUtils.readUpInstrText;
 import static org.obeonetwork.m2doc.util.M2DocUtils.message;
 import static org.obeonetwork.m2doc.util.M2DocUtils.validationError;
 
@@ -100,7 +83,7 @@ import static org.obeonetwork.m2doc.util.M2DocUtils.validationError;
  * @author Romain Guider
  */
 @SuppressWarnings("restriction")
-public class BodyParser {
+public class BodyTemplateParser extends BodyAbstractParser {
 
     /**
      * Label modifier constant.
@@ -173,42 +156,21 @@ public class BodyParser {
      * Rank of the option's name group in the matcher.
      */
     private static final int OPTION_GROUP_RANK = 1;
-    /**
-     * Parsed template document.
-     */
-    private IBody document;
-    /**
-     * iterator over the document used to access {@link XWPFRun} instances in
-     * sequence.
-     */
-    private TokenProvider runIterator;
-    /**
-     * {@link IQueryBuilderEngine} used to parse AQL queries.
-     */
-    private IQueryBuilderEngine queryParser;
 
     /**
-     * The {@link IQueryEnvironment}.
-     */
-    private final IQueryEnvironment queryEnvironment;
-
-    /**
-     * Creates a new {@link BodyParser} instance.
+     * Creates a new {@link BodyTemplateParser} instance.
      * 
      * @param inputDocument
      *            the input template to parser
      * @param queryEnvironment
      *            the query environment to used during parsing.
      */
-    public BodyParser(IBody inputDocument, IQueryEnvironment queryEnvironment) {
-        this.document = inputDocument;
-        runIterator = new TokenProvider(inputDocument);
-        this.queryParser = new QueryBuilderEngine(queryEnvironment);
-        this.queryEnvironment = queryEnvironment;
+    public BodyTemplateParser(IBody inputDocument, IQueryEnvironment queryEnvironment) {
+        super(inputDocument, queryEnvironment);
     }
 
     /**
-     * Creates a new {@link BodyParser} instance.
+     * Creates a new {@link BodyTemplateParser} instance.
      * 
      * @param inputDocument
      *            the input template to parser
@@ -217,20 +179,8 @@ public class BodyParser {
      * @param queryEnvironment
      *            The {@link IQueryEnvironment}
      */
-    BodyParser(IBody inputDocument, IQueryBuilderEngine queryParser, IQueryEnvironment queryEnvironment) {
-        this.document = inputDocument;
-        runIterator = new TokenProvider(inputDocument);
-        this.queryParser = queryParser;
-        this.queryEnvironment = queryEnvironment;
-    }
-
-    /**
-     * returns the next token type.
-     * 
-     * @return the next token type.
-     */
-    private TokenType getNextTokenType() {
-        return getNextTokenType(1);
+    BodyTemplateParser(IBody inputDocument, IQueryBuilderEngine queryParser, IQueryEnvironment queryEnvironment) {
+        super(inputDocument, queryParser, queryEnvironment);
     }
 
     /**
@@ -240,7 +190,8 @@ public class BodyParser {
      *            index
      * @return the next token type.
      */
-    private TokenType getNextTokenType(int index) {
+    @Override
+    protected TokenType getNextTokenType(int index) {
         ParsingToken token = runIterator.lookAhead(index);
         TokenType result;
         if (token == null) {
@@ -250,8 +201,8 @@ public class BodyParser {
         } else {
             XWPFRun run = token.getRun();
             // is run a field begin run
-            if (isFieldBegin(run)) {
-                String code = lookAheadTag(index, runIterator);
+            if (fieldUtils.isFieldBegin(run)) {
+                String code = fieldUtils.lookAheadTag(index, runIterator);
                 if (code.startsWith(TokenType.FOR.getValue())) {
                     result = TokenType.FOR;
                 } else if (code.startsWith(TokenType.ENDFOR.getValue())) {
@@ -299,20 +250,6 @@ public class BodyParser {
     }
 
     /**
-     * Returns the template contained in the document.
-     * 
-     * @return the parsed template.
-     * @throws DocumentParserException
-     *             if a syntax problem is detected during parsing.
-     */
-    public Template parseTemplate() throws DocumentParserException {
-        Template template = (Template) EcoreUtil.create(TemplatePackage.Literals.TEMPLATE);
-        template.setBody(this.document);
-        parseCompound(template, TokenType.EOF);
-        return template;
-    }
-
-    /**
      * Parses a compound object.
      * 
      * @param compound
@@ -322,7 +259,8 @@ public class BodyParser {
      * @throws DocumentParserException
      *             if a problem occurs while parsing.
      */
-    private void parseCompound(Compound compound, TokenType... endTypes) throws DocumentParserException {
+    @Override
+    protected void parseCompound(Compound compound, TokenType... endTypes) throws DocumentParserException {
         TokenType type = getNextTokenType();
         List<TokenType> endTypeList = Lists.newArrayList(endTypes);
         while (!endTypeList.contains(type)) {
@@ -398,66 +336,6 @@ public class BodyParser {
     }
 
     /**
-     * Reads up a tag so that it can be parsed as a simple string.
-     * 
-     * @param construct
-     *            the construct to read tag to
-     * @param runsToFill
-     *            the run list to fill
-     * @return the string present into the tag as typed by the template author.
-     */
-    String readTag(AbstractConstruct construct, List<XWPFRun> runsToFill) {
-        XWPFRun run = this.runIterator.lookAhead(1).getRun();
-        if (run == null) {
-            throw new IllegalStateException("readTag shouldn't be called with a table in the lookahead window.");
-        }
-        XWPFRun styleRun = null;
-        boolean columnRead = false;
-        if (run != null && isFieldBegin(run)) {
-            runsToFill.add(runIterator.next().getRun()); // Consume begin field
-            boolean finished = false;
-            StringBuilder builder = new StringBuilder();
-            while (runIterator.hasNext() && !finished) {
-                run = runIterator.next().getRun();
-                if (run == null) {
-                    // XXX : treat this as a proper parsing error.
-                    throw new IllegalArgumentException("table cannot be inserted into tags.");
-                }
-                runsToFill.add(run);
-                if (isFieldEnd(run)) {
-                    finished = true;
-                } else {
-                    // CHECKSTYLE:OFF
-                    String runText = readUpInstrText(run).toString();
-                    builder.append(runText);
-                    // the style run hasn't been discovered yet.
-                    if (styleRun == null) {
-                        if (columnRead && !"".equals(runText)) {
-                            styleRun = run;
-                            construct.setStyleRun(styleRun);
-                        } else {
-                            int indexOfColumn = runText.indexOf(':');
-                            if (indexOfColumn >= 0) {
-                                columnRead = true;
-                                if (indexOfColumn < runText.length() - 1) {
-                                    styleRun = run;// ':' doesn't appear at the
-                                    construct.setStyleRun(styleRun);
-                                    // end of the string
-                                } // otherwise, use the next non empty run.
-                            }
-                        }
-                    }
-                }
-            }
-            return builder.toString();
-        } else {
-            throw new IllegalStateException("Shouldn't call readTag if the current run doesn't start a field");
-        }
-    }
-
-    // CHECKSTYLE:ON
-
-    /**
      * Parses a let construct.
      * 
      * @return the created object
@@ -498,48 +376,6 @@ public class BodyParser {
             query.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), queryText, lastRun));
         }
         return query;
-    }
-
-    /**
-     * Gets the {@link List} of {@link TemplateValidationMessage} from the given {@link Diagnostic}.
-     * 
-     * @param diagnostic
-     *            the {@link Diagnostic}
-     * @param queryText
-     *            the query text
-     * @param location
-     *            the location of the {@link TemplateValidationMessage}
-     * @return the {@link List} of {@link TemplateValidationMessage} from the given {@link Diagnostic}
-     */
-    private List<TemplateValidationMessage> getValidationMessage(Diagnostic diagnostic, String queryText,
-            XWPFRun location) {
-        final List<TemplateValidationMessage> res = new ArrayList<TemplateValidationMessage>();
-
-        for (Diagnostic child : diagnostic.getChildren()) {
-            final ValidationMessageLevel level;
-            switch (diagnostic.getSeverity()) {
-                case Diagnostic.INFO:
-                    level = ValidationMessageLevel.INFO;
-                    break;
-
-                case Diagnostic.WARNING:
-                    level = ValidationMessageLevel.WARNING;
-                    break;
-
-                case Diagnostic.ERROR:
-                    level = ValidationMessageLevel.ERROR;
-                    break;
-
-                default:
-                    level = ValidationMessageLevel.INFO;
-                    break;
-            }
-            res.add(new TemplateValidationMessage(level,
-                    message(ParsingErrorMessage.INVALIDEXPR, queryText, child.getMessage()), location));
-            res.addAll(getValidationMessage(child, queryText, location));
-        }
-
-        return res;
     }
 
     /**
@@ -696,21 +532,6 @@ public class BodyParser {
                     .addAll(getValidationMessage(result.getDiagnostic(), query, lastRun));
             providerTemplate.getOptionValueMap().put(aqlParsedOption.getKey(), null);
         }
-    }
-
-    /**
-     * parses a static fragment.
-     * 
-     * @return the object created
-     * @throws DocumentParserException
-     *             if something wrong happens during parsing
-     */
-    private StaticFragment parseStaticFragment() throws DocumentParserException {
-        StaticFragment result = (StaticFragment) EcoreUtil.create(TemplatePackage.Literals.STATIC_FRAGMENT);
-        while (getNextTokenType() == TokenType.STATIC) {
-            result.getRuns().add(runIterator.next().getRun());
-        }
-        return result;
     }
 
     /**
@@ -998,36 +819,6 @@ public class BodyParser {
     }
 
     /**
-     * Parses a table.
-     * 
-     * @param wtable
-     *            the table to parse
-     * @return the created object
-     * @throws DocumentParserException
-     *             if a problem occurs while parsing.
-     */
-    private Table parseTable(XWPFTable wtable) throws DocumentParserException {
-        if (wtable == null) {
-            throw new IllegalArgumentException("parseTable can't be called on a null argument.");
-        }
-        Table table = (Table) EcoreUtil.create(TemplatePackage.Literals.TABLE);
-        table.setTable(wtable);
-        for (XWPFTableRow tablerow : wtable.getRows()) {
-            Row row = (Row) EcoreUtil.create(TemplatePackage.Literals.ROW);
-            table.getRows().add(row);
-            row.setTableRow(tablerow);
-            for (XWPFTableCell tableCell : tablerow.getTableCells()) {
-                Cell cell = (Cell) EcoreUtil.create(TemplatePackage.Literals.CELL);
-                row.getCells().add(cell);
-                cell.setTableCell(tableCell);
-                BodyParser parser = new BodyParser(tableCell, this.queryParser, queryEnvironment);
-                cell.setTemplate(parser.parseTemplate());
-            }
-        }
-        return table;
-    }
-
-    /**
      * Parse a bookmark construct. Bookmark are of the form
      * <code>{gd:bookmark 'bookmark name'} runs {gd:endbookmark}</code>
      * 
@@ -1190,74 +981,4 @@ public class BodyParser {
 
         return result;
     }
-
-    /**
-     * Class to easily validate a list of options against options declared by a provider.
-     * 
-     * @author ldelaigue
-     */
-    private static final class OptionChecker {
-        /** The provider options, considered mandatory. */
-        private final Map<String, OptionType> providerOptions;
-        /** The options to ignore. */
-        private Set<String> optionsToIgnore;
-
-        /**
-         * Constructor.
-         * 
-         * @param providerOptions
-         *            The map opf provider options, cannot be <code>null</code>
-         */
-        private OptionChecker(Map<String, OptionType> providerOptions) {
-            this.providerOptions = checkNotNull(providerOptions);
-            optionsToIgnore = new LinkedHashSet<String>();
-        }
-
-        /**
-         * Static method to instantiate an OptionChecker more easily.
-         * 
-         * @param providerOptions
-         *            The provider options, cannot be <code>null</code>
-         * @return A new instance of OptionChecker.
-         */
-        public static OptionChecker check(Map<String, OptionType> providerOptions) {
-            return new OptionChecker(providerOptions);
-        }
-
-        /**
-         * Register the given option names as options to ignore. If these options are provided but are not present in the provider options,
-         * they won't cause the candidate to be rejected.
-         * 
-         * @param options
-         *            The options to ignore
-         * @return this, for a fluent API.
-         */
-        public OptionChecker ignore(String... options) {
-            for (String option : options) {
-                if (option != null) {
-                    optionsToIgnore.add(option);
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Check whether the given map of options is compatible with the provider options, taking into account the options to ignore and the
-         * rejectAdditionalOptions flag.
-         * 
-         * @param options
-         *            Options to check
-         * @return <code>true</code> if the given options are compatible with the provider options, taking the checker configuration into
-         *         account (options to ignore, reject additinoal options).
-         */
-        public boolean against(Map<String, String> options) {
-            for (Entry<String, OptionType> entry : providerOptions.entrySet()) {
-                if (!options.containsKey(entry.getKey())) {
-                    return false;
-                }
-            }
-            return difference(difference(options.keySet(), providerOptions.keySet()), optionsToIgnore).isEmpty();
-        }
-    }
-
 }

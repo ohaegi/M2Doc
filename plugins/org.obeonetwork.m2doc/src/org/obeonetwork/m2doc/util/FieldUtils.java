@@ -25,14 +25,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
  * 
  * @author ohaegi
  */
-public final class FieldUtils {
-
-    /**
-     * Constructor.
-     */
-    private FieldUtils() {
-        super();
-    }
+public class FieldUtils {
 
     /**
      * read up a tag looking ahead the runs so that a prediction can be made
@@ -49,20 +42,26 @@ public final class FieldUtils {
      *            run iterator
      * @return the complete text of the current field.
      */
-    public static String lookAheadTag(int index, final TokenProvider runIterator) {
-        LocalRunsIterator runsIter = new LocalRunsIterator() {
-
-            @Override
-            public XWPFRun getRun(int i) {
-                XWPFRun run = runIterator.lookAhead(i).getRun();
-                if (run == null) {
-                    throw new IllegalStateException("lookAheadTag shouldn't be called on a table.");
-                }
-                return run;
+    public String lookAheadTag(int index, final TokenProvider runIterator) {
+        int i = index;
+        // first run must begin a field.
+        XWPFRun run = runIterator.lookAhead(i).getRun();
+        if (run == null) {
+            throw new IllegalStateException("lookAheadTag shouldn't be called on a table.");
+        }
+        if (isFieldBegin(run)) {
+            StringBuilder builder = new StringBuilder();
+            i++;
+            run = runIterator.lookAhead(i).getRun();
+            // run is null when EOF is reached or a table is encountered.
+            while (run != null && !isFieldEnd(run)) {
+                builder.append(readUpInstrText(run));
+                run = runIterator.lookAhead(++i).getRun();
             }
-        };
-
-        return lookAheadTag(runsIter, index);
+            return builder.toString().trim();
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -73,17 +72,23 @@ public final class FieldUtils {
      *            list of run where find tag
      * @return tag string
      */
-    public static String lookAheadTag(final List<XWPFRun> runs) {
-        LocalRunsIterator runsIter = new LocalRunsIterator() {
-
-            @Override
-            public XWPFRun getRun(int index) {
-                // TODO Auto-generated method stub
-                return runs.get(index);
+    public String lookAheadTag(final List<XWPFRun> runs) {
+        int i = 0;
+        XWPFRun run = runs.get(i);
+        if (run != null) {
+            if (isFieldBegin(run)) {
+                StringBuilder builder = new StringBuilder();
+                i++;
+                run = runs.get(i);
+                // run is null when EOF is reached or a table is encountered.
+                while (run != null && !isFieldEnd(run)) {
+                    builder.append(readUpInstrText(run));
+                    run = runs.get(++i);
+                }
+                return builder.toString().trim();
             }
-        };
-
-        return lookAheadTag(runsIter, 0);
+        }
+        return "";
     }
 
     /**
@@ -96,41 +101,24 @@ public final class FieldUtils {
      *            run index in iterator
      * @return tag string
      */
-    private static String lookAheadTag(LocalRunsIterator runs, int index) {
+    public String lookAheadTag(List<XWPFRun> runs, int index) {
         int i = index;
         // first run must begin a field.
-        XWPFRun run = runs.getRun(i);
+        XWPFRun run = runs.get(i);
         if (run != null) {
             if (isFieldBegin(run)) {
                 StringBuilder builder = new StringBuilder();
                 i++;
-                run = runs.getRun(i);
+                run = runs.get(i);
                 // run is null when EOF is reached or a table is encountered.
                 while (run != null && !isFieldEnd(run)) {
                     builder.append(readUpInstrText(run));
-                    run = runs.getRun(++i);
+                    run = runs.get(++i);
                 }
                 return builder.toString().trim();
             }
         }
         return "";
-    }
-
-    /**
-     * LocalRunsIterator.
-     * To be implemented by List<XWPFRun> runs or TokenProvider runIterator
-     * 
-     * @author ohaegi
-     */
-    interface LocalRunsIterator {
-        /**
-         * Return run located to index in Iterator.
-         * 
-         * @param index
-         *            location of run in iterator
-         * @return run
-         */
-        XWPFRun getRun(int index);
     }
 
     /**
@@ -140,7 +128,7 @@ public final class FieldUtils {
      *            the concerned run
      * @return <code>true</code> for field begin.
      */
-    public static boolean isFieldBegin(XWPFRun run) {
+    public boolean isFieldBegin(XWPFRun run) {
         if (run.getCTR().getFldCharList().size() > 0) {
             CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
             return STFldCharType.BEGIN.equals(fldChar.getFldCharType());
@@ -157,7 +145,7 @@ public final class FieldUtils {
      * @return <code>true</code> for field end.
      */
 
-    public static boolean isFieldEnd(XWPFRun run) {
+    public boolean isFieldEnd(XWPFRun run) {
         if (run.getCTR().getFldCharList().size() > 0) {
             CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
             return STFldCharType.END.equals(fldChar.getFldCharType());

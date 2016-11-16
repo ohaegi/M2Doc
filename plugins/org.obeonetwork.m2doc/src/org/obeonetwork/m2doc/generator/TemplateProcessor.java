@@ -517,7 +517,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
                 }
 
                 // Tag UserDocDest with evaluated id
-                addDocField(object, "m:userdocdest id='" + id + "'");
+                addDocField(object, "m:userdocdest " + id);
 
                 // Copy userdoc content
                 boolean hasNoDestForId = true;

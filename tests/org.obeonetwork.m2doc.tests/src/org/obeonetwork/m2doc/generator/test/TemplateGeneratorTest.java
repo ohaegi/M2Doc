@@ -25,7 +25,7 @@ import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
 import org.junit.Test;
 import org.obeonetwork.m2doc.generator.DocumentGenerationException;
 import org.obeonetwork.m2doc.generator.TemplateGenerator;
-import org.obeonetwork.m2doc.parser.DocumentParser;
+import org.obeonetwork.m2doc.parser.DocumentTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
@@ -59,7 +59,7 @@ public class TemplateGeneratorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentParser parser = new DocumentParser(document, queryEnvironment);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         final XWPFRun location = ((XWPFParagraph) template.getDocument().getBodyElements().get(0)).getRuns().get(0);
         template.getBody().getValidationMessages()
@@ -95,7 +95,7 @@ public class TemplateGeneratorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentParser parser = new DocumentParser(document, queryEnvironment);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         final XWPFRun location = ((XWPFParagraph) template.getDocument().getBodyElements().get(0)).getRuns().get(0);
         template.getBody().getValidationMessages().add(
@@ -131,7 +131,7 @@ public class TemplateGeneratorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentParser parser = new DocumentParser(document, queryEnvironment);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         final XWPFRun location = ((XWPFParagraph) template.getDocument().getBodyElements().get(0)).getRuns().get(0);
         template.getBody().getValidationMessages()
@@ -167,7 +167,7 @@ public class TemplateGeneratorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentParser parser = new DocumentParser(document, queryEnvironment);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         final XWPFRun location = ((XWPFParagraph) template.getDocument().getBodyElements().get(0)).getRuns().get(0);
         template.getBody().getValidationMessages()

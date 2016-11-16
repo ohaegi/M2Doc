@@ -22,7 +22,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine.AstResult;
 import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
 import org.junit.Test;
-import org.obeonetwork.m2doc.parser.BodyParser;
+import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
@@ -69,7 +69,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidFor1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -97,7 +97,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidFor2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -125,7 +125,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidFor3.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -151,7 +151,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidFor4.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -179,7 +179,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidFor5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -202,7 +202,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidAQL.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(2, template.getSubConstructs().size());
@@ -228,7 +228,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -254,7 +254,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -285,7 +285,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal3.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -315,7 +315,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal4.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -347,7 +347,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -375,7 +375,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testVarInvalid.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(1, template.getSubConstructs().size());
@@ -403,7 +403,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc3.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(3, template.getSubConstructs().size());
@@ -442,7 +442,7 @@ public class DocumentParserErrorsTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc4.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         assertEquals(document, template.getBody());
         assertEquals(3, template.getSubConstructs().size());

@@ -60,7 +60,11 @@ public enum ParsingErrorMessage {
     /**
      * Error message issued when a userdoc tag have not id parameter.
      */
-    INVALID_USERDOC_ID_MUST_EXIST("userdoc tag must have an id parameter.");
+    INVALID_USERDOC_ID_MUST_EXIST("userdoc tag must have an id parameter."),
+    /**
+     * Error message issued when a userdoc tag must have a not empty value.
+     */
+    INVALID_USERDOCDEST_VALUE("userdocdest tag must have an no empty value.");
     /**
      * The error message.
      */

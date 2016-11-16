@@ -122,6 +122,8 @@ public class TemplateValidator extends EObjectValidator {
                 return validateRepetition((Repetition)value, diagnostics, context);
             case TemplatePackage.USER_DOC:
                 return validateUserDoc((UserDoc)value, diagnostics, context);
+            case TemplatePackage.USER_DOC_DEST:
+                return validateUserDocDest((UserDocDest)value, diagnostics, context);
             case TemplatePackage.QUERY:
                 return validateQuery((Query)value, diagnostics, context);
             case TemplatePackage.TABLE_MERGE:
@@ -257,6 +259,15 @@ public class TemplateValidator extends EObjectValidator {
      */
     public boolean validateUserDoc(UserDoc userDoc, DiagnosticChain diagnostics, Map<Object, Object> context) {
         return validate_EveryDefaultConstraint(userDoc, diagnostics, context);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean validateUserDocDest(UserDocDest userDocDest, DiagnosticChain diagnostics, Map<Object, Object> context) {
+        return validate_EveryDefaultConstraint(userDocDest, diagnostics, context);
     }
 
     /**

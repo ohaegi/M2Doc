@@ -25,7 +25,7 @@ import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
 import org.junit.Test;
 import org.obeonetwork.m2doc.generator.BookmarkManager;
 import org.obeonetwork.m2doc.generator.TemplateProcessor;
-import org.obeonetwork.m2doc.parser.BodyParser;
+import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.template.Template;
 
@@ -60,7 +60,7 @@ public class TemplateRuntimeErrorTests {
         FileInputStream is = new FileInputStream("templates/testVar.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testVar.docx");
@@ -94,7 +94,7 @@ public class TemplateRuntimeErrorTests {
         FileInputStream is = new FileInputStream("templates/testAQL.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testAQL.docx");
@@ -131,7 +131,7 @@ public class TemplateRuntimeErrorTests {
         FileInputStream is = new FileInputStream("templates/testRepetitionSyntaxError.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testRepetitionSyntaxError.docx");
@@ -158,7 +158,7 @@ public class TemplateRuntimeErrorTests {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testInvalidConditionnal1.docx");
@@ -185,7 +185,7 @@ public class TemplateRuntimeErrorTests {
         FileInputStream is = new FileInputStream("templates/testInvalidConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testInvalidConditionnal5.docx");

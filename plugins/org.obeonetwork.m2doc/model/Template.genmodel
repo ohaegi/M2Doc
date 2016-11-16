@@ -45,6 +45,9 @@
     <genClasses ecoreClass="Template.ecore#//UserDoc">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Template.ecore#//UserDoc/id"/>
     </genClasses>
+    <genClasses ecoreClass="Template.ecore#//UserDocDest">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Template.ecore#//UserDocDest/id"/>
+    </genClasses>
     <genClasses ecoreClass="Template.ecore#//Query">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Template.ecore#//Query/behavior"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Template.ecore#//Query/query"/>

@@ -101,6 +101,10 @@ public class TemplateAdapterFactory extends AdapterFactoryImpl {
                 return createUserDocAdapter();
             }
             @Override
+            public Adapter caseUserDocDest(UserDocDest object) {
+                return createUserDocDestAdapter();
+            }
+            @Override
             public Adapter caseQuery(Query object) {
                 return createQueryAdapter();
             }
@@ -245,6 +249,20 @@ public class TemplateAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createUserDocAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.obeonetwork.m2doc.template.UserDocDest <em>User Doc Dest</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.obeonetwork.m2doc.template.UserDocDest
+     * @generated
+     */
+    public Adapter createUserDocDestAdapter() {
         return null;
     }
 

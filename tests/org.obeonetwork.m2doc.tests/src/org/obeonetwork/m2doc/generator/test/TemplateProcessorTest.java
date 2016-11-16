@@ -37,16 +37,16 @@ import org.junit.Test;
 import org.obeonetwork.m2doc.genconf.GenconfPackage;
 import org.obeonetwork.m2doc.generator.BookmarkManager;
 import org.obeonetwork.m2doc.generator.TemplateProcessor;
-import org.obeonetwork.m2doc.parser.BodyParser;
+import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.provider.ProviderRegistry;
 import org.obeonetwork.m2doc.provider.test.StubDiagramProvider;
 import org.obeonetwork.m2doc.template.Template;
+import org.obeonetwork.m2doc.util.FieldUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.obeonetwork.m2doc.util.FieldUtils.lookAheadTag;
 
 /**
  * Test the {@link TemplateProcessor} class.
@@ -58,6 +58,11 @@ public class TemplateProcessorTest {
      * {@link ProviderRegistry} instance used during testing.
      */
     private ProviderRegistry registry = ProviderRegistry.INSTANCE;
+
+    /**
+     * {@link FieldUtils} instance used during testing.
+     */
+    private FieldUtils fieldUtils = new FieldUtils();
 
     /**
      * Root object of the genconf example model.
@@ -141,7 +146,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testVar.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -179,7 +184,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
@@ -212,7 +217,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testAQL.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
@@ -245,7 +250,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testVarStyle.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
@@ -278,7 +283,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testGDFOR.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
@@ -310,7 +315,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -343,7 +348,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -376,7 +381,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
@@ -405,7 +410,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value");
@@ -436,7 +441,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
@@ -465,7 +470,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value2");
@@ -494,7 +499,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value");
@@ -523,7 +528,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testConditionnal6.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
@@ -553,7 +558,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -584,7 +589,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -615,7 +620,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -645,7 +650,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         // CHECKSTYLE:OFF
@@ -676,7 +681,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "part1\r\npart2\r\npart3\r\npart4");
@@ -705,7 +710,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "\r\n\r\n\r\n");
@@ -734,7 +739,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "\r\n\r\n\r\ntext");
@@ -763,7 +768,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testCarriageReturn.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "text\r\n\r\n\r\n");
@@ -793,7 +798,7 @@ public class TemplateProcessorTest {
         // CHECKSTYLE:ON
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "part1\tpart2\tpart3\tpart4");
@@ -822,7 +827,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testTabulation.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "\t\t\t");
@@ -851,7 +856,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testTabulation.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "\t\t\ttext");
@@ -880,7 +885,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testTabulation.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("v", "text\t\t\t");
@@ -908,7 +913,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testEmptyParagraphs.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("author", "Moi");
@@ -943,7 +948,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramValidTwoImage.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramValidTwoImage.docx");
@@ -976,7 +981,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramValidOneImage.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramValidOneImage.docx");
@@ -1007,7 +1012,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramValidZeroImage.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramValidZeroImage.docx");
@@ -1036,7 +1041,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramException.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramException.docx");
@@ -1068,7 +1073,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramInvalidNoProvider.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/diagramInvalidNoProvider.docx");
@@ -1099,7 +1104,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramInvalidAqlExpression.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("db", rootObject);
@@ -1132,7 +1137,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/diagramValidAqlOption.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("db", rootObject);
@@ -1162,7 +1167,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/staticHyperlink.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/staticHyperlink.docx");
@@ -1197,7 +1202,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/dynamicHyperlink.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/dynamicHyperlink.docx");
@@ -1241,7 +1246,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
@@ -1254,7 +1259,7 @@ public class TemplateProcessorTest {
         assertEquals(8, destinationDoc.getParagraphs().size());
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         assertEquals(1, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
-        assertEquals("m:userdocdest id='value1'",
+        assertEquals("m:userdocdest value1",
                 destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
         assertEquals(1, destinationDoc.getParagraphs().get(5).getCTP().getFldSimpleList().size());
         assertEquals("m:enduserdocdest",
@@ -1278,7 +1283,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc2.docx");
@@ -1291,7 +1296,7 @@ public class TemplateProcessorTest {
         assertEquals(4, destinationDoc.getParagraphs().size());
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         assertEquals(2, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
-        assertEquals("m:userdocdest id='value1'",
+        assertEquals("m:userdocdest value1",
                 destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
         assertEquals("m:enduserdocdest",
                 destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(1).getInstr());
@@ -1313,7 +1318,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc3.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc3.docx");
@@ -1327,14 +1332,15 @@ public class TemplateProcessorTest {
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
         assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
-        assertEquals("m:userdoc 'value1'", lookAheadTag(paragraph1.getRuns()));
+        // FieldUtils fieldUtils = new FieldUtils();
+        assertEquals("m:userdoc 'value1'", fieldUtils.lookAheadTag(paragraph1.getRuns()));
         int paragraph1RunNbr = paragraph1.getRuns().size();
         assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
                 paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
 
         XWPFParagraph paragraph3 = destinationDoc.getParagraphs().get(3);
         assertEquals(1, paragraph3.getRuns().get(0).getCTR().getFldCharList().size());
-        assertEquals("m:if x='1'", lookAheadTag(paragraph3.getRuns()));
+        assertEquals("m:if x='1'", fieldUtils.lookAheadTag(paragraph3.getRuns()));
         assertEquals("Invalid userdoc content, the type Conditionnal can not be contrain by userdoc tag.",
                 paragraph3.getRuns().get(4).getText(0));
         // CHECKSTYLE:ON
@@ -1355,7 +1361,7 @@ public class TemplateProcessorTest {
         FileInputStream is = new FileInputStream("templates/testUserDoc4.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc4.docx");
@@ -1369,88 +1375,10 @@ public class TemplateProcessorTest {
         assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
         XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
         assertEquals(1, paragraph1.getRuns().get(0).getCTR().getFldCharList().size());
-        assertEquals("m:userdoc", lookAheadTag(paragraph1.getRuns()));
+        assertEquals("m:userdoc", fieldUtils.lookAheadTag(paragraph1.getRuns()));
         int paragraph1RunNbr = paragraph1.getRuns().size();
         assertEquals("Expression \"\" is invalid: null or empty string.",
                 paragraph1.getRuns().get(paragraph1RunNbr - 1).getText(0));
         // CHECKSTYLE:ON
     }
-
-    // /**
-    // * Extract tag string (word field) from runs list.
-    // * The tag must begin at the first run, return empty sting if not.
-    // *
-    // * @param runs
-    // * list of run where find tag
-    // * @return tag string
-    // */
-    // private String lookAheadTag(List<XWPFRun> runs) {
-    // int i = 0;
-    // // first run must begin a field.
-    // XWPFRun run = runs.get(i);
-    // if (run != null) {
-    // if (isFieldBegin(run)) {
-    // StringBuilder builder = new StringBuilder();
-    // i++;
-    // run = runs.get(i);
-    // // run is null when EOF is reached or a table is encountered.
-    // while (run != null && !isFieldEnd(run)) {
-    // builder.append(readUpInstrText(run));
-    // run = runs.get(++i);
-    // }
-    // return builder.toString().trim();
-    // }
-    // }
-    // return "";
-    // }
-    //
-    // /**
-    // * Returns <code>true</code> when the specified run is a field begin run and <code>false</code> otherwise.
-    // *
-    // * @param run
-    // * the concerned run
-    // * @return <code>true</code> for field begin.
-    // */
-    // private boolean isFieldBegin(XWPFRun run) {
-    // if (run.getCTR().getFldCharList().size() > 0) {
-    // CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
-    // return STFldCharType.BEGIN.equals(fldChar.getFldCharType());
-    // } else {
-    // return false;
-    // }
-    // }
-    //
-    // /**
-    // * Returns <code>true</code> when the specified run is a field end run and <code>false</code> otherwise.
-    // *
-    // * @param run
-    // * the concerned run
-    // * @return <code>true</code> for field end.
-    // */
-    //
-    // private boolean isFieldEnd(XWPFRun run) {
-    // if (run.getCTR().getFldCharList().size() > 0) {
-    // CTFldChar fldChar = run.getCTR().getFldCharList().get(0);
-    // return STFldCharType.END.equals(fldChar.getFldCharType());
-    // } else {
-    // return false;
-    // }
-    // }
-    //
-    // /**
-    // * reads up the instruction of a field's run.
-    // *
-    // * @param run
-    // * the run to read.
-    // * @return the aggregated instruction text of the run
-    // */
-    // private StringBuilder readUpInstrText(XWPFRun run) {
-    // List<CTText> texts = run.getCTR().getInstrTextList();
-    // StringBuilder runBuilder = new StringBuilder();
-    // for (CTText text : texts) {
-    // runBuilder.append(text.getStringValue());
-    // }
-    // return runBuilder;
-    // }
-
 }

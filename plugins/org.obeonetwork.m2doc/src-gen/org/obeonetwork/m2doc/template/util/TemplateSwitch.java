@@ -113,6 +113,14 @@ public class TemplateSwitch<T> extends Switch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TemplatePackage.USER_DOC_DEST: {
+                UserDocDest userDocDest = (UserDocDest)theEObject;
+                T result = caseUserDocDest(userDocDest);
+                if (result == null) result = caseCompound(userDocDest);
+                if (result == null) result = caseAbstractConstruct(userDocDest);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             case TemplatePackage.QUERY: {
                 Query query = (Query)theEObject;
                 T result = caseQuery(query);
@@ -306,6 +314,21 @@ public class TemplateSwitch<T> extends Switch<T> {
      * @generated
      */
     public T caseUserDoc(UserDoc object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>User Doc Dest</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>User Doc Dest</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseUserDocDest(UserDocDest object) {
         return null;
     }
 

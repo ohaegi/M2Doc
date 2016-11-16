@@ -66,6 +66,15 @@ public interface TemplateFactory extends EFactory {
     UserDoc createUserDoc();
 
     /**
+     * Returns a new object of class '<em>User Doc Dest</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>User Doc Dest</em>'.
+     * @generated
+     */
+    UserDocDest createUserDocDest();
+
+    /**
      * Returns a new object of class '<em>Query</em>'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -23,7 +23,7 @@ import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
 import org.junit.Test;
 import org.obeonetwork.m2doc.generator.DocumentGenerationException;
 import org.obeonetwork.m2doc.generator.TemplateValidationGenerator;
-import org.obeonetwork.m2doc.parser.BodyParser;
+import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.template.Template;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STHighlightColor;
@@ -71,7 +71,7 @@ public class TemplateParsingValidatorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorStartTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
@@ -122,7 +122,7 @@ public class TemplateParsingValidatorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
@@ -170,7 +170,7 @@ public class TemplateParsingValidatorTest {
         FileInputStream is = new FileInputStream("templates/testMultiParsingErrorSimpleTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
@@ -231,7 +231,7 @@ public class TemplateParsingValidatorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorEndTag.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
@@ -308,7 +308,7 @@ public class TemplateParsingValidatorTest {
         FileInputStream is = new FileInputStream("templates/testParsingErrorSimpleTagWithoutFollowingText.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
-        BodyParser parser = new BodyParser(document, env);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);

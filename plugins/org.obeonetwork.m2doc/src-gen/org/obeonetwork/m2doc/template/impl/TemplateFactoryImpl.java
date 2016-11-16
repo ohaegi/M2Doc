@@ -87,6 +87,7 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
             case TemplatePackage.CONDITIONNAL: return createConditionnal();
             case TemplatePackage.REPETITION: return createRepetition();
             case TemplatePackage.USER_DOC: return createUserDoc();
+            case TemplatePackage.USER_DOC_DEST: return createUserDocDest();
             case TemplatePackage.QUERY: return createQuery();
             case TemplatePackage.TABLE_MERGE: return createTableMerge();
             case TemplatePackage.IMAGE: return createImage();
@@ -205,6 +206,16 @@ public class TemplateFactoryImpl extends EFactoryImpl implements TemplateFactory
     public UserDoc createUserDoc() {
         UserDocImpl userDoc = new UserDocImpl();
         return userDoc;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public UserDocDest createUserDocDest() {
+        UserDocDestImpl userDocDest = new UserDocDestImpl();
+        return userDocDest;
     }
 
     /**
