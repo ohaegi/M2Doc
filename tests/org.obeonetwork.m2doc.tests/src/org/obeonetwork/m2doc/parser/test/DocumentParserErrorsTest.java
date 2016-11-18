@@ -19,7 +19,6 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine.AstResult;
 import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
 import org.junit.Test;
 import org.obeonetwork.m2doc.parser.BodyTemplateParser;
@@ -384,47 +383,6 @@ public class DocumentParserErrorsTest {
         assertEquals(1, query.getValidationMessages().size());
         assertTemplateValidationMessage(query.getValidationMessages().get(0), ValidationMessageLevel.ERROR,
                 "Expression \"\" is invalid: null or empty string.", query.getRuns().get(4));
-    }
-
-    /**
-     * Test parsing userDoc tag with condition tag in userDoc content.
-     * 
-     * @throws InvalidFormatException
-     *             InvalidFormatException
-     *             InvalidFormatException
-     * @throws IOException
-     *             IOException
-     * @throws DocumentParserException
-     *             DocumentParserException
-     */
-    @Test
-    public void testUserDocWithConditionInContent()
-            throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDoc3.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        BodyTemplateParser parser = new BodyTemplateParser(document, env);
-        Template template = parser.parseTemplate();
-        assertEquals(document, template.getBody());
-        assertEquals(3, template.getSubConstructs().size());
-        assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDoc);
-        assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
-        UserDoc userDoc = (UserDoc) template.getSubConstructs().get(1);
-        assertNotNull(userDoc.getId());
-        assertTrue(userDoc.getId() instanceof AstResult);
-        assertEquals(3, userDoc.getSubConstructs().size());
-        assertTrue(userDoc.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(userDoc.getSubConstructs().get(1) instanceof Conditionnal);
-        assertTrue(userDoc.getSubConstructs().get(2) instanceof StaticFragment);
-        // Check ValidationMessage
-        assertEquals(1, userDoc.getValidationMessages().size());
-        TemplateValidationMessage validationMessage = userDoc.getValidationMessages().get(0);
-        assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
-                validationMessage.getMessage());
-        assertEquals(ValidationMessageLevel.ERROR, validationMessage.getLevel());
-        XWPFRun location = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-        assertEquals(location, validationMessage.getLocation());
     }
 
     /**

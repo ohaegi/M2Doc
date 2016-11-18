@@ -62,6 +62,10 @@ public enum ParsingErrorMessage {
      */
     INVALID_USERDOC_ID_MUST_EXIST("userdoc tag must have an id parameter."),
     /**
+     * Error message issued when a userdoc tag have an unique id value.
+     */
+    INVALID_USERDOC_ID_NOT_UNIQUE("userdoc tag must have unique id value. ''{0}'' id already exists in document"),
+    /**
      * Error message issued when a userdoc tag must have a not empty value.
      */
     INVALID_USERDOCDEST_VALUE("userdocdest tag must have an no empty value.");

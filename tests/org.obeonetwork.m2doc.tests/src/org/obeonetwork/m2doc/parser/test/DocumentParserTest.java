@@ -20,7 +20,6 @@ import java.util.Map;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.eclipse.acceleo.query.ast.Call;
 import org.eclipse.acceleo.query.ast.Conditional;
 import org.eclipse.acceleo.query.ast.StringLiteral;
@@ -33,7 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
-import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
 import org.obeonetwork.m2doc.provider.IProvider;
 import org.obeonetwork.m2doc.provider.OptionType;
@@ -539,7 +537,8 @@ public class DocumentParserTest {
     }
 
     /**
-     * Tests that the escaping character {@link BodyTemplateParser#M2DOC_ESCAPE_CHARACTER} is not kept when applied to a character that does not
+     * Tests that the escaping character {@link BodyTemplateParser#M2DOC_ESCAPE_CHARACTER} is not kept when applied to a character that does
+     * not
      * need to be escaped.
      * The legend option is legend:"plan de for\me du dingy herbulot" .
      * The result value option should be <"plan de forme du dingy herbulot">
@@ -1209,12 +1208,6 @@ public class DocumentParserTest {
         assertTrue(userDoc.getSubConstructs().get(1) instanceof Conditionnal);
         assertTrue(userDoc.getSubConstructs().get(2) instanceof StaticFragment);
         // Check ValidationMessage
-        assertEquals(1, userDoc.getValidationMessages().size());
-        TemplateValidationMessage validationMessage = userDoc.getValidationMessages().get(0);
-        assertEquals("Invalid userdoc content, elements in userdoc must only be STATIC type.",
-                validationMessage.getMessage());
-        assertEquals(ValidationMessageLevel.ERROR, validationMessage.getLevel());
-        XWPFRun location = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-        assertEquals(location, validationMessage.getLocation());
+        assertEquals(0, userDoc.getValidationMessages().size());
     }
 }

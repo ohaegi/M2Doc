@@ -113,22 +113,11 @@ public abstract class BodyAbstractParser {
     }
 
     /**
-     * returns the next token type.
-     * 
-     * @return the next token type.
-     */
-    protected TokenType getNextTokenType() {
-        return getNextTokenType(1);
-    }
-
-    /**
      * returns the next token type after index.
      * 
-     * @param index
-     *            index
      * @return the next token type.
      */
-    protected abstract TokenType getNextTokenType(int index);
+    protected abstract TokenType getNextTokenType();
 
     /**
      * Returns the template contained in the document.

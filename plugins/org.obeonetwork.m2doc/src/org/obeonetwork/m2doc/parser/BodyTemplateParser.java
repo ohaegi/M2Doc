@@ -186,12 +186,11 @@ public class BodyTemplateParser extends BodyAbstractParser {
     /**
      * returns the next token type after index.
      * 
-     * @param index
-     *            index
      * @return the next token type.
      */
     @Override
-    protected TokenType getNextTokenType(int index) {
+    protected TokenType getNextTokenType() {
+        int index = 1;
         ParsingToken token = runIterator.lookAhead(index);
         TokenType result;
         if (token == null) {
@@ -202,7 +201,7 @@ public class BodyTemplateParser extends BodyAbstractParser {
             XWPFRun run = token.getRun();
             // is run a field begin run
             if (fieldUtils.isFieldBegin(run)) {
-                String code = fieldUtils.lookAheadTag(index, runIterator);
+                String code = fieldUtils.lookAheadTag(runIterator);
                 if (code.startsWith(TokenType.FOR.getValue())) {
                     result = TokenType.FOR;
                 } else if (code.startsWith(TokenType.ENDFOR.getValue())) {
@@ -909,33 +908,12 @@ public class BodyTemplateParser extends BodyAbstractParser {
             final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
             userDoc.getValidationMessages().addAll(getValidationMessage(result.getDiagnostic(), tagText, lastRun));
         }
-        // Test if userdoc tag contain only some static element
-        boolean containStaticOnly = true;
-        int index = 1;
-        while (containStaticOnly) {
-            TokenType type = getNextTokenType(index);
-            if (type == TokenType.ENDUSERDOC) {
-                break;
-            } else if (type != TokenType.STATIC) {
-                containStaticOnly = false;
-            }
-            index++;
-        }
-        // if not containStaticOnly add validation message error
-        if (!containStaticOnly) {
-            // location is on userDoc run because elements in userDoc no already exists.
-            final XWPFRun lastRun = userDoc.getRuns().get(userDoc.getRuns().size() - 1);
-            TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
-                    ValidationMessageLevel.ERROR, message(ParsingErrorMessage.INVALID_USERDOC_CONTENT), lastRun);
-            userDoc.getValidationMessages().add(templateValidationMessage);
-        }
 
         // read up the tags until the "m:enduserdoc" tag is encountered.
         parseCompound(userDoc, TokenType.ENDUSERDOC);
         if (getNextTokenType() != TokenType.EOF) {
             readTag(userDoc, userDoc.getClosingRuns());
         }
-
         return userDoc;
     }
 

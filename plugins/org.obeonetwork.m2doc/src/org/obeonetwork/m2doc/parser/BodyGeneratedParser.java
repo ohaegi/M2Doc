@@ -13,6 +13,7 @@ package org.obeonetwork.m2doc.parser;
 
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.IBody;
@@ -31,9 +32,15 @@ import static org.obeonetwork.m2doc.util.M2DocUtils.message;
  * Body parser for destination document (result of M2Doc generation document).
  * This
  * 
- * @author Romain Guider
+ * @author ohaegi
  */
 public class BodyGeneratedParser extends BodyAbstractParser {
+
+    /**
+     * User Doc destination Ids list.
+     * Used for uniqueness test.
+     */
+    private List<String> userDocDestIds = new ArrayList<String>();
 
     /**
      * Creates a new {@link BodyGeneratedParser} instance.
@@ -64,12 +71,11 @@ public class BodyGeneratedParser extends BodyAbstractParser {
     /**
      * returns the next token type after index.
      * 
-     * @param index
-     *            index
      * @return the next token type.
      */
     @Override
-    protected TokenType getNextTokenType(int index) {
+    protected TokenType getNextTokenType() {
+        int index = 1;
         ParsingToken token = runIterator.lookAhead(index);
         TokenType result;
         if (token == null) {
@@ -80,7 +86,7 @@ public class BodyGeneratedParser extends BodyAbstractParser {
             XWPFRun run = token.getRun();
             // is run a field begin run
             if (fieldUtils.isFieldBegin(run)) {
-                String code = fieldUtils.lookAheadTag(index, runIterator);
+                String code = fieldUtils.lookAheadTag(runIterator);
                 if (code.startsWith(TokenType.ENDUSERDOCDEST.getValue())) {
                     result = TokenType.ENDUSERDOCDEST;
                 } else if (code.startsWith(TokenType.USERDOCDEST.getValue())) {
@@ -173,6 +179,15 @@ public class BodyGeneratedParser extends BodyAbstractParser {
             userDocDest.getValidationMessages().add(templateValidationMessage);
         } else {
             userDocDest.setId(tagText);
+            if (userDocDestIds.contains(tagText)) {
+                final XWPFRun lastRun = userDocDest.getRuns().get(userDocDest.getRuns().size() - 1);
+                TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
+                        ValidationMessageLevel.WARNING,
+                        message(ParsingErrorMessage.INVALID_USERDOC_ID_NOT_UNIQUE, tagText), lastRun);
+                userDocDest.getValidationMessages().add(templateValidationMessage);
+            } else {
+                userDocDestIds.add(tagText);
+            }
         }
 
         // read up the tags until the "m:enduserdoc" tag is encountered.

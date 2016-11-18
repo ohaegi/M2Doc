@@ -47,7 +47,7 @@ public class EcoreDocumentationGeneration {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", TemplatePackage.eINSTANCE);
         DocumentGenerator generator = new DocumentGenerator("templates/ecoreDocumentationTemplate.docx",
-                "results/ecoreDocumentationTemplateResults.docx", template, definitions, queryEnvironment, null);
+                "results/generated/ecoreDocumentationTemplateResults.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 

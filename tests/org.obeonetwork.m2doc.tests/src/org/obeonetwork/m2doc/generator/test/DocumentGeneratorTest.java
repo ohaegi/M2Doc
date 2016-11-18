@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.obeonetwork.m2doc.generator.test;
 
+import java.io.File;
 //CHECKSTYLE:OFF
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +30,8 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Test;
 import org.obeonetwork.m2doc.generator.DocumentGenerationException;
 import org.obeonetwork.m2doc.generator.DocumentGenerator;
-import org.obeonetwork.m2doc.parser.DocumentTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
+import org.obeonetwork.m2doc.parser.DocumentTemplateParser;
 import org.obeonetwork.m2doc.template.DocumentTemplate;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
 
@@ -50,7 +52,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
         DocumentGenerator generator = new DocumentGenerator("templates/testTextAreaAndForms.docx",
-                "results/testTextAreaAndForms.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testTextAreaAndForms.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -67,7 +69,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testStaticFragmentWithfields.docx",
-                "results/testStaticFragmentWithfields.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testStaticFragmentWithfields.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -84,7 +86,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testStaticFragment.docx",
-                "results/testStaticFragment.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testStaticFragment.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -101,7 +103,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testVarInHeader.docx",
-                "results/testVarInHeaderResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testVarInHeaderResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -118,7 +120,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testVarInFooter.docx",
-                "results/testVarInFooterResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testVarInFooterResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -134,8 +136,8 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx", "results/testVarResult.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx",
+                "results/generated/testVarResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -150,8 +152,8 @@ public class DocumentGeneratorTest {
         DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx", "results/testVarResult.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx",
+                "results/generated/testVarResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -168,7 +170,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testVarStyle.docx",
-                "results/testVarStyleResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testVarStyleResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -185,7 +187,8 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testVarStyleSpanning2Paragraphs.docx",
-                "results/testVarStyleSpanning2ParagraphsResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testVarStyleSpanning2ParagraphsResult.docx", template, definitions, queryEnvironment,
+                null);
         generator.generate();
     }
 
@@ -201,8 +204,8 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx", "results/testAQLResult.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx",
+                "results/generated/testAQLResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -217,8 +220,8 @@ public class DocumentGeneratorTest {
         DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx", "results/testAQLResult.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx",
+                "results/generated/testAQLResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -234,8 +237,8 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testGDFOR.docx", "results/testGDFOR.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testGDFOR.docx",
+                "results/generated/testGDFOR.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -252,7 +255,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
         DocumentGenerator generator = new DocumentGenerator("templates/testGDFORWithTable.docx",
-                "results/testGDFORWithTable.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testGDFORWithTable.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -269,7 +272,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal1.docx",
-                "results/testConditionnal1Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal1Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -286,7 +289,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal1.docx",
-                "results/testConditionnal1FalseResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal1FalseResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -303,7 +306,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal2.docx",
-                "results/testConditionnal2Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal2Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -320,7 +323,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal2.docx",
-                "results/testConditionnal2FalseResult.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal2FalseResult.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -342,7 +345,7 @@ public class DocumentGeneratorTest {
     // definitions.put("x", "valueofx");
     // DocumentGenerator generator = new
     // DocumentGenerator("templates/testConditionnal3.docx",
-    // "results/testConditionnal3Result.docx", template, definitions,
+    // "results/generated/testConditionnal3Result.docx", template, definitions,
     // queryEnvironment);
     // generator.generate();
     // }
@@ -360,8 +363,8 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/test.docx", "results/testResult.docx", template,
-                definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/test.docx", "results/generated/testResult.docx",
+                template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -378,7 +381,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value1");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/testConditionnal5Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal5Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -395,7 +398,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value2");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/testConditionnal6Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal6Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -412,7 +415,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "value3");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/testConditionnal7Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal7Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -429,7 +432,7 @@ public class DocumentGeneratorTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
         DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/testConditionnal8Result.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testConditionnal8Result.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -445,8 +448,8 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testImageTag.docx", "results/testImageTag.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/testImageTag.docx",
+                "results/generated/testImageTag.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -461,8 +464,8 @@ public class DocumentGeneratorTest {
         DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/allDiagram.docx", "results/allDiagram.docx",
-                template, definitions, queryEnvironment, null);
+        DocumentGenerator generator = new DocumentGenerator("templates/allDiagram.docx",
+                "results/generated/allDiagram.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -478,7 +481,7 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         DocumentGenerator generator = new DocumentGenerator("templates/staticHyperlink.docx",
-                "results/staticHyperlink.docx", template, definitions, queryEnvironment, null);
+                "results/generated/staticHyperlink.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -494,7 +497,7 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         DocumentGenerator generator = new DocumentGenerator("templates/dynamicHyperlink.docx",
-                "results/dynamicHyperlink.docx", template, definitions, queryEnvironment, null);
+                "results/generated/dynamicHyperlink.docx", template, definitions, queryEnvironment, null);
         generator.generate();
     }
 
@@ -510,10 +513,10 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         DocumentGenerator generator = new DocumentGenerator("templates/testBookmarkNominal.docx",
-                "results/testBookmarkNominal.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testBookmarkNominal.docx", template, definitions, queryEnvironment, null);
         generator.generate();
 
-        FileInputStream resIs = new FileInputStream("results/testBookmarkNominal.docx");
+        FileInputStream resIs = new FileInputStream("results/generated/testBookmarkNominal.docx");
         OPCPackage resOPackage = OPCPackage.open(resIs);
         XWPFDocument resDocument = new XWPFDocument(resOPackage);
 
@@ -598,10 +601,10 @@ public class DocumentGeneratorTest {
         DocumentTemplate template = parser.parseDocument();
         Map<String, Object> definitions = new HashMap<String, Object>();
         DocumentGenerator generator = new DocumentGenerator("templates/testBookmarkNoBookmark.docx",
-                "results/testBookmarkNoBookmark.docx", template, definitions, queryEnvironment, null);
+                "results/generated/testBookmarkNoBookmark.docx", template, definitions, queryEnvironment, null);
         generator.generate();
 
-        FileInputStream resIs = new FileInputStream("results/testBookmarkNoBookmark.docx");
+        FileInputStream resIs = new FileInputStream("results/generated/testBookmarkNoBookmark.docx");
         OPCPackage resOPackage = OPCPackage.open(resIs);
         XWPFDocument resDocument = new XWPFDocument(resOPackage);
 
@@ -618,4 +621,214 @@ public class DocumentGeneratorTest {
         resDocument.close();
     }
 
+    /**
+     * Test UserDoc with no previous result.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     * @throws DocumentGenerationException
+     *             DocumentGenerationException
+     */
+    @Test
+    public void testUserDoc()
+            throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
+        // Remove previous generated file
+        String resultPath = "results/generated/testUserDoc1.docx";
+        File oldResult = new File(resultPath);
+        if (oldResult.exists()) {
+            oldResult.delete();
+        }
+
+        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
+                .newEnvironmentWithDefaultServices(null);
+        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+        DocumentTemplate template = parser.parseDocument();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx",
+                "results/generated/testUserDoc1.docx", template, definitions, queryEnvironment, null);
+        generator.generate();
+
+        FileInputStream resIs = new FileInputStream("results/generated/testUserDoc1.docx");
+        OPCPackage resOPackage = OPCPackage.open(resIs);
+        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+
+        assertEquals(8, resDocument.getParagraphs().size());
+        assertEquals("User document part Texte 1", resDocument.getParagraphs().get(2).getText());
+
+        resIs.close();
+        resOPackage.close();
+        resDocument.close();
+    }
+
+    /**
+     * Test UserDoc In Header and Footer with no previous result.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     * @throws DocumentGenerationException
+     *             DocumentGenerationException
+     */
+    @Test
+    public void testUserDocInHeaderFooter()
+            throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
+        // Remove previous generated file
+        String resultPath = "results/generated/testUserDoc9.docx";
+        File oldResult = new File(resultPath);
+        if (oldResult.exists()) {
+            oldResult.delete();
+        }
+
+        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
+                .newEnvironmentWithDefaultServices(null);
+        FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+        DocumentTemplate template = parser.parseDocument();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
+                definitions, queryEnvironment, null);
+        generator.generate();
+
+        FileInputStream resIs = new FileInputStream("results/generated/testUserDoc9.docx");
+        OPCPackage resOPackage = OPCPackage.open(resIs);
+        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+
+        assertEquals(1, resDocument.getHeaderList().size());
+        assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
+        assertEquals(" User document part Texte 1",
+                resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
+
+        assertEquals(6, resDocument.getParagraphs().size());
+        assertEquals("User document part Texte 2", resDocument.getParagraphs().get(2).getText());
+
+        assertEquals(1, resDocument.getFooterList().size());
+        assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
+        assertEquals(" User document part Texte 3",
+                resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
+
+        resIs.close();
+        resOPackage.close();
+        resDocument.close();
+    }
+
+    /**
+     * Test UserDoc with previous result.
+     * There is a picture in previous result userCode.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     * @throws DocumentGenerationException
+     *             DocumentGenerationException
+     */
+    @Test
+    public void testUserDocWithPreviousResult()
+            throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
+        // Remove previous generated file
+        String resultPath = "results/generated/testUserDocDest1Custom1Result.docx";
+        File oldResult = new File(resultPath);
+        if (oldResult.exists()) {
+            oldResult.delete();
+        }
+
+        // Copy result in right place
+        Files.copy(new File("userDocDest/testUserDocDest1Custom1.docx").toPath(), new File(resultPath).toPath());
+
+        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
+                .newEnvironmentWithDefaultServices(null);
+        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+        DocumentTemplate template = parser.parseDocument();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx", resultPath, template,
+                definitions, queryEnvironment, null);
+        generator.generate();
+
+        FileInputStream resIs = new FileInputStream(resultPath);
+        OPCPackage resOPackage = OPCPackage.open(resIs);
+        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+
+        assertEquals(6, resDocument.getParagraphs().size());
+        assertEquals(1, resDocument.getParagraphs().get(2).getRuns().get(1).getEmbeddedPictures().size());
+        assertEquals(new Long("3355498452"), resDocument.getParagraphs().get(2).getRuns().get(1).getEmbeddedPictures()
+                .get(0).getPictureData().getChecksum());
+
+        resIs.close();
+        resOPackage.close();
+        resDocument.close();
+    }
+
+    /**
+     * Test UserDoc In Header and Footer with no previous result.
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     * @throws DocumentGenerationException
+     *             DocumentGenerationException
+     */
+    @Test
+    public void testUserDocInHeaderFooterWithPreviousResult()
+            throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
+        // Remove previous generated file
+        String resultPath = "results/generated/testUserDoc9Custom1Resultat.docx";
+        File oldResult = new File(resultPath);
+        if (oldResult.exists()) {
+            oldResult.delete();
+        }
+        // Copy result in right place
+        Files.copy(new File("userDocDest/testUserDocDest9Custom1.docx").toPath(), new File(resultPath).toPath());
+
+        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
+                .newEnvironmentWithDefaultServices(null);
+        FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+        DocumentTemplate template = parser.parseDocument();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
+                definitions, queryEnvironment, null);
+        generator.generate();
+
+        FileInputStream resIs = new FileInputStream(resultPath);
+        OPCPackage resOPackage = OPCPackage.open(resIs);
+        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+
+        assertEquals(1, resDocument.getHeaderList().size());
+        assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
+        assertEquals("Custom 1", resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
+
+        assertEquals(6, resDocument.getParagraphs().size());
+        assertEquals("Custom 2", resDocument.getParagraphs().get(2).getText());
+
+        assertEquals(1, resDocument.getFooterList().size());
+        assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
+        assertEquals(" Custom 3", resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
+
+        resIs.close();
+        resOPackage.close();
+        resDocument.close();
+
+    }
 }

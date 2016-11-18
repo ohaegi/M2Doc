@@ -34,6 +34,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.xmlbeans.XmlException;
 import org.eclipse.acceleo.query.runtime.EvaluationResult;
 import org.eclipse.acceleo.query.runtime.IQueryBuilderEngine.AstResult;
 import org.eclipse.acceleo.query.runtime.IQueryEnvironment;
@@ -43,7 +44,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.obeonetwork.m2doc.genconf.Generation;
-import org.obeonetwork.m2doc.parser.ParsingErrorMessage;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
 import org.obeonetwork.m2doc.provider.AbstractDiagramProvider;
@@ -69,6 +69,7 @@ import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.TableClient;
 import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.UserDoc;
+import org.obeonetwork.m2doc.template.UserDocDest;
 import org.obeonetwork.m2doc.template.util.TemplateSwitch;
 import org.obeonetwork.m2doc.util.M2DocUtils;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
@@ -76,8 +77,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTbl;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTc;
-
-import static org.obeonetwork.m2doc.util.M2DocUtils.message;
 
 /**
  * The {@link TemplateProcessor} class implements a switch over template that generates the doc.
@@ -141,6 +140,17 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
     private EObject targetConfObject;
 
     /**
+     * Last Destination UserDocDest Manager.
+     */
+    private UserDocDestManager userDocDestManager;
+
+    /**
+     * User Doc Ids list.
+     * Used for uniqueness test.
+     */
+    private List<String> userDocIds = new ArrayList<String>();
+
+    /**
      * Create a new {@link TemplateProcessor} instance given some definitions
      * and a query environment.
      * 
@@ -150,6 +160,8 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the path to the project where the template is located.
      * @param bookmarkManager
      *            the {@link BookmarkManager}
+     * @param userDocDestManager
+     *            the {@link UserDocDestManager}
      * @param queryEnvironment
      *            the query environment used to evaluate queries in the
      * @param destinationDocument
@@ -158,10 +170,12 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the root EObject of the gen conf model.
      */
     public TemplateProcessor(Map<String, Object> initialDefs, String projectPath, BookmarkManager bookmarkManager,
-            IQueryEnvironment queryEnvironment, IBody destinationDocument, EObject theTargetConfObject) {
+            UserDocDestManager userDocDestManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
+            EObject theTargetConfObject) {
         this.rootProjectPath = projectPath;
         this.definitions = new GenerationEnvironment(initialDefs);
         this.bookmarkManager = bookmarkManager;
+        this.userDocDestManager = userDocDestManager;
         this.queryEnvironment = queryEnvironment;
         this.generatedDocument = destinationDocument;
         this.targetConfObject = theTargetConfObject;
@@ -175,6 +189,8 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the definitions used in queries and variable tags
      * @param bookmarkManager
      *            the {@link BookmarkManager}
+     * @param userDocDestManager
+     *            the {@link UserDocDestManager}
      * @param queryEnvironment
      *            the query environment used to evaluate queries in the
      *            template.
@@ -184,9 +200,11 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the root EObject of the gen conf model.
      */
     public TemplateProcessor(GenerationEnvironment defs, BookmarkManager bookmarkManager,
-            IQueryEnvironment queryEnvironment, IBody destinationDocument, EObject theTargetConfObject) {
+            UserDocDestManager userDocDestManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
+            EObject theTargetConfObject) {
         this.definitions = defs;
         this.bookmarkManager = bookmarkManager;
+        this.userDocDestManager = userDocDestManager;
         this.queryEnvironment = queryEnvironment;
         this.generatedDocument = destinationDocument;
         this.targetConfObject = theTargetConfObject;
@@ -466,132 +484,148 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      * 
      * @see org.obeonetwork.m2doc.template.util.TemplateSwitch#caseUserDoc(org.obeonetwork.m2doc.template.UserDoc)
      */
+    @SuppressWarnings("deprecation")
     @Override
     public AbstractConstruct caseUserDoc(UserDoc object) {
-        // first : check parsing error
-        if (!object.getValidationMessages().isEmpty()) {
-            // Report parsing error in generated document
+        // first : evaluate the query
+        boolean validQuery = object.getId() != null;
+        EvaluationResult result = new QueryEvaluationEngine(queryEnvironment).eval(object.getId(),
+                definitions.getCurrentDefinitions());
+        if (!validQuery || result == null || result.getResult() == null
+            || result.getDiagnostic().getCode() == Diagnostic.ERROR) {
+            // insert the tag runs as is.
             for (XWPFRun tagRun : object.getRuns()) {
                 insertRun(tagRun);
             }
             // insert the error message.
             XWPFRun run = currentGeneratedParagraph.createRun();
-            for (TemplateValidationMessage templateValidationMessage : object.getValidationMessages()) {
-                setErrorMessageToRun(templateValidationMessage.getMessage(), run);
-            }
-
-            noEvalCopyWithErrorOnAllTag(object, ParsingErrorMessage.INVALID_USERDOC_NOT_STATIC);
-        } else {
-            // evaluate the query
-            boolean validQuery = object.getId() != null;
-            EvaluationResult result = new QueryEvaluationEngine(queryEnvironment).eval(object.getId(),
-                    definitions.getCurrentDefinitions());
-            if (!validQuery || result == null || result.getDiagnostic().getCode() == Diagnostic.ERROR) {
-                // insert the tag runs as is.
-                for (XWPFRun tagRun : object.getRuns()) {
-                    insertRun(tagRun);
-                }
-                // insert the error message.
-                XWPFRun run = currentGeneratedParagraph.createRun();
-                if (!validQuery) {
-                    // run.setText(QUERY_SYNTAX_ERROR_MESSAGE);
-                    setErrorMessageToRun(QUERY_SYNTAX_ERROR_MESSAGE, run);
-                } else if (result != null) {
-                    // run.setText(result.getDiagnostic().getMessage());
-                    setErrorMessageToRun(result.getDiagnostic().getMessage(), run);
-                } else {
-                    // run.setText(QUERY_EVALERROR_MESSAGE);
-                    setErrorMessageToRun(QUERY_EVALERROR_MESSAGE, run);
-                }
-                noEvalCopyWithErrorOnAllTag(object, ParsingErrorMessage.INVALID_USERDOC_NOT_STATIC);
+            if (!validQuery) {
+                setErrorMessageToRun(QUERY_SYNTAX_ERROR_MESSAGE, run);
+            } else if (result != null) {
+                setErrorMessageToRun(result.getDiagnostic().getMessage(), run);
             } else {
-                // compute userdoc id
-                String id = "";
-                if (result.getResult() instanceof String) {
-                    id = (String) result.getResult();
-                } else if (result.getResult() instanceof Integer) {
-                    id = ((Integer) result.getResult()).toString();
-                } else {
-                    id = result.getResult().toString();
-                    // TODO A ajout d'une erreur si pas le bon type A voir si nécessaire ??
-                }
-
-                // Tag UserDocDest with evaluated id
-                addDocField(object, "m:userdocdest " + id);
-
-                // Copy userdoc content
-                boolean hasNoDestForId = true;
-                // TODO calculer la condition userCodeDest n'existe pas pour l'id courant
-                if (hasNoDestForId) {
-                    for (AbstractConstruct construct : object.getSubConstructs()) {
-                        doSwitch(construct);
-                    }
-                } else {
-                    // TODO mettre le userCodeDest correspondant à id si il existe
-                }
-
-                // Closing compound
-                closingCompound(object);
-                // Tag m:enduserdocdest
-                addDocField(object, "m:enduserdocdest");
+                setErrorMessageToRun(QUERY_EVALERROR_MESSAGE, run);
             }
+        } else {
+            // compute userdoc id
+            String id = result.getResult().toString();
+
+            // Tag UserDocDest with evaluated id
+            addStartUserDocField(object, id);
+            // manage user Doc Id Uniqueness
+            manageUserDocIdUniqueness(id, object);
+            // Copy userdoc content
+            UserDocDest userDocDest = userDocDestManager.getUserDocDest(id);
+            boolean needNewParagraphBeforeEndTag = true;
+            if (userDocDest == null) {
+                for (AbstractConstruct construct : object.getSubConstructs()) {
+                    doSwitch(construct);
+                }
+                needNewParagraphBeforeEndTag = needNewParagraph(object);
+            } else {
+                UserDocDestRawCopy userDocDestRawCopy = new UserDocDestRawCopy();
+                try {
+                    currentGeneratedParagraph = userDocDestRawCopy.copy(userDocDest, currentGeneratedParagraph);
+                    needNewParagraphBeforeEndTag = userDocDestRawCopy.needNewParagraph();
+                    // Affect currentTemplateParagraph after Raw copy
+                    if (object.getClosingRuns().size() != 0) {
+                        currentTemplateParagraph = object.getClosingRuns().get(object.getClosingRuns().size() - 1)
+                                .getParagraph();
+                    }
+                } catch (InvalidFormatException e) {
+                    XWPFRun run = currentGeneratedParagraph.createRun();
+                    setErrorMessageToRun("userdoc copy error : " + e.getMessage(), run);
+                } catch (XmlException e) {
+                    XWPFRun run = currentGeneratedParagraph.createRun();
+                    setErrorMessageToRun("userdoc copy error : " + e.getMessage(), run);
+                }
+            }
+
+            // Tag m:enduserdocdest
+            addEndUserDocField(object, needNewParagraphBeforeEndTag);
+            // Closing compound
+            closingCompound(object);
+            // }
         }
         return object;
     }
 
     /**
-     * Simple Copy With Error On All Tag.
-     * We not evaluate M2Doc tag.
+     * Test if compound need new paragraph before end tag.
      * 
-     * @param object
-     *            concerned object
-     * @param msgTemplate
-     *            Template message error
+     * @param compound
+     *            compound
+     * @return true if need new paragraph
      */
-    private void noEvalCopyWithErrorOnAllTag(Compound object, ParsingErrorMessage msgTemplate) {
-        for (AbstractConstruct construct : object.getSubConstructs()) {
-            if (construct instanceof StaticFragment) {
-                doSwitch(construct);
-            } else {
-                for (XWPFRun tagRun : construct.getRuns()) {
-                    insertRun(tagRun);
-                }
-                // insert the error message.
-                XWPFRun run = currentGeneratedParagraph.createRun();
-                String msgError = message(msgTemplate, construct.eClass().getName());
-                setErrorMessageToRun(msgError, run);
-
-                // if not static fragment put errors in construct EObject
-                TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
-                        ValidationMessageLevel.ERROR, msgError, object.getRuns().get(construct.getRuns().size() - 1));
-                construct.getValidationMessages().add(templateValidationMessage);
-                if (construct instanceof Compound) {
-                    noEvalCopyWithErrorOnAllTag((Compound) construct, msgTemplate);
-                } else {
-                    doSwitch(construct);
-                }
+    @SuppressWarnings("deprecation")
+    private boolean needNewParagraph(Compound compound) {
+        boolean needNewParagraph = true;
+        if (compound.getClosingRuns().size() != 0) {
+            if (compound.getClosingRuns().get(0).getParagraph() == currentTemplateParagraph) {
+                needNewParagraph = false;
             }
         }
-        for (XWPFRun tagRun : object.getClosingRuns()) {
-            insertRun(tagRun);
-        }
+        return needNewParagraph;
     }
 
     /**
-     * Add word Document Field.
+     * userDoc Id Uniqueness test.
+     * 
+     * @param id
+     *            id
+     * @param userdoc
+     *            userdoc EObject
+     */
+    private void manageUserDocIdUniqueness(String id, UserDoc userdoc) {
+        if (userDocIds.contains(id)) {
+            // insert the error message.
+            XWPFRun run = currentGeneratedParagraph.createRun();
+            String msgError = "The id '" + id
+                + "' is already used in generated document. Ids must be unique otherwise document part contained userdocdest could be lost at next generation.";
+            setErrorMessageToRun(msgError, run);
+
+            TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
+                    ValidationMessageLevel.ERROR, msgError, userdoc.getRuns().get(userdoc.getRuns().size() - 1));
+            userdoc.getValidationMessages().add(templateValidationMessage);
+        } else {
+            userDocIds.add(id);
+        }
+
+    }
+
+    /**
+     * Add Start UserDocDest word Document Field.
      * 
      * @param object
      *            AbstractConstruct where add field
-     * @param value
-     *            of field
+     * @param id
+     *            UserDoc Id
      */
     @SuppressWarnings("deprecation")
-    private void addDocField(AbstractConstruct object, String value) {
-        if (object.getClosingRuns().size() != 0
-            && object.getClosingRuns().get(0).getParagraph() != currentTemplateParagraph) {
-            createNewParagraph(object.getClosingRuns().get(0).getParagraph());
+    private void addStartUserDocField(AbstractConstruct object, String id) {
+        if (currentTemplateParagraph == null
+            || object.getRuns().size() != 0 && object.getRuns().get(0).getParagraph() != currentTemplateParagraph) {
+            createNewParagraph(object.getRuns().get(0).getParagraph());
         }
-        currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr(value);
+        currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:userdocdest " + id);
+    }
+
+    /**
+     * Add End UserDocDest word Document Field.
+     * 
+     * @param object
+     *            AbstractConstruct where add field
+     * @param needNewParagraph
+     *            need New Paragraph boolean
+     */
+    @SuppressWarnings("deprecation")
+    private void addEndUserDocField(AbstractConstruct object, boolean needNewParagraph) {
+        if (object.getClosingRuns().size() != 0) {
+            if (needNewParagraph) {
+                createNewParagraph(object.getClosingRuns().get(0).getParagraph());
+            }
+            currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:enduserdocdest");
+        }
     }
 
     /**
@@ -695,8 +729,8 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
                 ctCell.getTblList().clear();
                 newCell.getCTTc().set(ctCell);
                 // process the cell :
-                TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, queryEnvironment,
-                        newCell, targetConfObject);
+                TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userDocDestManager,
+                        queryEnvironment, newCell, targetConfObject);
                 processor.doSwitch(cell.getTemplate());
             }
         }

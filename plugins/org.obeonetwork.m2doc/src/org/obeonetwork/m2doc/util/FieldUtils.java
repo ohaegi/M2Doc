@@ -36,14 +36,12 @@ public class FieldUtils {
      * precluding the tag nature prediction based on the first run only.
      * </p>
      * 
-     * @param index
-     *            index on current run iterator
      * @param runIterator
      *            run iterator
      * @return the complete text of the current field.
      */
-    public String lookAheadTag(int index, final TokenProvider runIterator) {
-        int i = index;
+    public String lookAheadTag(final TokenProvider runIterator) {
+        int i = 1;
         // first run must begin a field.
         XWPFRun run = runIterator.lookAhead(i).getRun();
         if (run == null) {

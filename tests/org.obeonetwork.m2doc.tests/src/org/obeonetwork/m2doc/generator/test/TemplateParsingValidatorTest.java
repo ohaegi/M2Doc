@@ -13,6 +13,7 @@ package org.obeonetwork.m2doc.generator.test;
 
 //CHECKSTYLE:OFF
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -75,7 +76,7 @@ public class TemplateParsingValidatorTest {
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
-        createDestinationDocument(document, "results/testParsingErrorStartTag.docx");
+        createDestinationDocument(document, "results/generated/testParsingErrorStartTag.docx");
 
         // scan the destination document
         assertEquals(2, document.getParagraphs().size());
@@ -126,7 +127,7 @@ public class TemplateParsingValidatorTest {
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
-        createDestinationDocument(document, "results/testParsingErrorSimpleTag.docx");
+        createDestinationDocument(document, "results/generated/testParsingErrorSimpleTag.docx");
         // scan the destination document
         assertEquals(2, document.getParagraphs().size());
         assertEquals(11, document.getParagraphs().get(0).getRuns().size());
@@ -174,7 +175,7 @@ public class TemplateParsingValidatorTest {
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
-        createDestinationDocument(document, "results/testMultiParsingErrorSimpleTag.docx");
+        createDestinationDocument(document, "results/generated/testMultiParsingErrorSimpleTag.docx");
         // scan the destination document
         assertEquals(1, document.getParagraphs().size());
         assertEquals(14, document.getParagraphs().get(0).getRuns().size());
@@ -235,7 +236,7 @@ public class TemplateParsingValidatorTest {
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
-        createDestinationDocument(document, "results/testParsingErrorEndTag.docx");
+        createDestinationDocument(document, "results/generated/testParsingErrorEndTag.docx");
         // scan the destination document
         assertEquals(1, document.getParagraphs().size());
         assertEquals(24, document.getParagraphs().get(0).getRuns().size());
@@ -312,7 +313,7 @@ public class TemplateParsingValidatorTest {
         Template template = parser.parseTemplate();
         TemplateValidationGenerator validator = new TemplateValidationGenerator();
         validator.doSwitch(template);
-        createDestinationDocument(document, "results/testParsingErrorSimpleTagWithoutFollowingText.docx");
+        createDestinationDocument(document, "results/generated/testParsingErrorSimpleTagWithoutFollowingText.docx");
         // scan the destination document
         assertEquals(1, document.getParagraphs().size());
         assertEquals(11, document.getParagraphs().get(0).getRuns().size());
@@ -328,6 +329,39 @@ public class TemplateParsingValidatorTest {
         assertEquals(16, document.getParagraphs().get(0).getRuns().get(5).getFontSize());
         assertEquals(STHighlightColor.LIGHT_GRAY,
                 document.getParagraphs().get(0).getRuns().get(5).getCTR().getRPr().getHighlight().getVal());
+    }
+
+    @Test
+    public void testErrorInUserDocAqlParsing()
+            throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
+        String templatePath = "templates/testParsingErrorSimpleTagWithoutFollowingText.docx";
+        XWPFDocument document = loadDoc(templatePath);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
+        Template template = parser.parseTemplate();
+        TemplateValidationGenerator validator = new TemplateValidationGenerator();
+        validator.doSwitch(template);
+        createDestinationDocument(document, "results/generated/testParsingErrorSimpleTagWithoutFollowingText.docx");
+
+    }
+
+    /**
+     * Load doc from path.
+     * 
+     * @param docPath
+     *            resultPath
+     * @return document
+     * @throws FileNotFoundException
+     *             FileNotFoundException
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     */
+    private XWPFDocument loadDoc(String docPath) throws FileNotFoundException, InvalidFormatException, IOException {
+        FileInputStream is = new FileInputStream(docPath);
+        OPCPackage oPackage = OPCPackage.open(is);
+        XWPFDocument document = new XWPFDocument(oPackage);
+        return document;
     }
 
 }
