@@ -113,11 +113,11 @@ public class TemplateSwitch<T> extends Switch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case TemplatePackage.USER_DOC_DEST: {
-                UserDocDest userDocDest = (UserDocDest)theEObject;
-                T result = caseUserDocDest(userDocDest);
-                if (result == null) result = caseCompound(userDocDest);
-                if (result == null) result = caseAbstractConstruct(userDocDest);
+            case TemplatePackage.USER_CONTENT: {
+                UserContent userContent = (UserContent)theEObject;
+                T result = caseUserContent(userContent);
+                if (result == null) result = caseCompound(userContent);
+                if (result == null) result = caseAbstractConstruct(userContent);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -318,17 +318,17 @@ public class TemplateSwitch<T> extends Switch<T> {
     }
 
     /**
-     * Returns the result of interpreting the object as an instance of '<em>User Doc Dest</em>'.
+     * Returns the result of interpreting the object as an instance of '<em>User Content</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
      * returning a non-null result will terminate the switch.
      * <!-- end-user-doc -->
      * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>User Doc Dest</em>'.
+     * @return the result of interpreting the object as an instance of '<em>User Content</em>'.
      * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
      * @generated
      */
-    public T caseUserDocDest(UserDocDest object) {
+    public T caseUserContent(UserContent object) {
         return null;
     }
 

@@ -37,7 +37,7 @@ import org.obeonetwork.m2doc.api.POIServices;
 import org.obeonetwork.m2doc.genconf.GenconfPackage;
 import org.obeonetwork.m2doc.generator.BookmarkManager;
 import org.obeonetwork.m2doc.generator.TemplateProcessor;
-import org.obeonetwork.m2doc.generator.UserDocDestManager;
+import org.obeonetwork.m2doc.generator.UserContentManager;
 import org.obeonetwork.m2doc.parser.BodyTemplateParser;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.template.Template;
@@ -112,7 +112,7 @@ public class TemplateProcessorUserDocRemplaceTest {
      *             DocumentParserException
      */
     @Test
-    public void testUserDocTagWithImageInUserDocDest()
+    public void testUserDocTagWithImageInUserContent()
             throws InvalidFormatException, IOException, DocumentParserException {
         // CHECKSTYLE:OFF
         String templatePath = "templates/testUserDoc1.docx";
@@ -123,10 +123,10 @@ public class TemplateProcessorUserDocRemplaceTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestManager = new UserDocDestManager(
-                "userDocDest/testUserDocDest1Custom1.docx");
+        final UserContentManager userContentManager = new UserContentManager(
+                "userContent/testUserContent1Custom1.docx");
         // CHECKSTYLE:OFF
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userDocDestManager,
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
                 env, destinationDoc, rootObject);
         // CHECKSTYLE:ON
         processor.doSwitch(template);
@@ -142,7 +142,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         XWPFParagraph paragraph3 = reloadDocument.getParagraphs().get(2);
         assertEquals("Custom texte avec image ", paragraph3.getRuns().get(0).getText(0));
         assertEquals(1, paragraph3.getRuns().get(1).getEmbeddedPictures().size());
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
         // CHECKSTYLE:ON
     }
 
@@ -157,7 +157,7 @@ public class TemplateProcessorUserDocRemplaceTest {
      *             DocumentParserException
      */
     @Test
-    public void testUserDocTagWithTableInUserDocDest()
+    public void testUserDocTagWithTableInUserContent()
             throws InvalidFormatException, IOException, DocumentParserException {
         String templatePath = "templates/testUserDoc1.docx";
         XWPFDocument document = loadDoc(templatePath);
@@ -166,9 +166,9 @@ public class TemplateProcessorUserDocRemplaceTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestManager = new UserDocDestManager(
-                "userDocDest/testUserDocDest1Custom2.docx");
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userDocDestManager,
+        final UserContentManager userContentManager = new UserContentManager(
+                "userContent/testUserContent1Custom2.docx");
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
                 env, destinationDoc, rootObject);
         processor.doSwitch(template);
         String resultDoc = "results/generated/testUserDoc1Custom2Resultat.docx";
@@ -182,7 +182,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
         XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
         assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
         // CHECKSTYLE:ON
     }
 
@@ -207,9 +207,9 @@ public class TemplateProcessorUserDocRemplaceTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestManager = new UserDocDestManager(
-                "userDocDest/testUserDocDest1Custom3.docx");
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userDocDestManager,
+        final UserContentManager userContentManager = new UserContentManager(
+                "userContent/testUserContent1Custom3.docx");
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
                 env, destinationDoc, rootObject);
         processor.doSwitch(template);
         String resultPath = "results/generated/testUserDoc1Custom3Resultat.docx";
@@ -222,7 +222,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
         XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
         assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
     }
 
     /**
@@ -244,9 +244,9 @@ public class TemplateProcessorUserDocRemplaceTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument(templatePath);
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestManager = new UserDocDestManager(
-                "userDocDest/testUserDocDest7Custom1.docx");
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userDocDestManager,
+        final UserContentManager userContentManager = new UserContentManager(
+                "userContent/testUserContent7Custom1.docx");
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
                 env, destinationDoc, rootObject);
         processor.doSwitch(template);
         String resultPath = "results/generated/testUserDoc7Custom1Resultat.docx";
@@ -268,7 +268,7 @@ public class TemplateProcessorUserDocRemplaceTest {
 
         assertEquals(1, paragraph14.getRuns().get(0).getEmbeddedPictures().size());
 
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
         // CHECKSTYLE:ON
     }
 
@@ -291,9 +291,9 @@ public class TemplateProcessorUserDocRemplaceTest {
         Map<String, Object> definitions = new HashMap<String, Object>();
         XWPFDocument destinationDoc = createDestinationDocument(templatePath);
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestManager = new UserDocDestManager(
-                "userDocDest/testUserDocDest2Custom1.docx");
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userDocDestManager,
+        final UserContentManager userContentManager = new UserContentManager(
+                "userContent/testUserContent2Custom1.docx");
+        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
                 env, destinationDoc, rootObject);
         processor.doSwitch(template);
 
@@ -309,7 +309,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(paragraph2.getText().startsWith("Début"));
         assertTrue(paragraph2.getText().contains("Custom texte"));
         assertTrue(paragraph2.getText().endsWith("fin"));
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
         // CHECKSTYLE:ON
     }
 

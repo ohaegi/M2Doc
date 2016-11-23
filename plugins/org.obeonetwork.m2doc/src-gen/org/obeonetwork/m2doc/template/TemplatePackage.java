@@ -488,14 +488,14 @@ public interface TemplatePackage extends EPackage {
     int USER_DOC_OPERATION_COUNT = COMPOUND_OPERATION_COUNT + 0;
 
     /**
-     * The meta object id for the '{@link org.obeonetwork.m2doc.template.impl.UserDocDestImpl <em>User Doc Dest</em>}' class.
+     * The meta object id for the '{@link org.obeonetwork.m2doc.template.impl.UserContentImpl <em>User Content</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.obeonetwork.m2doc.template.impl.UserDocDestImpl
-     * @see org.obeonetwork.m2doc.template.impl.TemplatePackageImpl#getUserDocDest()
+     * @see org.obeonetwork.m2doc.template.impl.UserContentImpl
+     * @see org.obeonetwork.m2doc.template.impl.TemplatePackageImpl#getUserContent()
      * @generated
      */
-    int USER_DOC_DEST = 4;
+    int USER_CONTENT = 4;
 
     /**
      * The feature id for the '<em><b>Style Run</b></em>' attribute.
@@ -504,7 +504,7 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__STYLE_RUN = COMPOUND__STYLE_RUN;
+    int USER_CONTENT__STYLE_RUN = COMPOUND__STYLE_RUN;
 
     /**
      * The feature id for the '<em><b>Runs</b></em>' attribute list.
@@ -513,7 +513,7 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__RUNS = COMPOUND__RUNS;
+    int USER_CONTENT__RUNS = COMPOUND__RUNS;
 
     /**
      * The feature id for the '<em><b>Closing Runs</b></em>' attribute list.
@@ -522,7 +522,7 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__CLOSING_RUNS = COMPOUND__CLOSING_RUNS;
+    int USER_CONTENT__CLOSING_RUNS = COMPOUND__CLOSING_RUNS;
 
     /**
      * The feature id for the '<em><b>Validation Messages</b></em>' attribute list.
@@ -531,7 +531,7 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__VALIDATION_MESSAGES = COMPOUND__VALIDATION_MESSAGES;
+    int USER_CONTENT__VALIDATION_MESSAGES = COMPOUND__VALIDATION_MESSAGES;
 
     /**
      * The feature id for the '<em><b>Sub Constructs</b></em>' containment reference list.
@@ -540,7 +540,7 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__SUB_CONSTRUCTS = COMPOUND__SUB_CONSTRUCTS;
+    int USER_CONTENT__SUB_CONSTRUCTS = COMPOUND__SUB_CONSTRUCTS;
 
     /**
      * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -549,25 +549,25 @@ public interface TemplatePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST__ID = COMPOUND_FEATURE_COUNT + 0;
+    int USER_CONTENT__ID = COMPOUND_FEATURE_COUNT + 0;
 
     /**
-     * The number of structural features of the '<em>User Doc Dest</em>' class.
+     * The number of structural features of the '<em>User Content</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST_FEATURE_COUNT = COMPOUND_FEATURE_COUNT + 1;
+    int USER_CONTENT_FEATURE_COUNT = COMPOUND_FEATURE_COUNT + 1;
 
     /**
-     * The number of operations of the '<em>User Doc Dest</em>' class.
+     * The number of operations of the '<em>User Content</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int USER_DOC_DEST_OPERATION_COUNT = COMPOUND_OPERATION_COUNT + 0;
+    int USER_CONTENT_OPERATION_COUNT = COMPOUND_OPERATION_COUNT + 0;
 
     /**
      * The meta object id for the '{@link org.obeonetwork.m2doc.template.impl.QueryImpl <em>Query</em>}' class.
@@ -2234,25 +2234,25 @@ public interface TemplatePackage extends EPackage {
     EAttribute getUserDoc_Id();
 
     /**
-     * Returns the meta object for class '{@link org.obeonetwork.m2doc.template.UserDocDest <em>User Doc Dest</em>}'.
+     * Returns the meta object for class '{@link org.obeonetwork.m2doc.template.UserContent <em>User Content</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for class '<em>User Doc Dest</em>'.
-     * @see org.obeonetwork.m2doc.template.UserDocDest
+     * @return the meta object for class '<em>User Content</em>'.
+     * @see org.obeonetwork.m2doc.template.UserContent
      * @generated
      */
-    EClass getUserDocDest();
+    EClass getUserContent();
 
     /**
-     * Returns the meta object for the attribute '{@link org.obeonetwork.m2doc.template.UserDocDest#getId <em>Id</em>}'.
+     * Returns the meta object for the attribute '{@link org.obeonetwork.m2doc.template.UserContent#getId <em>Id</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Id</em>'.
-     * @see org.obeonetwork.m2doc.template.UserDocDest#getId()
-     * @see #getUserDocDest()
+     * @see org.obeonetwork.m2doc.template.UserContent#getId()
+     * @see #getUserContent()
      * @generated
      */
-    EAttribute getUserDocDest_Id();
+    EAttribute getUserContent_Id();
 
     /**
      * Returns the meta object for class '{@link org.obeonetwork.m2doc.template.Query <em>Query</em>}'.
@@ -3051,14 +3051,14 @@ public interface TemplatePackage extends EPackage {
         EAttribute USER_DOC__ID = eINSTANCE.getUserDoc_Id();
 
         /**
-         * The meta object literal for the '{@link org.obeonetwork.m2doc.template.impl.UserDocDestImpl <em>User Doc Dest</em>}' class.
+         * The meta object literal for the '{@link org.obeonetwork.m2doc.template.impl.UserContentImpl <em>User Content</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @see org.obeonetwork.m2doc.template.impl.UserDocDestImpl
-         * @see org.obeonetwork.m2doc.template.impl.TemplatePackageImpl#getUserDocDest()
+         * @see org.obeonetwork.m2doc.template.impl.UserContentImpl
+         * @see org.obeonetwork.m2doc.template.impl.TemplatePackageImpl#getUserContent()
          * @generated
          */
-        EClass USER_DOC_DEST = eINSTANCE.getUserDocDest();
+        EClass USER_CONTENT = eINSTANCE.getUserContent();
 
         /**
          * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
@@ -3066,7 +3066,7 @@ public interface TemplatePackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute USER_DOC_DEST__ID = eINSTANCE.getUserDocDest_Id();
+        EAttribute USER_CONTENT__ID = eINSTANCE.getUserContent_Id();
 
         /**
          * The meta object literal for the '{@link org.obeonetwork.m2doc.template.impl.QueryImpl <em>Query</em>}' class.

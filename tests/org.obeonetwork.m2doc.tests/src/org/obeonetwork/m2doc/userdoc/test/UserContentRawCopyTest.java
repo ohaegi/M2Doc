@@ -21,19 +21,19 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.xmlbeans.XmlException;
 import org.junit.Test;
 import org.obeonetwork.m2doc.api.POIServices;
-import org.obeonetwork.m2doc.generator.UserDocDestManager;
-import org.obeonetwork.m2doc.generator.UserDocDestRawCopy;
+import org.obeonetwork.m2doc.generator.UserContentManager;
+import org.obeonetwork.m2doc.generator.UserContentRawCopy;
 import org.obeonetwork.m2doc.parser.DocumentParserException;
-import org.obeonetwork.m2doc.template.UserDocDest;
+import org.obeonetwork.m2doc.template.UserContent;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the {@link UserDocDestRawCopy} class.
+ * Tests the {@link UserContentRawCopy} class.
  * 
  * @author ohaegi
  */
-public class UserDocDestRawCopyTest {
+public class UserContentRawCopyTest {
 
     /**
      * Test copy.
@@ -48,9 +48,9 @@ public class UserDocDestRawCopyTest {
     @Test
     // CHECKSTYLE:OFF
     public void test() throws IOException, DocumentParserException, InvalidFormatException, XmlException {
-        String filePath = "userDocDest/testUserDocDest2.docx";
-        UserDocDestManager userDocDestManager = new UserDocDestManager(filePath);
-        UserDocDest userDocDest = userDocDestManager.getUserDocDest("value1");
+        String filePath = "userContent/testUserContent2.docx";
+        UserContentManager userContentManager = new UserContentManager(filePath);
+        UserContent userContent = userContentManager.getUserContent("value1");
 
         // Create an empty document
         XWPFDocument document = new XWPFDocument();
@@ -58,14 +58,14 @@ public class UserDocDestRawCopyTest {
         XWPFParagraph paragraph = document.createParagraph();
 
         // Launch copy
-        UserDocDestRawCopy userDocDestRawCopy = new UserDocDestRawCopy();
-        userDocDestRawCopy.copy(userDocDest, paragraph);
+        UserContentRawCopy userContentRawCopy = new UserContentRawCopy();
+        userContentRawCopy.copy(userContent, paragraph);
 
         String resultFilePath = "results/generated/testUserDoc2RowCopyResultat.docx";
         POIServices.getInstance().saveFile(document, resultFilePath);
         document.close();
 
-        userDocDestManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
 
         // Reopen document
         FileInputStream is = new FileInputStream(resultFilePath);

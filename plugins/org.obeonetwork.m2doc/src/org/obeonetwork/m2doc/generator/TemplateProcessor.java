@@ -68,8 +68,8 @@ import org.obeonetwork.m2doc.template.StaticFragment;
 import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.TableClient;
 import org.obeonetwork.m2doc.template.Template;
+import org.obeonetwork.m2doc.template.UserContent;
 import org.obeonetwork.m2doc.template.UserDoc;
-import org.obeonetwork.m2doc.template.UserDocDest;
 import org.obeonetwork.m2doc.template.util.TemplateSwitch;
 import org.obeonetwork.m2doc.util.M2DocUtils;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
@@ -140,9 +140,9 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
     private EObject targetConfObject;
 
     /**
-     * Last Destination UserDocDest Manager.
+     * Last Destination UserContent Manager.
      */
-    private UserDocDestManager userDocDestManager;
+    private UserContentManager userContentManager;
 
     /**
      * User Doc Ids list.
@@ -160,8 +160,8 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the path to the project where the template is located.
      * @param bookmarkManager
      *            the {@link BookmarkManager}
-     * @param userDocDestManager
-     *            the {@link UserDocDestManager}
+     * @param userContentManager
+     *            the {@link UserContentManager}
      * @param queryEnvironment
      *            the query environment used to evaluate queries in the
      * @param destinationDocument
@@ -170,12 +170,12 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the root EObject of the gen conf model.
      */
     public TemplateProcessor(Map<String, Object> initialDefs, String projectPath, BookmarkManager bookmarkManager,
-            UserDocDestManager userDocDestManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
+            UserContentManager userContentManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
             EObject theTargetConfObject) {
         this.rootProjectPath = projectPath;
         this.definitions = new GenerationEnvironment(initialDefs);
         this.bookmarkManager = bookmarkManager;
-        this.userDocDestManager = userDocDestManager;
+        this.userContentManager = userContentManager;
         this.queryEnvironment = queryEnvironment;
         this.generatedDocument = destinationDocument;
         this.targetConfObject = theTargetConfObject;
@@ -189,8 +189,8 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the definitions used in queries and variable tags
      * @param bookmarkManager
      *            the {@link BookmarkManager}
-     * @param userDocDestManager
-     *            the {@link UserDocDestManager}
+     * @param userContentManager
+     *            the {@link UserContentManager}
      * @param queryEnvironment
      *            the query environment used to evaluate queries in the
      *            template.
@@ -200,11 +200,11 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
      *            the root EObject of the gen conf model.
      */
     public TemplateProcessor(GenerationEnvironment defs, BookmarkManager bookmarkManager,
-            UserDocDestManager userDocDestManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
+            UserContentManager userContentManager, IQueryEnvironment queryEnvironment, IBody destinationDocument,
             EObject theTargetConfObject) {
         this.definitions = defs;
         this.bookmarkManager = bookmarkManager;
-        this.userDocDestManager = userDocDestManager;
+        this.userContentManager = userContentManager;
         this.queryEnvironment = queryEnvironment;
         this.generatedDocument = destinationDocument;
         this.targetConfObject = theTargetConfObject;
@@ -510,23 +510,23 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
             // compute userdoc id
             String id = result.getResult().toString();
 
-            // Tag UserDocDest with evaluated id
+            // Tag UserContent with evaluated id
             addStartUserDocField(object, id);
             // manage user Doc Id Uniqueness
             manageUserDocIdUniqueness(id, object);
             // Copy userdoc content
-            UserDocDest userDocDest = userDocDestManager.getUserDocDest(id);
+            UserContent userContent = userContentManager.getUserContent(id);
             boolean needNewParagraphBeforeEndTag = true;
-            if (userDocDest == null) {
+            if (userContent == null) {
                 for (AbstractConstruct construct : object.getSubConstructs()) {
                     doSwitch(construct);
                 }
                 needNewParagraphBeforeEndTag = needNewParagraph(object);
             } else {
-                UserDocDestRawCopy userDocDestRawCopy = new UserDocDestRawCopy();
+                UserContentRawCopy userContentRawCopy = new UserContentRawCopy();
                 try {
-                    currentGeneratedParagraph = userDocDestRawCopy.copy(userDocDest, currentGeneratedParagraph);
-                    needNewParagraphBeforeEndTag = userDocDestRawCopy.needNewParagraph();
+                    currentGeneratedParagraph = userContentRawCopy.copy(userContent, currentGeneratedParagraph);
+                    needNewParagraphBeforeEndTag = userContentRawCopy.needNewParagraph();
                     // Affect currentTemplateParagraph after Raw copy
                     if (object.getClosingRuns().size() != 0) {
                         currentTemplateParagraph = object.getClosingRuns().get(object.getClosingRuns().size() - 1)
@@ -541,7 +541,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
                 }
             }
 
-            // Tag m:enduserdocdest
+            // Tag m:enduserContent
             addEndUserDocField(object, needNewParagraphBeforeEndTag);
             // Closing compound
             closingCompound(object);
@@ -581,7 +581,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
             // insert the error message.
             XWPFRun run = currentGeneratedParagraph.createRun();
             String msgError = "The id '" + id
-                + "' is already used in generated document. Ids must be unique otherwise document part contained userdocdest could be lost at next generation.";
+                + "' is already used in generated document. Ids must be unique otherwise document part contained userContent could be lost at next generation.";
             setErrorMessageToRun(msgError, run);
 
             TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
@@ -594,7 +594,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
     }
 
     /**
-     * Add Start UserDocDest word Document Field.
+     * Add Start UserContent word Document Field.
      * 
      * @param object
      *            AbstractConstruct where add field
@@ -607,11 +607,11 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
             || object.getRuns().size() != 0 && object.getRuns().get(0).getParagraph() != currentTemplateParagraph) {
             createNewParagraph(object.getRuns().get(0).getParagraph());
         }
-        currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:userdocdest " + id);
+        currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:userContent " + id);
     }
 
     /**
-     * Add End UserDocDest word Document Field.
+     * Add End UserContent word Document Field.
      * 
      * @param object
      *            AbstractConstruct where add field
@@ -624,7 +624,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
             if (needNewParagraph) {
                 createNewParagraph(object.getClosingRuns().get(0).getParagraph());
             }
-            currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:enduserdocdest");
+            currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr("m:enduserContent");
         }
     }
 
@@ -729,7 +729,7 @@ public class TemplateProcessor extends TemplateSwitch<AbstractConstruct> {
                 ctCell.getTblList().clear();
                 newCell.getCTTc().set(ctCell);
                 // process the cell :
-                TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userDocDestManager,
+                TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
                         queryEnvironment, newCell, targetConfObject);
                 processor.doSwitch(cell.getTemplate());
             }

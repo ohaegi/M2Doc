@@ -143,17 +143,17 @@ public class DocumentGenerator {
         // The output document is created from the input so as to get the styles
         // and definitions in the original template.
         final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserDocDestManager userDocDestinationManager = new UserDocDestManager(
+        final UserContentManager userContentManager = new UserContentManager(
                 this.destinationFileName);
         TemplateProcessor processor = new TemplateProcessor(definitions, this.projectPath, bookmarkManager,
-                userDocDestinationManager, queryEnvironment, destinationDocument, targetConfObject);
+                userContentManager, queryEnvironment, destinationDocument, targetConfObject);
         processor.doSwitch(this.template.getBody());
         Iterator<XWPFFooter> footers = destinationDocument.getFooterList().iterator();
         for (Template footerTemplate : this.template.getFooters()) {
             XWPFFooter footer = footers.next();
             cleanHeaderFooter(footer);
             TemplateProcessor footerProc = new TemplateProcessor(definitions, this.projectPath, bookmarkManager,
-                    userDocDestinationManager, queryEnvironment, footer, targetConfObject);
+                    userContentManager, queryEnvironment, footer, targetConfObject);
             footerProc.doSwitch(footerTemplate);
         }
         Iterator<XWPFHeader> headers = destinationDocument.getHeaderList().iterator();
@@ -161,7 +161,7 @@ public class DocumentGenerator {
             XWPFHeader header = headers.next();
             cleanHeaderFooter(header);
             TemplateProcessor headerProc = new TemplateProcessor(definitions, this.projectPath, bookmarkManager,
-                    userDocDestinationManager, queryEnvironment, header, targetConfObject);
+                    userContentManager, queryEnvironment, header, targetConfObject);
             headerProc.doSwitch(headerTemplate);
         }
 
@@ -172,7 +172,7 @@ public class DocumentGenerator {
         POIServices.getInstance().saveFile(destinationDocument, destinationFileName);
 
         // Remove temporary last destination document
-        userDocDestinationManager.deleteTempGeneratedFile();
+        userContentManager.deleteTempGeneratedFile();
     }
 
     /**

@@ -740,14 +740,14 @@ public class DocumentGeneratorTest {
     public void testUserDocWithPreviousResult()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
         // Remove previous generated file
-        String resultPath = "results/generated/testUserDocDest1Custom1Result.docx";
+        String resultPath = "results/generated/testUserContent1Custom1Result.docx";
         File oldResult = new File(resultPath);
         if (oldResult.exists()) {
             oldResult.delete();
         }
 
         // Copy result in right place
-        Files.copy(new File("userDocDest/testUserDocDest1Custom1.docx").toPath(), new File(resultPath).toPath());
+        Files.copy(new File("userContent/testUserContent1Custom1.docx").toPath(), new File(resultPath).toPath());
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
@@ -797,7 +797,7 @@ public class DocumentGeneratorTest {
             oldResult.delete();
         }
         // Copy result in right place
-        Files.copy(new File("userDocDest/testUserDocDest9Custom1.docx").toPath(), new File(resultPath).toPath());
+        Files.copy(new File("userContent/testUserContent9Custom1.docx").toPath(), new File(resultPath).toPath());
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);

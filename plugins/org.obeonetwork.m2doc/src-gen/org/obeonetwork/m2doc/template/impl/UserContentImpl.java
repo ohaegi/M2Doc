@@ -17,22 +17,22 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.obeonetwork.m2doc.template.TemplatePackage;
-import org.obeonetwork.m2doc.template.UserDocDest;
+import org.obeonetwork.m2doc.template.UserContent;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>User Doc Dest</b></em>'.
+ * An implementation of the model object '<em><b>User Content</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.obeonetwork.m2doc.template.impl.UserDocDestImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.obeonetwork.m2doc.template.impl.UserContentImpl#getId <em>Id</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
+public class UserContentImpl extends CompoundImpl implements UserContent {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -65,7 +65,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
      * <!-- end-user-doc -->
      * @generated
      */
-    protected UserDocDestImpl() {
+    protected UserContentImpl() {
         super();
     }
 
@@ -76,7 +76,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
      */
     @Override
     protected EClass eStaticClass() {
-        return TemplatePackage.Literals.USER_DOC_DEST;
+        return TemplatePackage.Literals.USER_CONTENT;
     }
 
     /**
@@ -97,7 +97,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
         String oldId = id;
         id = newId;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TemplatePackage.USER_DOC_DEST__ID, oldId, id));
+            eNotify(new ENotificationImpl(this, Notification.SET, TemplatePackage.USER_CONTENT__ID, oldId, id));
     }
 
     /**
@@ -108,7 +108,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case TemplatePackage.USER_DOC_DEST__ID:
+            case TemplatePackage.USER_CONTENT__ID:
                 return getId();
         }
         return super.eGet(featureID, resolve, coreType);
@@ -122,7 +122,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case TemplatePackage.USER_DOC_DEST__ID:
+            case TemplatePackage.USER_CONTENT__ID:
                 setId((String)newValue);
                 return;
         }
@@ -137,7 +137,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case TemplatePackage.USER_DOC_DEST__ID:
+            case TemplatePackage.USER_CONTENT__ID:
                 setId(ID_EDEFAULT);
                 return;
         }
@@ -152,7 +152,7 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case TemplatePackage.USER_DOC_DEST__ID:
+            case TemplatePackage.USER_CONTENT__ID:
                 return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
         }
         return super.eIsSet(featureID);
@@ -174,4 +174,4 @@ public class UserDocDestImpl extends CompoundImpl implements UserDocDest {
         return result.toString();
     }
 
-} //UserDocDestImpl
+} //UserContentImpl

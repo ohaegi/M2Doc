@@ -26,7 +26,7 @@ import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
 import org.obeonetwork.m2doc.template.StaticFragment;
 import org.obeonetwork.m2doc.template.Table;
 import org.obeonetwork.m2doc.template.Template;
-import org.obeonetwork.m2doc.template.UserDocDest;
+import org.obeonetwork.m2doc.template.UserContent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -45,7 +45,7 @@ public class DocumentGeneratedParserTest {
     private IQueryEnvironment env = org.eclipse.acceleo.query.runtime.Query.newEnvironmentWithDefaultServices(null);
 
     /**
-     * Test parsing userDocDest tag in M2Doc generated document.
+     * Test parsing userContent tag in M2Doc generated document.
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException
@@ -55,8 +55,8 @@ public class DocumentGeneratedParserTest {
      *             DocumentParserException
      */
     @Test
-    public void testUserDocDestSimple() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("userDocDest/testUserDocDest1.docx");
+    public void testuserContentSimple() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("userContent/testuserContent1.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
@@ -64,22 +64,22 @@ public class DocumentGeneratedParserTest {
         assertEquals(document, template.getBody());
         assertEquals(3, template.getSubConstructs().size());
         assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
         assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
-        UserDocDest userDocDest = (UserDocDest) template.getSubConstructs().get(1);
-        assertNotNull(userDocDest.getId());
-        assertTrue(userDocDest.getId() instanceof String);
+        UserContent userContent = (UserContent) template.getSubConstructs().get(1);
+        assertNotNull(userContent.getId());
+        assertTrue(userContent.getId() instanceof String);
         // CHECKSTYLE:OFF
-        assertEquals("value1", userDocDest.getId());
+        assertEquals("value1", userContent.getId());
         // CHECKSTYLE:ON
-        assertEquals(1, userDocDest.getSubConstructs().size());
-        assertTrue(userDocDest.getSubConstructs().get(0) instanceof StaticFragment);
-        String contentValue1 = userDocDest.getSubConstructs().get(0).getRuns().get(0).getText(0);
+        assertEquals(1, userContent.getSubConstructs().size());
+        assertTrue(userContent.getSubConstructs().get(0) instanceof StaticFragment);
+        String contentValue1 = userContent.getSubConstructs().get(0).getRuns().get(0).getText(0);
         assertEquals("User document part Texte 1", contentValue1);
     }
 
     /**
-     * Test parsing userDocDest tag in M2Doc generated document with image in tag.
+     * Test parsing userContent tag in M2Doc generated document with image in tag.
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException
@@ -89,8 +89,8 @@ public class DocumentGeneratedParserTest {
      *             DocumentParserException
      */
     @Test
-    public void testUserDocDestImage() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("userDocDest/testUserDocDest2.docx");
+    public void testuserContentImage() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("userContent/testuserContent2.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
@@ -98,25 +98,25 @@ public class DocumentGeneratedParserTest {
         assertEquals(document, template.getBody());
         assertEquals(3, template.getSubConstructs().size());
         assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
         assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
-        UserDocDest userDocDest = (UserDocDest) template.getSubConstructs().get(1);
-        assertNotNull(userDocDest.getId());
-        assertTrue(userDocDest.getId() instanceof String);
-        assertEquals("value1", userDocDest.getId());
-        assertEquals(1, userDocDest.getSubConstructs().size());
-        assertTrue(userDocDest.getSubConstructs().get(0) instanceof StaticFragment);
-        String contentValue1 = userDocDest.getSubConstructs().get(0).getRuns().get(0).getText(0);
+        UserContent userContent = (UserContent) template.getSubConstructs().get(1);
+        assertNotNull(userContent.getId());
+        assertTrue(userContent.getId() instanceof String);
+        assertEquals("value1", userContent.getId());
+        assertEquals(1, userContent.getSubConstructs().size());
+        assertTrue(userContent.getSubConstructs().get(0) instanceof StaticFragment);
+        String contentValue1 = userContent.getSubConstructs().get(0).getRuns().get(0).getText(0);
         assertEquals("User document part Texte 1", contentValue1);
-        assertEquals(1, userDocDest.getSubConstructs().get(0).getRuns().get(2).getEmbeddedPictures().size());
+        assertEquals(1, userContent.getSubConstructs().get(0).getRuns().get(2).getEmbeddedPictures().size());
         // CHECKSTYLE:OFF
-        assertEquals(new Long(1829750042), userDocDest.getSubConstructs().get(0).getRuns().get(2).getEmbeddedPictures()
+        assertEquals(new Long(1829750042), userContent.getSubConstructs().get(0).getRuns().get(2).getEmbeddedPictures()
                 .get(0).getPictureData().getChecksum());
         // CHECKSTYLE:ON
     }
 
     /**
-     * Test parsing userDocDest tag in M2Doc generated document with table in tag.
+     * Test parsing userContent tag in M2Doc generated document with table in tag.
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException
@@ -126,8 +126,8 @@ public class DocumentGeneratedParserTest {
      *             DocumentParserException
      */
     @Test
-    public void testUserDocDestTable() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("userDocDest/testUserDocDest3.docx");
+    public void testuserContentTable() throws InvalidFormatException, IOException, DocumentParserException {
+        FileInputStream is = new FileInputStream("userContent/testuserContent3.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
@@ -135,17 +135,17 @@ public class DocumentGeneratedParserTest {
         assertEquals(document, template.getBody());
         assertEquals(3, template.getSubConstructs().size());
         assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
         assertTrue(template.getSubConstructs().get(2) instanceof StaticFragment);
-        UserDocDest userDocDest = (UserDocDest) template.getSubConstructs().get(1);
-        assertNotNull(userDocDest.getId());
-        assertTrue(userDocDest.getId() instanceof String);
-        assertEquals("value1", userDocDest.getId());
-        assertEquals(3, userDocDest.getSubConstructs().size());
-        assertTrue(userDocDest.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(userDocDest.getSubConstructs().get(1) instanceof Table);
-        assertTrue(userDocDest.getSubConstructs().get(2) instanceof StaticFragment);
-        Table table = (Table) userDocDest.getSubConstructs().get(1);
+        UserContent userContent = (UserContent) template.getSubConstructs().get(1);
+        assertNotNull(userContent.getId());
+        assertTrue(userContent.getId() instanceof String);
+        assertEquals("value1", userContent.getId());
+        assertEquals(3, userContent.getSubConstructs().size());
+        assertTrue(userContent.getSubConstructs().get(0) instanceof StaticFragment);
+        assertTrue(userContent.getSubConstructs().get(1) instanceof Table);
+        assertTrue(userContent.getSubConstructs().get(2) instanceof StaticFragment);
+        Table table = (Table) userContent.getSubConstructs().get(1);
         String cellContent1 = table.getRows().get(0).getCells().get(0).getTableCell().getText();
         assertEquals("Un", cellContent1);
         String cellContent2 = table.getRows().get(0).getCells().get(2).getTableCell().getText();
@@ -153,7 +153,7 @@ public class DocumentGeneratedParserTest {
     }
 
     /**
-     * Test parsing userDocDest tag with no unique id (2 times the same id).
+     * Test parsing userContent tag with no unique id (2 times the same id).
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException&
@@ -164,7 +164,7 @@ public class DocumentGeneratedParserTest {
      */
     @Test
     public void testUserDocWithNoUniqueId2() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDocDest4.docx");
+        FileInputStream is = new FileInputStream("templates/testUserContent4.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
@@ -172,12 +172,12 @@ public class DocumentGeneratedParserTest {
         assertEquals(document, template.getBody());
         assertEquals(4, template.getSubConstructs().size());
         assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
-        assertTrue(template.getSubConstructs().get(2) instanceof UserDocDest);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
+        assertTrue(template.getSubConstructs().get(2) instanceof UserContent);
         assertTrue(template.getSubConstructs().get(3) instanceof StaticFragment);
-        UserDocDest userDoc1 = (UserDocDest) template.getSubConstructs().get(1);
+        UserContent userDoc1 = (UserContent) template.getSubConstructs().get(1);
         assertEquals(0, userDoc1.getValidationMessages().size());
-        UserDocDest userDoc2 = (UserDocDest) template.getSubConstructs().get(2);
+        UserContent userDoc2 = (UserContent) template.getSubConstructs().get(2);
         assertEquals(1, userDoc2.getValidationMessages().size());
         assertEquals(ValidationMessageLevel.WARNING, userDoc2.getValidationMessages().get(0).getLevel());
         // CHECKSTYLE:OFF
@@ -190,7 +190,7 @@ public class DocumentGeneratedParserTest {
     }
 
     /**
-     * Test parsing userDocDest tag with no unique id (2 times the same id).
+     * Test parsing userContent tag with no unique id (2 times the same id).
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException&
@@ -201,7 +201,7 @@ public class DocumentGeneratedParserTest {
      */
     @Test
     public void testUserDocWithNoUniqueId3() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDocDest5.docx");
+        FileInputStream is = new FileInputStream("templates/testUserContent5.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
@@ -209,20 +209,20 @@ public class DocumentGeneratedParserTest {
         assertEquals(document, template.getBody());
         assertEquals(5, template.getSubConstructs().size());
         assertTrue(template.getSubConstructs().get(0) instanceof StaticFragment);
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
-        assertTrue(template.getSubConstructs().get(2) instanceof UserDocDest);
-        assertTrue(template.getSubConstructs().get(3) instanceof UserDocDest);
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
+        assertTrue(template.getSubConstructs().get(2) instanceof UserContent);
+        assertTrue(template.getSubConstructs().get(3) instanceof UserContent);
         assertTrue(template.getSubConstructs().get(4) instanceof StaticFragment);
-        UserDocDest userDoc1 = (UserDocDest) template.getSubConstructs().get(1);
+        UserContent userDoc1 = (UserContent) template.getSubConstructs().get(1);
         assertEquals(0, userDoc1.getValidationMessages().size());
-        UserDocDest userDoc2 = (UserDocDest) template.getSubConstructs().get(2);
+        UserContent userDoc2 = (UserContent) template.getSubConstructs().get(2);
         assertEquals(1, userDoc2.getValidationMessages().size());
         assertEquals(ValidationMessageLevel.WARNING, userDoc2.getValidationMessages().get(0).getLevel());
         assertEquals("userdoc tag must have unique id value. 'value1' id already exists in document",
                 userDoc2.getValidationMessages().get(0).getMessage());
         assertEquals(userDoc2.getRuns().get(userDoc2.getRuns().size() - 1),
                 userDoc2.getValidationMessages().get(0).getLocation());
-        UserDocDest userDoc3 = (UserDocDest) template.getSubConstructs().get(3);
+        UserContent userDoc3 = (UserContent) template.getSubConstructs().get(3);
         assertEquals(1, userDoc2.getValidationMessages().size());
         assertEquals(ValidationMessageLevel.WARNING, userDoc3.getValidationMessages().get(0).getLevel());
         assertEquals("userdoc tag must have unique id value. 'value1' id already exists in document",
@@ -232,7 +232,7 @@ public class DocumentGeneratedParserTest {
     }
 
     /**
-     * Test parsing userDocDest tag without end of tag.
+     * Test parsing userContent tag without end of tag.
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException&
@@ -243,24 +243,24 @@ public class DocumentGeneratedParserTest {
      */
     @Test
     public void testUserDocWithNoEndOfTag() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDocDest6.docx");
+        FileInputStream is = new FileInputStream("templates/testUserContent6.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);
         Template template = parser.parseTemplate();
-        assertTrue(template.getSubConstructs().get(1) instanceof UserDocDest);
-        UserDocDest userDocDest = (UserDocDest) template.getSubConstructs().get(1);
-        assertTrue(userDocDest.getClosingRuns().isEmpty());
-        assertEquals(ValidationMessageLevel.ERROR, userDocDest.getValidationMessages().get(0).getLevel());
-        assertEquals("Unexpected tag EOF at this location", userDocDest.getValidationMessages().get(0).getMessage());
-        XWPFRun lastRunInContent = userDocDest.getSubConstructs().get(0).getRuns()
-                .get(userDocDest.getSubConstructs().get(0).getRuns().size() - 1);
-        assertEquals(lastRunInContent, userDocDest.getValidationMessages().get(0).getLocation());
+        assertTrue(template.getSubConstructs().get(1) instanceof UserContent);
+        UserContent userContent = (UserContent) template.getSubConstructs().get(1);
+        assertTrue(userContent.getClosingRuns().isEmpty());
+        assertEquals(ValidationMessageLevel.ERROR, userContent.getValidationMessages().get(0).getLevel());
+        assertEquals("Unexpected tag EOF at this location", userContent.getValidationMessages().get(0).getMessage());
+        XWPFRun lastRunInContent = userContent.getSubConstructs().get(0).getRuns()
+                .get(userContent.getSubConstructs().get(0).getRuns().size() - 1);
+        assertEquals(lastRunInContent, userContent.getValidationMessages().get(0).getLocation());
 
     }
 
     /**
-     * Test parsing enduserDocDest tag alone.
+     * Test parsing enduserContent tag alone.
      * 
      * @throws InvalidFormatException
      *             InvalidFormatException&
@@ -271,7 +271,7 @@ public class DocumentGeneratedParserTest {
      */
     @Test
     public void testEndUserDocAlone() throws InvalidFormatException, IOException, DocumentParserException {
-        FileInputStream is = new FileInputStream("templates/testUserDocDest7.docx");
+        FileInputStream is = new FileInputStream("templates/testUserContent7.docx");
         OPCPackage oPackage = OPCPackage.open(is);
         XWPFDocument document = new XWPFDocument(oPackage);
         BodyGeneratedParser parser = new BodyGeneratedParser(document, env);

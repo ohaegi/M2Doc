@@ -29,14 +29,14 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlToken;
 import org.obeonetwork.m2doc.template.AbstractConstruct;
 import org.obeonetwork.m2doc.template.Table;
-import org.obeonetwork.m2doc.template.UserDocDest;
+import org.obeonetwork.m2doc.template.UserContent;
 
 /**
- * UserDocDest Raw Copy.
+ * UserContent Raw Copy.
  * 
  * @author ohaegi
  */
-public class UserDocDestRawCopy {
+public class UserContentRawCopy {
 
     /**
      * Current Input Paragraph.
@@ -48,7 +48,7 @@ public class UserDocDestRawCopy {
      */
     private XWPFParagraph currentOutputParagraph;
     /**
-     * Previous Input Paragraph of userdocdest tag content.
+     * Previous Input Paragraph of UserContent tag content.
      */
     private XWPFParagraph previousInputParagraph;
 
@@ -64,7 +64,7 @@ public class UserDocDestRawCopy {
     private List<XWPFTable> listOutputTables = new ArrayList<XWPFTable>();
     /**
      * List Output Runs.
-     * Those runs is located at begin of userdocdest tag content before first paragraph
+     * Those runs is located at begin of usercontent tag content before first paragraph
      * Used to custom id relation picture.
      */
     private List<XWPFRun> listOutputRuns = new ArrayList<XWPFRun>();
@@ -77,14 +77,14 @@ public class UserDocDestRawCopy {
 
     /**
      * Need new paragraph after copy.
-     * Last Content Run And EndUserDocDest are not In Same Paragraph.
+     * Last Content Run And EndUserContent are not In Same Paragraph.
      */
     private boolean needNewParagraph = true;
 
     /**
-     * Is last Content Run And EndUserDocDest are In Same Paragraph.
+     * Is last Content Run And EndUserContent are In Same Paragraph.
      * 
-     * @return the lastContentRunAndEndUserDocDestInSameParagraph
+     * @return the needNewParagraph
      */
     public boolean needNewParagraph() {
         return needNewParagraph;
@@ -93,8 +93,8 @@ public class UserDocDestRawCopy {
     /**
      * Copy.
      * 
-     * @param userDocDest
-     *            User Doc Dest EObject
+     * @param userContent
+     *            UserContent EObject
      * @param outputParagraphBeforeUserDocContent
      *            Output Paragraph Before User Doc Dest content (User Code dest is writen by {@link TemplateProcessor} )
      * @return last paragraph created by copy
@@ -104,17 +104,17 @@ public class UserDocDestRawCopy {
      *             XmlException
      */
     @SuppressWarnings("deprecation")
-    public XWPFParagraph copy(UserDocDest userDocDest, XWPFParagraph outputParagraphBeforeUserDocContent)
+    public XWPFParagraph copy(UserContent userContent, XWPFParagraph outputParagraphBeforeUserDocContent)
             throws InvalidFormatException, XmlException {
         XWPFDocument outputDocument = outputParagraphBeforeUserDocContent.getDocument();
-        // Test if run before userDocDest is in same XWPFParagraph than first run of userDocDest
-        if (!userDocContentIsFirstRunOfParagraph(userDocDest)) {
-            previousInputParagraph = userDocDest.getRuns().get(userDocDest.getRuns().size() - 1).getParagraph();
+        // Test if run before userContent is in same XWPFParagraph than first run of userContent
+        if (!userDocContentIsFirstRunOfParagraph(userContent)) {
+            previousInputParagraph = userContent.getRuns().get(userContent.getRuns().size() - 1).getParagraph();
             currentInputParagraph = previousInputParagraph;
             currentOutputParagraph = outputParagraphBeforeUserDocContent;
         }
         XWPFParagraph currentRunParagraph = null;
-        for (AbstractConstruct abstractConstruct : userDocDest.getSubConstructs()) {
+        for (AbstractConstruct abstractConstruct : userContent.getSubConstructs()) {
             for (XWPFRun inputRun : abstractConstruct.getRuns()) {
                 currentRunParagraph = inputRun.getParagraph();
                 if (currentRunParagraph != currentInputParagraph) {
@@ -124,7 +124,7 @@ public class UserDocDestRawCopy {
                     currentOutputParagraph.getCTP().set(currentInputParagraph.getCTP());
                     listOutputParagraphs.add(currentOutputParagraph);
                 }
-                // Test if some run exist between userDocDest tag and first paragraph in this tag
+                // Test if some run exist between userContent tag and first paragraph in this tag
                 if (currentRunParagraph == previousInputParagraph) {
                     // Clone run directly, paragraph is already generate by normal processing
                     XWPFRun outputRun = currentOutputParagraph.createRun();
@@ -151,8 +151,8 @@ public class UserDocDestRawCopy {
         // Change Picture Id by xml replacement
         changePictureId();
 
-        if (userDocDest.getClosingRuns().size() != 0
-            && currentInputParagraph == userDocDest.getClosingRuns().get(0).getParagraph()) {
+        if (userContent.getClosingRuns().size() != 0
+            && currentInputParagraph == userContent.getClosingRuns().get(0).getParagraph()) {
             needNewParagraph = false;
         }
         return currentOutputParagraph;
@@ -278,17 +278,17 @@ public class UserDocDestRawCopy {
     }
 
     /**
-     * Test if first userDocDest content begin by a paragraph.
+     * Test if first userContent content begin by a paragraph.
      * 
-     * @param userDocDest
-     *            userDocDest EObject
-     * @return true if userDocDest content begin by a paragraph
+     * @param userContent
+     *            userContent EObject
+     * @return true if userContent content begin by a paragraph
      */
-    private boolean userDocContentIsFirstRunOfParagraph(UserDocDest userDocDest) {
-        XWPFRun userDocDestContentFirstRun = userDocDest.getSubConstructs().get(0).getRuns().get(0);
+    private boolean userDocContentIsFirstRunOfParagraph(UserContent userContent) {
+        XWPFRun userContentFirstRun = userContent.getSubConstructs().get(0).getRuns().get(0);
         @SuppressWarnings("deprecation")
-        XWPFRun paragraphFirstRun = userDocDestContentFirstRun.getParagraph().getRuns().get(0);
-        return userDocDestContentFirstRun == paragraphFirstRun;
+        XWPFRun paragraphFirstRun = userContentFirstRun.getParagraph().getRuns().get(0);
+        return userContentFirstRun == paragraphFirstRun;
     }
 
     /**

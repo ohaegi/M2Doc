@@ -31,16 +31,16 @@ import org.obeonetwork.m2doc.parser.DocumentParserException;
 import org.obeonetwork.m2doc.parser.TemplateValidationMessage;
 import org.obeonetwork.m2doc.parser.ValidationMessageLevel;
 import org.obeonetwork.m2doc.template.DocumentTemplate;
-import org.obeonetwork.m2doc.template.UserDocDest;
+import org.obeonetwork.m2doc.template.UserContent;
 
 /**
- * This class manage UserDoc Destination tag.
- * It launch destination parsing doc and keep map of UserDoc id / UserDocDestination EObject element.
+ * This class manage UserDoc Destination tag UserContent.
+ * It launch destination parsing doc and keep map of UserDoc id / UserContent EObject element.
  * Be careful, parsing must be done on a copy of destination document because old destination document is remove by generation.
  * 
  * @author ohaegi
  */
-public class UserDocDestManager {
+public class UserContentManager {
     /**
      * Temporary Generated destination file name suffix.
      */
@@ -52,9 +52,9 @@ public class UserDocDestManager {
     private File generatedFileCopy;
 
     /**
-     * Map for id to UserDocDest EObject.
+     * Map for id to UserContent EObject.
      */
-    private Map<String, UserDocDest> mapIdUserDocDest;
+    private Map<String, UserContent> mapIdUserContent;
 
     /**
      * Constructor.
@@ -68,8 +68,7 @@ public class UserDocDestManager {
      * @throws InvalidFormatException
      *             InvalidFormatException
      */
-    public UserDocDestManager(String destinationPathFileName)
-            throws IOException, DocumentParserException {
+    public UserContentManager(String destinationPathFileName) throws IOException, DocumentParserException {
         File lastGeneratedFile = new File(destinationPathFileName);
         if (lastGeneratedFile.exists() && lastGeneratedFile.isFile()) {
             // Copy file
@@ -98,23 +97,23 @@ public class UserDocDestManager {
         final TreeIterator<EObject> iter = documentTemplate.eAllContents();
         while (iter.hasNext()) {
             EObject eObject = iter.next();
-            if (eObject instanceof UserDocDest) {
-                UserDocDest userDocDest = (UserDocDest) eObject;
-                if (userDocDest.getId() != null) {
-                    String id = userDocDest.getId();
-                    if (mapIdUserDocDest == null) {
-                        mapIdUserDocDest = new HashMap<String, UserDocDest>();
+            if (eObject instanceof UserContent) {
+                UserContent userContent = (UserContent) eObject;
+                if (userContent.getId() != null) {
+                    String id = userContent.getId();
+                    if (mapIdUserContent == null) {
+                        mapIdUserContent = new HashMap<String, UserContent>();
                     }
-                    if (mapIdUserDocDest.containsKey(id)) {
+                    if (mapIdUserContent.containsKey(id)) {
                         // Mark message to generate lost part of document
                         TemplateValidationMessage templateValidationMessage = new TemplateValidationMessage(
                                 ValidationMessageLevel.WARNING,
                                 "The id " + id
-                                    + " is already used in generated document. Ids must be unique otherwise document part contained userdocdest will be lost.",
-                                userDocDest.getRuns().get(0));
-                        userDocDest.getValidationMessages().add(templateValidationMessage);
+                                    + " is already used in generated document. Ids must be unique otherwise document part contained userContent will be lost.",
+                                userContent.getRuns().get(0));
+                        userContent.getValidationMessages().add(templateValidationMessage);
                     } else {
-                        mapIdUserDocDest.put(id, userDocDest);
+                        mapIdUserContent.put(id, userContent);
                     }
                 }
             }
@@ -128,9 +127,9 @@ public class UserDocDestManager {
      *            id
      * @return User Doc Destination
      */
-    public UserDocDest getUserDocDest(String id) {
-        if (mapIdUserDocDest != null && mapIdUserDocDest.containsKey(id)) {
-            return mapIdUserDocDest.get(id);
+    public UserContent getUserContent(String id) {
+        if (mapIdUserContent != null && mapIdUserContent.containsKey(id)) {
+            return mapIdUserContent.get(id);
         }
         return null;
     }
@@ -157,7 +156,7 @@ public class UserDocDestManager {
      */
     public void deleteTempGeneratedFile() {
         if (generatedFileCopy != null && generatedFileCopy.exists() && generatedFileCopy.isFile()) {
-            mapIdUserDocDest = null;
+            mapIdUserContent = null;
             generatedFileCopy.delete();
         }
     }
