@@ -53,33 +53,34 @@ public class UserContentRawCopyTest {
         UserContent userContent = userContentManager.getUserContent("value1");
 
         // Create an empty document
-        XWPFDocument document = new XWPFDocument();
-        // Create an empty document
-        XWPFParagraph paragraph = document.createParagraph();
+        try (XWPFDocument document = new XWPFDocument();) {
 
-        // Launch copy
-        UserContentRawCopy userContentRawCopy = new UserContentRawCopy();
-        userContentRawCopy.copy(userContent, paragraph, paragraph.getDocument());
+            // Create an empty document
+            XWPFParagraph paragraph = document.createParagraph();
 
-        String resultFilePath = "results/generated/testUserDoc2RowCopyResultat.docx";
-        POIServices.getInstance().saveFile(document, resultFilePath);
-        document.close();
+            // Launch copy
+            UserContentRawCopy userContentRawCopy = new UserContentRawCopy();
+            userContentRawCopy.copy(userContent, paragraph, paragraph.getDocument());
 
-        userContentManager.deleteTempGeneratedFile();
+            String resultFilePath = "results/generated/testUserDoc2RowCopyResultat.docx";
+            POIServices.getInstance().saveFile(document, resultFilePath);
+            document.close();
 
-        // Reopen document
-        FileInputStream is = new FileInputStream(resultFilePath);
-        OPCPackage oPackage = OPCPackage.open(is);
-        @SuppressWarnings("resource")
-        XWPFDocument documentResult = new XWPFDocument(oPackage);
+            userContentManager.dispose();
 
-        assertEquals("User document part Texte 1", documentResult.getParagraphs().get(1).getText());
-        assertEquals("User document part Texte 2", documentResult.getParagraphs().get(5).getText());
-        assertEquals(1, documentResult.getAllPictures().size());
-        String picId = documentResult.getAllPictures().get(0).getPackageRelationship().getId();
-        assertEquals(picId, documentResult.getParagraphs().get(3).getRuns().get(0).getEmbeddedPictures().get(0)
-                .getCTPicture().getBlipFill().getBlip().getEmbed());
+            // Reopen document
+            FileInputStream is = new FileInputStream(resultFilePath);
+            OPCPackage oPackage = OPCPackage.open(is);
+            try (XWPFDocument documentResult = new XWPFDocument(oPackage);) {
 
+                assertEquals("User document part Texte 1", documentResult.getParagraphs().get(1).getText());
+                assertEquals("User document part Texte 2", documentResult.getParagraphs().get(5).getText());
+                assertEquals(1, documentResult.getAllPictures().size());
+                String picId = documentResult.getAllPictures().get(0).getPackageRelationship().getId();
+                assertEquals(picId, documentResult.getParagraphs().get(3).getRuns().get(0).getEmbeddedPictures().get(0)
+                        .getCTPicture().getBlipFill().getBlip().getEmbed());
+            }
+        }
     }
     // CHECKSTYLE:ON
 

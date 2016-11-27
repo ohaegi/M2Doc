@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.obeonetwork.m2doc.generator.test;
 
-<<<<<<< HEAD
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
@@ -20,8 +19,6 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 
 import java.io.BufferedInputStream;
-=======
->>>>>>> [REA] Add support of user content document.
 import java.io.File;
 //CHECKSTYLE:OFF
 import java.io.FileInputStream;
@@ -75,7 +72,7 @@ public class DocumentGeneratorTest {
         try (FileInputStream is = new FileInputStream(templatePath)) {
             OPCPackage oPackage = OPCPackage.open(is);
             XWPFDocument document = new XWPFDocument(oPackage);
-            DocumentParser parser = new DocumentParser(document, queryEnvironment);
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
             DocumentTemplate template = parser.parseDocument();
             out = File.createTempFile(resultPath, "generated-test");
             String outputPath = out.getAbsolutePath();
@@ -161,414 +158,160 @@ public class DocumentGeneratorTest {
     @Test
     public void testFormsAndTextArea()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("self", EcorePackage.eINSTANCE);
         doGenerateDocAndCheckText("templates/testTextAreaAndForms.docx", "results/testTextAreaAndForms.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testTextAreaAndForms.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testTextAreaAndForms.docx",
-                "results/generated/testTextAreaAndForms.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testStaticFragmentWithFieldProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testStaticFragmentWithfields.docx",
                 "results/testStaticFragmentWithfields.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testStaticFragmentWithfields.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testStaticFragmentWithfields.docx",
-                "results/generated/testStaticFragmentWithfields.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testStaticFragmentProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testStaticFragment.docx", "results/testStaticFragment.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testStaticFragment.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testStaticFragment.docx",
-                "results/generated/testStaticFragment.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefInHeaderProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testVarInHeader.docx", "results/testVarInHeaderResult.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVarInHeader.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVarInHeader.docx",
-                "results/generated/testVarInHeaderResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefInFooterProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testVarInFooter.docx", "results/testVarInFooterResult.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVarInFooter.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVarInFooter.docx",
-                "results/generated/testVarInFooterResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testVar.docx", "results/testVarResult.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVar.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx",
-                "results/generated/testVarResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefErrorProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/testVar.docx", "results/testVarResultError.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVar.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testVar.docx",
-                "results/generated/testVarResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefStyledProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testVarStyle.docx", "results/testVarStyleResult.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVarStyle.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVarStyle.docx",
-                "results/generated/testVarStyleResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testVarRefStyledMultipleParagraphsProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testVarStyleSpanning2Paragraphs.docx",
                 "results/testVarStyleSpanning2ParagraphsResult.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testVarStyleSpanning2Paragraphs.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testVarStyleSpanning2Paragraphs.docx",
-                "results/generated/testVarStyleSpanning2ParagraphsResult.docx", template, definitions, queryEnvironment,
-                null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testQueryStyledProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("self", EcorePackage.eINSTANCE);
         doGenerateDocAndCheckText("templates/testAQL.docx", "results/testAQLResult.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testAQL.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx",
-                "results/generated/testAQLResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testQueryStyledErrorProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         // TODO this can't be right! two tests modifying the same data.
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/testAQL.docx", "results/testAQLResultError.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testAQL.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testAQL.docx",
-                "results/generated/testAQLResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testGDFORProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("self", EcorePackage.eINSTANCE);
         doGenerateDocAndCheckText("templates/testGDFOR.docx", "results/testGDFOR.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testGDFOR.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testGDFOR.docx",
-                "results/generated/testGDFOR.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testGDFORWithTableProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("self", EcorePackage.eINSTANCE);
         doGenerateDocAndCheckText("templates/testGDFORWithTable.docx", "results/testGDFORWithTable.docx", definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testGDFORWithTable.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/testGDFORWithTable.docx",
-                "results/generated/testGDFORWithTable.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal1trueProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "value1");
         doGenerateDocAndCheckText("templates/testConditionnal1.docx", "results/testConditionnal1Result.docx",
                 definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "value1");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal1.docx",
-                "results/generated/testConditionnal1Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal1falseProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testConditionnal1.docx", "results/testConditionnal1FalseResult.docx",
                 definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal1.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal1.docx",
-                "results/generated/testConditionnal1FalseResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal2Processing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "value1");
         doGenerateDocAndCheckText("templates/testConditionnal2.docx", "results/testConditionnal2Result.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "value1");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal2.docx",
-                "results/generated/testConditionnal2Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnalFalseProcessing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testConditionnal2.docx", "results/testConditionnal2FalseResult.docx",
                 definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal2.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal2.docx",
-                "results/generated/testConditionnal2FalseResult.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     //
@@ -589,7 +332,7 @@ public class DocumentGeneratorTest {
     // definitions.put("x", "valueofx");
     // DocumentGenerator generator = new
     // DocumentGenerator("templates/testConditionnal3.docx",
-    // "results/generated/testConditionnal3Result.docx", template, definitions,
+    // "results/testConditionnal3Result.docx", template, definitions,
     // queryEnvironment);
     // generator.generate();
     // }
@@ -597,227 +340,94 @@ public class DocumentGeneratorTest {
     @Test
     public void testImagesAndFootersAndHeadersAndBullets()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("self", EcorePackage.eINSTANCE);
         doGenerateDocAndCheckText("templates/test.docx", "results/testResult.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        queryEnvironment.registerEPackage(EcorePackage.eINSTANCE);
-        FileInputStream is = new FileInputStream("templates/test.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("self", EcorePackage.eINSTANCE);
-        DocumentGenerator generator = new DocumentGenerator("templates/test.docx", "results/generated/testResult.docx",
-                template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal5Processing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "value1");
         doGenerateDocAndCheckText("templates/testConditionnal5.docx", "results/testConditionnal5Result.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "value1");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/generated/testConditionnal5Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal6Processing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "value2");
         doGenerateDocAndCheckText("templates/testConditionnal5.docx", "results/testConditionnal6Result.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "value2");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/generated/testConditionnal6Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal7Processing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "value3");
         doGenerateDocAndCheckText("templates/testConditionnal5.docx", "results/testConditionnal7Result.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "value3");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/generated/testConditionnal7Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testConditionnal8Processing()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
         doGenerateDocAndCheckText("templates/testConditionnal5.docx", "results/testConditionnal8Result.docx",
                 definitions);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testConditionnal5.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testConditionnal5.docx",
-                "results/generated/testConditionnal8Result.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     @Ignore(value = "Seems like nobody knows yet what is the actual expected result.")
     public void testImageGeneration()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         definitions.put("x", "valueofx");
-        doGenerateDocAndCheckText("templates/testImageTag.docx", "results/testImageTag.docx", definitions, false);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testImageTag.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        definitions.put("x", "valueofx");
-        DocumentGenerator generator = new DocumentGenerator("templates/testImageTag.docx",
-                "results/generated/testImageTag.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
+        doGenerateDocAndCheckText("templates/testImageTag.docx", "results/expected/testImageTag.docx", definitions,
+                false);
     }
 
     @Test
     @Ignore(value = "Seems like nobody knows yet what is the actual expected result.")
     public void testDiagramGeneration()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
-        doGenerateDocAndCheckText("templates/allDiagram.docx", "results/allDiagram.docx", definitions, false);
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/allDiagram.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/allDiagram.docx",
-                "results/generated/allDiagram.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
+        doGenerateDocAndCheckText("templates/allDiagram.docx", "results/expected/allDiagram.docx", definitions, false);
     }
 
     @Test
     public void testStaticHyperlink()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/staticHyperlink.docx", "results/staticHyperlink.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/staticHyperlink.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/staticHyperlink.docx",
-                "results/generated/staticHyperlink.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testDynamicHyperlink()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/dynamicHyperlink.docx", "results/dynamicHyperlink.docx", definitions);
 
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/dynamicHyperlink.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/dynamicHyperlink.docx",
-                "results/generated/dynamicHyperlink.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testBookmarkNominal()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/testBookmarkNominal.docx", "results/testBookmarkNominal.docx",
@@ -894,100 +504,15 @@ public class DocumentGeneratorTest {
             assertEquals(1, paragraph.getRuns().get(5).getCTR().getFldCharList().size());
             assertEquals(STFldCharType.END,
                     paragraph.getRuns().get(5).getCTR().getFldCharList().get(0).getFldCharType());
-            resOPackage.close();
             resDocument.close();
+            resOPackage.close();
+            resIs.close();
         }
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testBookmarkNominal.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testBookmarkNominal.docx",
-                "results/generated/testBookmarkNominal.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
-
-        FileInputStream resIs = new FileInputStream("results/generated/testBookmarkNominal.docx");
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
-
-        assertEquals(4, resDocument.getBodyElements().size());
-        assertTrue(resDocument.getBodyElements().get(0) instanceof XWPFParagraph);
-        XWPFParagraph paragraph = (XWPFParagraph) resDocument.getBodyElements().get(0);
-        assertEquals(6, paragraph.getRuns().size());
-        assertEquals("Test link before bookmark : ", paragraph.getRuns().get(0).text());
-
-        final BigInteger id = new BigInteger(paragraph.getRuns().get(1).getCTR().getRsidR());
-
-        assertTrue(id != BigInteger.ZERO);
-        assertEquals(1, paragraph.getRuns().get(1).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.BEGIN, paragraph.getRuns().get(1).getCTR().getFldCharList().get(0).getFldCharType());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(2).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(2).getCTR().getInstrTextList().size());
-        assertEquals(Space.PRESERVE, paragraph.getRuns().get(2).getCTR().getInstrTextList().get(0).getSpace());
-        assertEquals(" REF bookmark1 \\h ",
-                paragraph.getRuns().get(2).getCTR().getInstrTextList().get(0).getStringValue());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(3).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(3).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.SEPARATE,
-                paragraph.getRuns().get(3).getCTR().getFldCharList().get(0).getFldCharType());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(4).getCTR().getRsidR()));
-        assertEquals("a reference to bookmark1", paragraph.getRuns().get(4).text());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(5).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(5).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.END, paragraph.getRuns().get(5).getCTR().getFldCharList().get(0).getFldCharType());
-
-        assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFParagraph);
-        paragraph = (XWPFParagraph) resDocument.getBodyElements().get(1);
-
-        assertEquals(1, paragraph.getCTP().getBookmarkStartList().size());
-        assertEquals("bookmark1", paragraph.getCTP().getBookmarkStartList().get(0).getName());
-        assertEquals(1, paragraph.getCTP().getBookmarkEndList().size());
-
-        assertTrue(resDocument.getBodyElements().get(2) instanceof XWPFParagraph);
-        paragraph = (XWPFParagraph) resDocument.getBodyElements().get(2);
-        assertEquals(7, paragraph.getRuns().size());
-        assertEquals("Test link after bookmark : ", paragraph.getRuns().get(0).text());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(1).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(1).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.BEGIN, paragraph.getRuns().get(1).getCTR().getFldCharList().get(0).getFldCharType());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(2).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(2).getCTR().getInstrTextList().size());
-        assertEquals(Space.PRESERVE, paragraph.getRuns().get(2).getCTR().getInstrTextList().get(0).getSpace());
-        assertEquals(" REF bookmark1 \\h ",
-                paragraph.getRuns().get(2).getCTR().getInstrTextList().get(0).getStringValue());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(3).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(3).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.SEPARATE,
-                paragraph.getRuns().get(3).getCTR().getFldCharList().get(0).getFldCharType());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(4).getCTR().getRsidR()));
-        assertEquals("a reference to bookmark1", paragraph.getRuns().get(4).text());
-
-        assertEquals(id, new BigInteger(paragraph.getRuns().get(5).getCTR().getRsidR()));
-        assertEquals(1, paragraph.getRuns().get(5).getCTR().getFldCharList().size());
-        assertEquals(STFldCharType.END, paragraph.getRuns().get(5).getCTR().getFldCharList().get(0).getFldCharType());
-
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
->>>>>>> [REA] Add support of user content document.
     }
 
     @Test
     public void testBookmarkNoBookmark()
             throws InvalidFormatException, IOException, DocumentParserException, DocumentGenerationException {
-<<<<<<< HEAD
 
         Map<String, Object> definitions = new HashMap<>();
         doGenerateDocAndCheckText("templates/testBookmarkNoBookmark.docx", "results/testBookmarkNoBookmark.docx",
@@ -1005,38 +530,10 @@ public class DocumentGeneratorTest {
             assertEquals("without", paragraph.getRuns().get(1).text());
             assertEquals(" bookmark : ", paragraph.getRuns().get(2).text());
 
-            resOPackage.close();
             resDocument.close();
+            resOPackage.close();
+            resIs.close();
         }
-=======
-        IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
-                .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testBookmarkNoBookmark.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testBookmarkNoBookmark.docx",
-                "results/generated/testBookmarkNoBookmark.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
-
-        FileInputStream resIs = new FileInputStream("results/generated/testBookmarkNoBookmark.docx");
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
-
-        assertEquals(2, resDocument.getBodyElements().size());
-        assertTrue(resDocument.getBodyElements().get(0) instanceof XWPFParagraph);
-        XWPFParagraph paragraph = (XWPFParagraph) resDocument.getBodyElements().get(0);
-        assertEquals(10, paragraph.getRuns().size());
-        assertEquals("Test link ", paragraph.getRuns().get(0).text());
-        assertEquals("without", paragraph.getRuns().get(1).text());
-        assertEquals(" bookmark : ", paragraph.getRuns().get(2).text());
-
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
->>>>>>> [REA] Add support of user content document.
     }
 
     /**
@@ -1063,26 +560,31 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx",
-                "results/generated/testUserDoc1.docx", template, definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx",
+                    "results/generated/testUserDoc1.docx", template, definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
 
-        FileInputStream resIs = new FileInputStream("results/generated/testUserDoc1.docx");
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
 
-        assertEquals(8, resDocument.getParagraphs().size());
-        assertEquals("User document part Texte 1", resDocument.getParagraphs().get(2).getText());
+            assertEquals(8, resDocument.getParagraphs().size());
+            assertEquals("User document part Texte 1", resDocument.getParagraphs().get(2).getText());
 
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
     }
 
     /**
@@ -1109,36 +611,40 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
 
-        FileInputStream resIs = new FileInputStream("results/generated/testUserDoc9.docx");
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
+            assertEquals(1, resDocument.getHeaderList().size());
+            assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
+            assertEquals(" User document part Texte 1",
+                    resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
 
-        assertEquals(1, resDocument.getHeaderList().size());
-        assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
-        assertEquals(" User document part Texte 1",
-                resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
+            assertEquals(6, resDocument.getParagraphs().size());
+            assertEquals("User document part Texte 2", resDocument.getParagraphs().get(2).getText());
 
-        assertEquals(6, resDocument.getParagraphs().size());
-        assertEquals("User document part Texte 2", resDocument.getParagraphs().get(2).getText());
+            assertEquals(1, resDocument.getFooterList().size());
+            assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
+            assertEquals(" User document part Texte 3",
+                    resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
 
-        assertEquals(1, resDocument.getFooterList().size());
-        assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
-        assertEquals(" User document part Texte 3",
-                resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
-
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
     }
 
     /**
@@ -1169,28 +675,32 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc1.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc1.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
 
-        FileInputStream resIs = new FileInputStream(resultPath);
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
+            assertEquals(6, resDocument.getParagraphs().size());
+            assertEquals(1, resDocument.getParagraphs().get(2).getRuns().get(1).getEmbeddedPictures().size());
+            assertEquals(new Long("3355498452"), resDocument.getParagraphs().get(2).getRuns().get(1)
+                    .getEmbeddedPictures().get(0).getPictureData().getChecksum());
 
-        assertEquals(6, resDocument.getParagraphs().size());
-        assertEquals(1, resDocument.getParagraphs().get(2).getRuns().get(1).getEmbeddedPictures().size());
-        assertEquals(new Long("3355498452"), resDocument.getParagraphs().get(2).getRuns().get(1).getEmbeddedPictures()
-                .get(0).getPictureData().getChecksum());
-
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
     }
 
     /**
@@ -1219,35 +729,45 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
 
-        FileInputStream resIs = new FileInputStream(resultPath);
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc9.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
 
-        assertEquals(1, resDocument.getHeaderList().size());
-        assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
-        assertEquals("Custom 1", resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc9.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
 
-        assertEquals(6, resDocument.getParagraphs().size());
-        assertEquals("Custom 2", resDocument.getParagraphs().get(2).getText());
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
 
-        assertEquals(1, resDocument.getFooterList().size());
-        assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
-        assertEquals(" Custom 3", resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
+            // FileInputStream resIs = new FileInputStream(resultPath);
+            // OPCPackage resOPackage = OPCPackage.open(resIs);
+            // XWPFDocument resDocument = new XWPFDocument(resOPackage);
 
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            assertEquals(1, resDocument.getHeaderList().size());
+            assertEquals(1, resDocument.getHeaderList().get(0).getParagraphs().size());
+            assertEquals("Custom 1", resDocument.getHeaderList().get(0).getParagraphs().get(0).getText());
 
+            assertEquals(6, resDocument.getParagraphs().size());
+            assertEquals("Custom 2", resDocument.getParagraphs().get(2).getText());
+
+            assertEquals(1, resDocument.getFooterList().size());
+            assertEquals(1, resDocument.getFooterList().get(0).getParagraphs().size());
+            assertEquals(" Custom 3", resDocument.getFooterList().get(0).getParagraphs().get(0).getText());
+
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
     }
 
     /**
@@ -1274,31 +794,36 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
 
-        FileInputStream resIs = new FileInputStream("results/generated/testUserDoc10.docx");
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
+        try (FileInputStream resIs = new FileInputStream("results/generated/testUserDoc10.docx");
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
 
-        assertEquals(5, resDocument.getBodyElements().size());
-        assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
-        XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
-        assertEquals(" OrigText1 ", table.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        assertEquals(" OrigText3 ", table.getRow(0).getCell(1).getParagraphs().get(0).getText());
-        assertEquals(" OrigText2 ", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
-        assertEquals(" OrigText4 ", table.getRow(1).getCell(1).getParagraphs().get(0).getText());
+            assertEquals(5, resDocument.getBodyElements().size());
+            assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
+            XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
+            assertEquals(" OrigText1 ", table.getRow(0).getCell(0).getParagraphs().get(0).getText());
+            assertEquals(" OrigText3 ", table.getRow(0).getCell(1).getParagraphs().get(0).getText());
+            assertEquals(" OrigText2 ", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
+            assertEquals(" OrigText4 ", table.getRow(1).getCell(1).getParagraphs().get(0).getText());
 
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
     }
 
     /**
@@ -1327,31 +852,36 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
 
-        FileInputStream resIs = new FileInputStream(resultPath);
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
 
-        assertEquals(5, resDocument.getBodyElements().size());
-        assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
-        XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
-        assertEquals(" Custom1 ", table.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        assertEquals(" Custom3 ", table.getRow(0).getCell(1).getParagraphs().get(0).getText());
-        assertEquals(" Custom2 ", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
-        assertEquals(" Custom4 ", table.getRow(1).getCell(1).getParagraphs().get(0).getText());
+            assertEquals(5, resDocument.getBodyElements().size());
+            assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
+            XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
+            assertEquals(" Custom1 ", table.getRow(0).getCell(0).getParagraphs().get(0).getText());
+            assertEquals(" Custom3 ", table.getRow(0).getCell(1).getParagraphs().get(0).getText());
+            assertEquals(" Custom2 ", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
+            assertEquals(" Custom4 ", table.getRow(1).getCell(1).getParagraphs().get(0).getText());
 
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
 
     }
 
@@ -1381,35 +911,39 @@ public class DocumentGeneratorTest {
 
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
-        OPCPackage oPackage = OPCPackage.open(is);
-        XWPFDocument document = new XWPFDocument(oPackage);
-        DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
-        DocumentTemplate template = parser.parseDocument();
-        Map<String, Object> definitions = new HashMap<String, Object>();
-        DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
-                definitions, queryEnvironment, null);
-        generator.generate();
+        try (FileInputStream is = new FileInputStream("templates/testUserDoc10.docx");
+                OPCPackage oPackage = OPCPackage.open(is);
+                XWPFDocument document = new XWPFDocument(oPackage);) {
+            DocumentTemplateParser parser = new DocumentTemplateParser(document, queryEnvironment);
+            DocumentTemplate template = parser.parseDocument();
+            Map<String, Object> definitions = new HashMap<>();
+            DocumentGenerator generator = new DocumentGenerator("templates/testUserDoc10.docx", resultPath, template,
+                    definitions, queryEnvironment, null);
+            generator.generate();
+            document.close();
+            oPackage.close();
+            is.close();
+        }
+        try (FileInputStream resIs = new FileInputStream(resultPath);
+                OPCPackage resOPackage = OPCPackage.open(resIs);
+                XWPFDocument resDocument = new XWPFDocument(resOPackage);) {
 
-        FileInputStream resIs = new FileInputStream(resultPath);
-        OPCPackage resOPackage = OPCPackage.open(resIs);
-        XWPFDocument resDocument = new XWPFDocument(resOPackage);
+            assertEquals(5, resDocument.getBodyElements().size());
+            assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
+            XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
+            assertEquals(1,
+                    table.getRow(0).getCell(0).getParagraphs().get(2).getRuns().get(0).getEmbeddedPictures().size());
+            assertEquals(new Long("1120175150"), table.getRow(0).getCell(0).getParagraphs().get(2).getRuns().get(0)
+                    .getEmbeddedPictures().get(0).getPictureData().getChecksum());
+            assertEquals("", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
+            assertEquals(" Custom2 ", table.getRow(1).getCell(0).getParagraphs().get(1).getText());
 
-        assertEquals(5, resDocument.getBodyElements().size());
-        assertTrue(resDocument.getBodyElements().get(1) instanceof XWPFTable);
-        XWPFTable table = (XWPFTable) resDocument.getBodyElements().get(1);
-        assertEquals(1,
-                table.getRow(0).getCell(0).getParagraphs().get(2).getRuns().get(0).getEmbeddedPictures().size());
-        assertEquals(new Long("1120175150"), table.getRow(0).getCell(0).getParagraphs().get(2).getRuns().get(0)
-                .getEmbeddedPictures().get(0).getPictureData().getChecksum());
-        assertEquals("", table.getRow(1).getCell(0).getParagraphs().get(0).getText());
-        assertEquals(" Custom2 ", table.getRow(1).getCell(0).getParagraphs().get(1).getText());
+            // TODO OHA fix bug in nested table on usercontent and add asset
 
-        // TODO OHA fix bug in nested table on usercontent and add asset
-
-        resIs.close();
-        resOPackage.close();
-        resDocument.close();
+            resDocument.close();
+            resOPackage.close();
+            resIs.close();
+        }
 
     }
 }

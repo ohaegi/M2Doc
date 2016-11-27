@@ -72,12 +72,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
     /**
      * The {@link Stack} of variables types.
      */
-    private final Stack<Map<String, Set<IType>>> stack = new Stack<Map<String, Set<IType>>>();
-
-    /**
-     * AQL environment used to validate queries.
-     */
-    private IQueryEnvironment environment;
+    private final Stack<Map<String, Set<IType>>> stack = new Stack<>();
 
     /**
      * AQL environment used to validate queries.
@@ -163,12 +158,8 @@ public class TemplateValidator extends TemplateSwitch<Void> {
         addValidationMessages(userDoc, run, validationResult);
         if (validationResult != null) { // FIXME : we might check why we may have a null validation result in AQL.
             checkUserDocSelectorTypes(userDoc, run, validationResult);
-            try {
-                for (AbstractConstruct construct : userDoc.getSubConstructs()) {
-                    doSwitch(construct);
-                }
-            } finally {
-                stack.pop();
+            for (AbstractConstruct construct : userDoc.getSubConstructs()) {
+                doSwitch(construct);
             }
         }
 
@@ -185,7 +176,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
             final Set<IType> types = validationResult.getPossibleTypes(conditional.getQuery().getAst());
             checkConditionalSelectorTypes(conditional, run, types);
 
-            final Map<String, Set<IType>> thenVariables = new HashMap<String, Set<IType>>(stack.peek());
+            final Map<String, Set<IType>> thenVariables = new HashMap<>(stack.peek());
             thenVariables
                     .putAll(validationResult.getInferredVariableTypes(conditional.getQuery().getAst(), Boolean.TRUE));
             stack.push(thenVariables);
@@ -198,7 +189,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
             }
 
             try {
-                final Map<String, Set<IType>> elseVariables = new HashMap<String, Set<IType>>(stack.peek());
+                final Map<String, Set<IType>> elseVariables = new HashMap<>(stack.peek());
                 elseVariables.putAll(
                         validationResult.getInferredVariableTypes(conditional.getQuery().getAst(), Boolean.FALSE));
                 stack.push(elseVariables);
@@ -316,7 +307,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
                     break;
                 }
             }
-            final Set<IType> iteratorTypes = new LinkedHashSet<IType>();
+            final Set<IType> iteratorTypes = new LinkedHashSet<>();
             for (IType type : types) {
                 if (type instanceof ICollectionType) {
                     iteratorTypes.add(((ICollectionType) type).getCollectionType());
@@ -326,7 +317,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
                 iteratorTypes
                         .add(new NothingType("No collection type for the iterator " + repetition.getIterationVar()));
             }
-            final Map<String, Set<IType>> iterationVariables = new HashMap<String, Set<IType>>(stack.peek());
+            final Map<String, Set<IType>> iterationVariables = new HashMap<>(stack.peek());
             iterationVariables.put(repetition.getIterationVar(), iteratorTypes);
             stack.push(iterationVariables);
             try {
@@ -387,7 +378,7 @@ public class TemplateValidator extends TemplateSwitch<Void> {
     public Void caseAbstractProviderClient(AbstractProviderClient providerClient) {
         final XWPFRun run = providerClient.getStyleRun();
         if (providerClient.getProvider() != null) {
-            Map<String, Object> options = new LinkedHashMap<String, Object>(providerClient.getOptionValueMap().size());
+            Map<String, Object> options = new LinkedHashMap<>(providerClient.getOptionValueMap().size());
             for (Entry<String, Object> entry : providerClient.getOptionValueMap()) {
                 if (providerClient.getProvider().getOptionTypes().get(entry.getKey()) == OptionType.AQL_EXPRESSION) {
                     final AstResult astResult = (AstResult) entry.getValue();

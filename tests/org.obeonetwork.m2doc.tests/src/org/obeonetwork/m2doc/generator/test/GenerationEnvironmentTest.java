@@ -32,7 +32,7 @@ public class GenerationEnvironmentTest {
 
     @Test
     public void testConstructorWithDefinitions() {
-        Map<String, Object> defs = new HashMap<String, Object>();
+        Map<String, Object> defs = new HashMap<>();
         defs.put("x", "valuex");
         defs.put("y", "valuey");
         GenerationEnvironment env = new GenerationEnvironment(defs);

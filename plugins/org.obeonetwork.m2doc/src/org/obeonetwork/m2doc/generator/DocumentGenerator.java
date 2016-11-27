@@ -172,7 +172,7 @@ public class DocumentGenerator {
         POIServices.getInstance().saveFile(destinationDocument, destinationFileName);
 
         // Remove temporary last destination document
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
     }
 
     /**

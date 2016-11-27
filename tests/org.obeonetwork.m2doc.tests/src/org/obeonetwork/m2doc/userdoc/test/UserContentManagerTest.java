@@ -74,7 +74,7 @@ public class UserContentManagerTest {
         assertNotNull(tempFile);
         assertTrue(tempFile.exists());
 
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
         // After launch deleteTempGeneratedFile method temp file no exist
         assertFalse(tempFile.exists());
 
@@ -114,7 +114,7 @@ public class UserContentManagerTest {
         // CHECKSTYLE:OFF
         assertNull(userContentManager.getUserContent("noExistid2"));
         // CHECKSTYLE:ON
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
     }
 
     /**
@@ -134,7 +134,7 @@ public class UserContentManagerTest {
         assertNotNull(userContent);
         assertEquals(1, userContent.getSubConstructs().size());
         assertEquals("User document part Texte 1", userContent.getSubConstructs().get(0).getRuns().get(0).getText(0));
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
     }
 
     /**
@@ -166,7 +166,7 @@ public class UserContentManagerTest {
         assertEquals(1, userContent.getSubConstructs().size());
         assertEquals("User document part Texte 3", userContent.getSubConstructs().get(0).getRuns().get(0).getText(0));
 
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
     }
 
 }

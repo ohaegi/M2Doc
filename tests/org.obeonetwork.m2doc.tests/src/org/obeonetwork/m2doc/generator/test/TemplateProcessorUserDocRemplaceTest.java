@@ -142,7 +142,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         XWPFParagraph paragraph3 = reloadDocument.getParagraphs().get(2);
         assertEquals("Custom texte avec image ", paragraph3.getRuns().get(0).getText(0));
         assertEquals(1, paragraph3.getRuns().get(1).getEmbeddedPictures().size());
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
         // CHECKSTYLE:ON
     }
 
@@ -182,7 +182,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
         XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
         assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
         // CHECKSTYLE:ON
     }
 
@@ -222,7 +222,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
         XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
         assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
     }
 
     /**
@@ -268,7 +268,7 @@ public class TemplateProcessorUserDocRemplaceTest {
 
         assertEquals(1, paragraph14.getRuns().get(0).getEmbeddedPictures().size());
 
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
         // CHECKSTYLE:ON
     }
 
@@ -309,7 +309,7 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertTrue(paragraph2.getText().startsWith("Début"));
         assertTrue(paragraph2.getText().contains("Custom texte"));
         assertTrue(paragraph2.getText().endsWith("fin"));
-        userContentManager.deleteTempGeneratedFile();
+        userContentManager.dispose();
         // CHECKSTYLE:ON
     }
 

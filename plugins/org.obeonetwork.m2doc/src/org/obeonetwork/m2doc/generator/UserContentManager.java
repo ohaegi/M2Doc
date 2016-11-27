@@ -57,6 +57,11 @@ public class UserContentManager {
     private Map<String, UserContent> mapIdUserContent;
 
     /**
+     * Current document.
+     */
+    XWPFDocument document;
+
+    /**
      * Constructor.
      * 
      * @param destinationPathFileName
@@ -88,10 +93,17 @@ public class UserContentManager {
      * @throws DocumentParserException
      *             DocumentParserException
      */
-    private void launchParsing() throws IOException, DocumentParserException {
+    private void launchParsing() throws DocumentParserException {
         IQueryEnvironment queryEnvironment = org.eclipse.acceleo.query.runtime.Query
                 .newEnvironmentWithDefaultServices(null);
-        XWPFDocument document = POIServices.getInstance().getXWPFDocument(generatedFileCopy.getAbsolutePath());
+        try {
+            document = POIServices.getInstance().getXWPFDocument(generatedFileCopy.getAbsolutePath());
+        } catch (Exception e) {
+            // In this case, we do nothing.
+            // The old output doc is not a docx document and it will be overwrite at current generation.
+            // And we have nothing to extract to a no docx document.
+            return;
+        }
         DocumentGeneratedParser documentGeneratedParser = new DocumentGeneratedParser(document, queryEnvironment);
         DocumentTemplate documentTemplate = documentGeneratedParser.parseDocument();
         final TreeIterator<EObject> iter = documentTemplate.eAllContents();
@@ -102,7 +114,7 @@ public class UserContentManager {
                 if (userContent.getId() != null) {
                     String id = userContent.getId();
                     if (mapIdUserContent == null) {
-                        mapIdUserContent = new HashMap<String, UserContent>();
+                        mapIdUserContent = new HashMap<>();
                     }
                     if (mapIdUserContent.containsKey(id)) {
                         // Mark message to generate lost part of document
@@ -152,12 +164,19 @@ public class UserContentManager {
     }
 
     /**
-     * Delete Temp Generated File.
+     * Dispose.
+     * 
+     * @throws IOException
      */
-    public void deleteTempGeneratedFile() {
+    public void dispose() throws IOException {
+        // Delete Temp Generated File.
         if (generatedFileCopy != null && generatedFileCopy.exists() && generatedFileCopy.isFile()) {
             mapIdUserContent = null;
             generatedFileCopy.delete();
+        }
+        // Close document
+        if (document != null) {
+            document.close();
         }
     }
 
@@ -172,11 +191,7 @@ public class UserContentManager {
      *             IOException
      */
     private static void copyFile(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
+        try (InputStream is = new FileInputStream(source); OutputStream os = new FileOutputStream(dest);) {
             // CHECKSTYLE:OFF
             byte[] buffer = new byte[1024];
             // CHECKSTYLE:ON
@@ -184,9 +199,6 @@ public class UserContentManager {
             while ((length = is.read(buffer)) > 0) {
                 os.write(buffer, 0, length);
             }
-        } finally {
-            is.close();
-            os.close();
         }
     }
 }
