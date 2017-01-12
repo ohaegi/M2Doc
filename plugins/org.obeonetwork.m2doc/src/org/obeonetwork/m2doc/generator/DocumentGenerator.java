@@ -108,41 +108,53 @@ public class DocumentGenerator {
      *             Last generated Document Parser Exception
      */
     public void generate() throws IOException, DocumentParserException {
-        // The output document is created from the input so as to get the styles
-        // and definitions in the original template.
-        final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserContentManager userContentManager = new UserContentManager(this.destinationFileName);
-        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
-                queryEnvironment, destinationDocument, targetConfObject);
-        processor.doSwitch(this.template.getBody());
-        Iterator<XWPFFooter> footers = destinationDocument.getFooterList().iterator();
-        for (Template footerTemplate : this.template.getFooters()) {
-            XWPFFooter footer = footers.next();
-            cleanHeaderFooter(footer);
-            TemplateProcessor footerProc = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
-                    queryEnvironment, footer, targetConfObject);
-            footerProc.doSwitch(footerTemplate);
-            footerProc.clear();
-        }
-        Iterator<XWPFHeader> headers = destinationDocument.getHeaderList().iterator();
-        for (Template headerTemplate : this.template.getHeaders()) {
-            XWPFHeader header = headers.next();
-            cleanHeaderFooter(header);
-            TemplateProcessor headerProc = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
-                    queryEnvironment, header, targetConfObject);
-            headerProc.doSwitch(headerTemplate);
-            headerProc.clear();
-        }
+        UserContentManager userContentManager = null;
+        try {
+            // The output document is created from the input so as to get the styles
+            // and definitions in the original template.
+            final BookmarkManager bookmarkManager = new BookmarkManager();
+            userContentManager = new UserContentManager(this.destinationFileName);
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
+                    queryEnvironment, destinationDocument, targetConfObject);
+            processor.doSwitch(this.template.getBody());
+            Iterator<XWPFFooter> footers = destinationDocument.getFooterList().iterator();
+            for (Template footerTemplate : this.template.getFooters()) {
+                XWPFFooter footer = footers.next();
+                cleanHeaderFooter(footer);
+                TemplateProcessor footerProc = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
+                        queryEnvironment, footer, targetConfObject);
+                footerProc.doSwitch(footerTemplate);
+                footerProc.clear();
+            }
+            Iterator<XWPFHeader> headers = destinationDocument.getHeaderList().iterator();
+            for (Template headerTemplate : this.template.getHeaders()) {
+                XWPFHeader header = headers.next();
+                cleanHeaderFooter(header);
+                TemplateProcessor headerProc = new TemplateProcessor(definitions, bookmarkManager, userContentManager,
+                        queryEnvironment, header, targetConfObject);
+                headerProc.doSwitch(headerTemplate);
+                headerProc.clear();
+            }
 
-        bookmarkManager.markDanglingReferences();
-        bookmarkManager.markOpenBookmarks();
-        // At this point, the documnet has been generated and just needs being
-        // writen on disk.
-        POIServices.getInstance().saveFile(destinationDocument, destinationFileName);
+            bookmarkManager.markDanglingReferences();
+            bookmarkManager.markOpenBookmarks();
+            // At this point, the document has been generated and just needs being
+            // written on disk.
+            POIServices.getInstance().saveFile(destinationDocument, destinationFileName);
 
-        // Remove temporary last destination document
-        userContentManager.dispose();
-        processor.clear();
+            // Remove temporary last destination document
+            userContentManager.dispose();
+            processor.clear();
+            // CHECKSTYLE:OFF
+        } catch (Exception e) {
+            // CHECKSTYLE:ON
+            if (userContentManager != null) {
+                // Remove temporary last destination document if exception occur
+                userContentManager.dispose();
+            }
+            // Re original throw exception
+            throw e;
+        }
     }
 
     /**

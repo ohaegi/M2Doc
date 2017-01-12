@@ -126,8 +126,8 @@ public class TemplateProcessorUserDocRemplaceTest {
         final UserContentManager userContentManager = new UserContentManager(
                 URI.createFileURI("userContent/testUserContent1Custom1.docx"));
         // CHECKSTYLE:OFF
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
-                env, destinationDoc, rootObject);
+        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                destinationDoc, rootObject);
         // CHECKSTYLE:ON
         processor.doSwitch(template);
 
@@ -144,6 +144,79 @@ public class TemplateProcessorUserDocRemplaceTest {
         assertEquals(1, paragraph3.getRuns().get(1).getEmbeddedPictures().size());
         userContentManager.dispose();
         // CHECKSTYLE:ON
+    }
+
+    /**
+     * Test userdoc with custom and twice generation.
+     * For test bug #137 : https://github.com/ObeoNetwork/M2Doc/issues/137
+     * 
+     * @throws InvalidFormatException
+     *             InvalidFormatException
+     * @throws IOException
+     *             IOException
+     * @throws DocumentParserException
+     *             DocumentParserException
+     */
+    @Test
+    public void testUserDocTagWithImageInUserContentGenerateTwice()
+            throws InvalidFormatException, IOException, DocumentParserException {
+        // CHECKSTYLE:OFF
+        String templatePath = "templates/testUserDoc1.docx";
+        // CHECKSTYLE:ON
+        XWPFDocument document = loadDoc(templatePath);
+        BodyTemplateParser parser = new BodyTemplateParser(document, env);
+        Template template = parser.parseTemplate();
+        Map<String, Object> definitions = new HashMap<String, Object>();
+        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
+        final BookmarkManager bookmarkManager = new BookmarkManager();
+        final UserContentManager userContentManager = new UserContentManager(
+                URI.createFileURI("userContent/testUserContent1Custom1.docx"));
+        // CHECKSTYLE:OFF
+        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                destinationDoc, rootObject);
+        // CHECKSTYLE:ON
+        processor.doSwitch(template);
+
+        String resultDoc = "results/generated/testUserDoc1Custom1Resultat.docx";
+        POIServices.getInstance().saveFile(destinationDoc, URI.createFileURI(resultDoc));
+        // Reload generated document
+
+        XWPFDocument reloadDocument = loadDoc(resultDoc);
+        // CHECKSTYLE:OFF
+        assertEquals(6, reloadDocument.getParagraphs().size());
+        assertEquals(0, reloadDocument.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        XWPFParagraph paragraph3 = reloadDocument.getParagraphs().get(2);
+        assertEquals("Custom texte avec image ", paragraph3.getRuns().get(0).getText(0));
+        assertEquals(1, paragraph3.getRuns().get(1).getEmbeddedPictures().size());
+        userContentManager.dispose();
+        // CHECKSTYLE:ON
+
+        // Twice
+        XWPFDocument document2 = loadDoc(templatePath);
+        BodyTemplateParser parser2 = new BodyTemplateParser(document2, env);
+        Template template2 = parser2.parseTemplate();
+        Map<String, Object> definitions2 = new HashMap<String, Object>();
+        XWPFDocument destinationDoc2 = createDestinationDocument("templates/testUserDoc1.docx");
+        final BookmarkManager bookmarkManager2 = new BookmarkManager();
+        final UserContentManager userContentManager2 = new UserContentManager(URI.createFileURI(resultDoc));
+        // CHECKSTYLE:OFF
+        TemplateProcessor processor2 = new TemplateProcessor(definitions2, bookmarkManager2, userContentManager2, env,
+                destinationDoc2, rootObject);
+        // CHECKSTYLE:ON
+        processor2.doSwitch(template);
+
+        // String resultDoc = "results/generated/testUserDoc1Custom1Resultat.docx";
+        POIServices.getInstance().saveFile(destinationDoc2, URI.createFileURI(resultDoc));
+        // Reload generated document
+
+        XWPFDocument reloadDocument2 = loadDoc(resultDoc);
+        // CHECKSTYLE:OFF
+        assertEquals(6, reloadDocument2.getParagraphs().size());
+        assertEquals(0, reloadDocument2.getParagraphs().get(0).getCTP().getFldSimpleList().size());
+        XWPFParagraph paragraph32 = reloadDocument.getParagraphs().get(2);
+        assertEquals("Custom texte avec image ", paragraph32.getRuns().get(0).getText(0));
+        assertEquals(1, paragraph32.getRuns().get(1).getEmbeddedPictures().size());
+        userContentManager2.dispose();
     }
 
     /**
@@ -168,8 +241,8 @@ public class TemplateProcessorUserDocRemplaceTest {
         final BookmarkManager bookmarkManager = new BookmarkManager();
         final UserContentManager userContentManager = new UserContentManager(
                 URI.createFileURI("userContent/testUserContent1Custom2.docx"));
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
-                env, destinationDoc, rootObject);
+        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                destinationDoc, rootObject);
         processor.doSwitch(template);
         String resultDoc = "results/generated/testUserDoc1Custom2Resultat.docx";
         POIServices.getInstance().saveFile(destinationDoc, URI.createFileURI(resultDoc));
@@ -200,29 +273,32 @@ public class TemplateProcessorUserDocRemplaceTest {
     public void testUserDocTagWithTableAndPicture()
             throws InvalidFormatException, IOException, DocumentParserException {
         String templatePath = "templates/testUserDoc1.docx";
-        XWPFDocument document = loadDoc(templatePath);
-
-        BodyTemplateParser parser = new BodyTemplateParser(document, env);
-        Template template = parser.parseTemplate();
         Map<String, Object> definitions = new HashMap<>();
-        XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
-        final BookmarkManager bookmarkManager = new BookmarkManager();
-        final UserContentManager userContentManager = new UserContentManager(
-                URI.createFileURI("userContent/testUserContent1Custom3.docx"));
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
-                env, destinationDoc, rootObject);
-        processor.doSwitch(template);
-        String resultPath = "results/generated/testUserDoc1Custom3Resultat.docx";
-        POIServices.getInstance().saveFile(destinationDoc, URI.createFileURI(resultPath));
+        try (XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc1.docx");
+                XWPFDocument document = loadDoc(templatePath);) {
 
-        XWPFDocument reloadDocument = loadDoc(resultPath);
-        // CHECKSTYLE:OFF
-        assertEquals(8, reloadDocument.getParagraphs().size());
-        // CHECKSTYLE:ON
-        assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
-        XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
-        assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
-        userContentManager.dispose();
+            BodyTemplateParser parser = new BodyTemplateParser(document, env);
+            Template template = parser.parseTemplate();
+            final BookmarkManager bookmarkManager = new BookmarkManager();
+            final UserContentManager userContentManager = new UserContentManager(
+                    URI.createFileURI("userContent/testUserContent1Custom3.docx"));
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                    destinationDoc, rootObject);
+            processor.doSwitch(template);
+            String resultPath = "results/generated/testUserDoc1Custom3Resultat.docx";
+            POIServices.getInstance().saveFile(destinationDoc, URI.createFileURI(resultPath));
+
+            try (XWPFDocument reloadDocument = loadDoc(resultPath);) {
+
+                // CHECKSTYLE:OFF
+                assertEquals(8, reloadDocument.getParagraphs().size());
+                // CHECKSTYLE:ON
+                assertTrue(reloadDocument.getBodyElements().get(4) instanceof XWPFTable);
+                XWPFTable table1 = (XWPFTable) reloadDocument.getBodyElements().get(4);
+                assertEquals("Un", table1.getRow(0).getCell(0).getParagraphs().get(0).getText());
+                userContentManager.dispose();
+            }
+        }
     }
 
     /**
@@ -246,8 +322,8 @@ public class TemplateProcessorUserDocRemplaceTest {
         final BookmarkManager bookmarkManager = new BookmarkManager();
         final UserContentManager userContentManager = new UserContentManager(
                 URI.createFileURI("userContent/testUserContent7Custom1.docx"));
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
-                env, destinationDoc, rootObject);
+        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                destinationDoc, rootObject);
         processor.doSwitch(template);
         String resultPath = "results/generated/testUserDoc7Custom1Resultat.docx";
         POIServices.getInstance().saveFile(destinationDoc, URI.createFileURI(resultPath));
@@ -293,8 +369,8 @@ public class TemplateProcessorUserDocRemplaceTest {
         final BookmarkManager bookmarkManager = new BookmarkManager();
         final UserContentManager userContentManager = new UserContentManager(
                 URI.createFileURI("userContent/testUserContent2Custom1.docx"));
-        TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager, userContentManager,
-                env, destinationDoc, rootObject);
+        TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                destinationDoc, rootObject);
         processor.doSwitch(template);
 
         String resultPath = "results/generated/testUserDoc2Custom1Resultat.docx";

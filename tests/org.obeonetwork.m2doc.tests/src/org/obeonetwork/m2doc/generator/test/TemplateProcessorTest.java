@@ -45,6 +45,7 @@ import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.UserDoc;
 import org.obeonetwork.m2doc.util.FieldUtils;
 import org.obeonetwork.m2doc.util.M2DocUtils;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -137,9 +138,9 @@ public class TemplateProcessorTest {
             Map<String, Object> definitions = new HashMap<String, Object>();
             // CHECKSTYLE:OFF
             definitions.put("v", "part1\npart2\npart3\npart4");
-            // CHECKSTYLE:ON
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
+            // CHECKSTYLE:ON
             TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
                     destinationDoc, null);
             processor.doSwitch(template);
@@ -398,19 +399,22 @@ public class TemplateProcessorTest {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
-            TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager,
-                    userContentManager, env, destinationDoc, rootObject);
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                    destinationDoc, rootObject);
             processor.doSwitch(template);
             // POIServices.getInstance().saveFile(destinationDoc, "results/generated/testUserDoc1Resultat.docx");
             // CHECKSTYLE:OFF
             assertEquals(8, destinationDoc.getParagraphs().size());
             assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
-            assertEquals(1, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
+            assertEquals(STFldCharType.BEGIN,
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(0).getFldCharArray(0).getFldCharType());
             assertEquals("m:usercontent value1",
-                    destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
-            assertEquals(1, destinationDoc.getParagraphs().get(5).getCTP().getFldSimpleList().size());
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(1).getInstrTextArray(0).getStringValue());
+
+            assertEquals(STFldCharType.BEGIN,
+                    destinationDoc.getParagraphs().get(5).getCTP().getRArray(0).getFldCharArray(0).getFldCharType());
             assertEquals("m:endusercontent",
-                    destinationDoc.getParagraphs().get(5).getCTP().getFldSimpleList().get(0).getInstr());
+                    destinationDoc.getParagraphs().get(5).getCTP().getRArray(1).getInstrTextArray(0).getStringValue());
             // CHECKSTYLE:ON
         }
     }
@@ -437,18 +441,21 @@ public class TemplateProcessorTest {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
-            TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager,
-                    userContentManager, env, destinationDoc, rootObject);
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                    destinationDoc, rootObject);
             processor.doSwitch(template);
             // POIServices.getInstance().saveFile(destinationDoc, "results/generated/testUserDoc2Resultat.docx");
             // CHECKSTYLE:OFF
             assertEquals(4, destinationDoc.getParagraphs().size());
-            assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
-            assertEquals(2, destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().size());
+            assertEquals(STFldCharType.BEGIN,
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(1).getFldCharArray(0).getFldCharType());
             assertEquals("m:usercontent value1",
-                    destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(0).getInstr());
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(2).getInstrTextArray(0).getStringValue());
+            assertEquals(STFldCharType.BEGIN,
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(6).getFldCharArray(0).getFldCharType());
+
             assertEquals("m:endusercontent",
-                    destinationDoc.getParagraphs().get(1).getCTP().getFldSimpleList().get(1).getInstr());
+                    destinationDoc.getParagraphs().get(1).getCTP().getRArray(7).getInstrTextArray(0).getStringValue());
             // CHECKSTYLE:ON
         }
     }
@@ -474,16 +481,18 @@ public class TemplateProcessorTest {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
-            TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager,
-                    userContentManager, env, destinationDoc, rootObject);
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                    destinationDoc, rootObject);
             processor.doSwitch(template);
             // POIServices.getInstance().saveFile(destinationDoc, "results/generated/testUserDoc3Resultat.docx");
             // CHECKSTYLE:OFF
             assertEquals(9, destinationDoc.getParagraphs().size());
-            assertEquals(0, destinationDoc.getParagraphs().get(0).getCTP().getFldSimpleList().size());
             XWPFParagraph paragraph1 = destinationDoc.getParagraphs().get(1);
-            assertEquals(1, paragraph1.getCTP().getFldSimpleList().size());
-            assertEquals("m:usercontent value1", paragraph1.getCTP().getFldSimpleList().get(0).getInstr());
+
+            assertEquals(STFldCharType.BEGIN, paragraph1.getCTP().getRArray(0).getFldCharArray(0).getFldCharType());
+            assertEquals("m:usercontent value1",
+                    paragraph1.getCTP().getRArray(1).getInstrTextArray(0).getStringValue());
+
             // CHECKSTYLE:ON
         }
     }
@@ -500,8 +509,10 @@ public class TemplateProcessorTest {
      */
     @Test
     public void testUserDocTagNoAql() throws InvalidFormatException, IOException, DocumentParserException {
+        //CHECKSTYLE:OFF
         try (DocumentTemplate documentTemplate = M2DocUtils.parse(URI.createFileURI("templates/testUserDoc4.docx"),
                 env);
+              //CHECKSTYLE:ON
                 FileInputStream is = new FileInputStream("templates/testUserDoc4.docx");
                 OPCPackage oPackage = OPCPackage.open(is);
                 XWPFDocument document = new XWPFDocument(oPackage);
@@ -509,8 +520,8 @@ public class TemplateProcessorTest {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
-            TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager,
-                    userContentManager, env, destinationDoc, rootObject);
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager, userContentManager, env,
+                    destinationDoc, rootObject);
             processor.doSwitch(documentTemplate.getBody());
             // POIServices.getInstance().saveFile(destinationDoc, "results/generated/testUserDoc4Resultat.docx");
             // CHECKSTYLE:OFF
@@ -538,12 +549,12 @@ public class TemplateProcessorTest {
      */
     @Test
     public void testUserDocWithNoUniqueId() throws InvalidFormatException, IOException, DocumentParserException {
-        try (DocumentTemplate documentTemplate = M2DocUtils.parse(URI.createFileURI("templates/testUserDoc6.docx"),
-                env); XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc6.docx");) {
+        try (DocumentTemplate documentTemplate = M2DocUtils.parse(URI.createFileURI("templates/testUserDoc6.docx"), env);
+                XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc6.docx");) {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));
-            TemplateProcessor processor = new TemplateProcessor(definitions, "results", bookmarkManager,
+            TemplateProcessor processor = new TemplateProcessor(definitions, bookmarkManager,
                     userContentManager, env, destinationDoc, rootObject);
             processor.doSwitch(documentTemplate.getBody());
             POIServices.getInstance().saveFile(destinationDoc,
@@ -575,8 +586,8 @@ public class TemplateProcessorTest {
      */
     @Test
     public void testUserDocWithOutEndUserDoc() throws InvalidFormatException, IOException, DocumentParserException {
-        try (DocumentTemplate documentTemplate = M2DocUtils.parse(URI.createFileURI("templates/testUserDoc8.docx"),
-                env); XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc8.docx");) {
+        try (DocumentTemplate documentTemplate = M2DocUtils.parse(URI.createFileURI("templates/testUserDoc8.docx"), env);
+                XWPFDocument destinationDoc = createDestinationDocument("templates/testUserDoc8.docx");) {
             Map<String, Object> definitions = new HashMap<String, Object>();
             final BookmarkManager bookmarkManager = new BookmarkManager();
             final UserContentManager userContentManager = new UserContentManager(URI.createFileURI("noResult"));

@@ -78,6 +78,7 @@ import org.obeonetwork.m2doc.template.Template;
 import org.obeonetwork.m2doc.template.UserContent;
 import org.obeonetwork.m2doc.template.UserDoc;
 import org.obeonetwork.m2doc.template.util.TemplateSwitch;
+import org.obeonetwork.m2doc.util.FieldUtils;
 import org.obeonetwork.m2doc.util.M2DocUtils;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
@@ -565,7 +566,8 @@ public class TemplateProcessor extends TemplateSwitch<IConstruct> {
             || object.getRuns().size() != 0 && object.getRuns().get(0).getParent() != currentTemplateParagraph) {
             createNewParagraph((XWPFParagraph) object.getRuns().get(0).getParent());
         }
-        currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr(TokenType.USERCONTENT.getValue() + " " + id);
+        FieldUtils fieldUtils = new FieldUtils();
+        fieldUtils.addInstrField(currentGeneratedParagraph, TokenType.USERCONTENT.getValue() + " " + id);
     }
 
     /**
@@ -581,7 +583,8 @@ public class TemplateProcessor extends TemplateSwitch<IConstruct> {
             if (needNewParagraph) {
                 createNewParagraph((XWPFParagraph) object.getClosingRuns().get(0).getParent());
             }
-            currentGeneratedParagraph.getCTP().addNewFldSimple().setInstr(TokenType.ENDUSERCONTENT.getValue());
+            FieldUtils fieldUtils = new FieldUtils();
+            fieldUtils.addInstrField(currentGeneratedParagraph, TokenType.ENDUSERCONTENT.getValue());
         }
     }
 
